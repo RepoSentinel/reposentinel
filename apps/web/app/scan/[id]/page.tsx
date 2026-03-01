@@ -1,0 +1,10 @@
+import ScanClient from "./ScanClient";
+
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  return <ScanClient id={id} />;
+}
