@@ -4,6 +4,11 @@ CREATE TABLE scans (
   id            TEXT PRIMARY KEY,
   repo_id       TEXT NOT NULL,
   status        scan_status NOT NULL DEFAULT 'queued',
+  attempt       INT NOT NULL DEFAULT 0,
+  worker_id     TEXT,
+  started_at    TIMESTAMPTZ,
+  finished_at   TIMESTAMPTZ,
+  heartbeat_at  TIMESTAMPTZ,
   result        JSONB,
   error         TEXT,
   created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -12,3 +17,4 @@ CREATE TABLE scans (
 
 CREATE INDEX scans_repo_id_idx ON scans(repo_id);
 CREATE INDEX scans_status_idx ON scans(status);
+CREATE INDEX scans_running_heartbeat_idx ON scans(status, heartbeat_at);

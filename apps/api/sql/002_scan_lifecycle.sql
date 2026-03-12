@@ -1,0 +1,12 @@
+-- Adds lifecycle fields for safer retries and stale-run detection.
+-- Apply to existing DBs after 001_init.sql has been executed.
+
+ALTER TABLE scans
+  ADD COLUMN IF NOT EXISTS attempt INT NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS worker_id TEXT,
+  ADD COLUMN IF NOT EXISTS started_at TIMESTAMPTZ,
+  ADD COLUMN IF NOT EXISTS finished_at TIMESTAMPTZ,
+  ADD COLUMN IF NOT EXISTS heartbeat_at TIMESTAMPTZ;
+
+CREATE INDEX IF NOT EXISTS scans_running_heartbeat_idx ON scans(status, heartbeat_at);
+
