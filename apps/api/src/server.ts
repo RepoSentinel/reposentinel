@@ -18,7 +18,6 @@ async function start() {
 
   await app.register(cors, {
     origin: (origin, cb) => {
-      // מאפשר גם כלים בלי Origin (curl) וגם localhost רגיל
       if (!origin) return cb(null, true);
 
       cb(null, allowedOrigins.has(origin));

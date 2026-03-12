@@ -7,12 +7,10 @@ import type { ScanRequest } from "@reposentinel/shared";
 type ScanStatus = "queued" | "running" | "done" | "failed";
 
 export async function scanRoutes(app: FastifyInstance) {
-  // Create scan (queued) + enqueue job
   app.post("/scan", async (req, reply) => {
     const body = req.body as ScanRequest;
     const scanId = randomUUID();
 
-    // Transaction קצר: יצירת רשומה במצב queued
     const client = await db.connect();
     try {
       await client.query("BEGIN");
@@ -30,7 +28,6 @@ export async function scanRoutes(app: FastifyInstance) {
       client.release();
     }
 
-    // הכנסת Job ל-Redis Queue
     try {
       await scanQueue.add(
         "scan",
@@ -55,14 +52,12 @@ export async function scanRoutes(app: FastifyInstance) {
       throw e;
     }
 
-    // מחזירים מיד 202
     return reply.code(202).send({
       scanId,
       status: "queued" as ScanStatus,
     });
   });
 
-  // Get scan status/result
   app.get("/scan/:id", async (req, reply) => {
     const id = (req.params as any).id as string;
 

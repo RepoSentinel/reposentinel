@@ -1,6 +1,3 @@
--- Adds lifecycle fields for safer retries and stale-run detection.
--- Apply to existing DBs after 001_init.sql has been executed.
-
 ALTER TABLE scans
   ADD COLUMN IF NOT EXISTS attempt INT NOT NULL DEFAULT 0,
   ADD COLUMN IF NOT EXISTS worker_id TEXT,

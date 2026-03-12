@@ -1,8 +1,8 @@
 export type LayerScores = {
-  security: number;          // 0-100
-  maintainability: number;   // 0-100
-  ecosystem: number;         // 0-100
-  upgradeImpact: number;     // 0-100
+  security: number;
+  maintainability: number;
+  ecosystem: number;
+  upgradeImpact: number;
 };
 
 export type FindingSeverity = "low" | "medium" | "high" | "critical";
@@ -16,14 +16,42 @@ export type Finding = {
   recommendation?: string;
 };
 
+export type LockfileManager = "pnpm" | "npm";
+
+export type ScanLockfileInput = {
+  manager: LockfileManager;
+  content: string;
+  path?: string;
+};
+
 export type ScanRequest = {
   repoId: string;
-  dependencyGraph: unknown; // נחליף בהמשך למבנה אמיתי
+  dependencyGraph: unknown;
+  lockfile?: ScanLockfileInput;
+};
+
+export type ScoreLayer = keyof LayerScores;
+
+export type ScoreContribution = {
+  id: string;
+  layer: ScoreLayer;
+  scoreImpact: number;
+  evidence?: Record<string, unknown>;
+};
+
+export type Recommendation = {
+  id: string;
+  title: string;
+  rationale: string;
+  impact: "low" | "medium" | "high";
+  packages?: string[];
 };
 
 export type ScanResult = {
-  totalScore: number;       // 0-100
+  totalScore: number;
   layerScores: LayerScores;
   findings: Finding[];
+  contributions?: ScoreContribution[];
+  recommendations?: Recommendation[];
   generatedAt: string;
 };

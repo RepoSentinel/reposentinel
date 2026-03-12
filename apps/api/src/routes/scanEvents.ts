@@ -12,7 +12,6 @@ export async function scanEventsRoutes(app: FastifyInstance) {
       Connection: "keep-alive",
     });
 
-    // Force bytes to flush immediately (helps proxies/browsers start rendering)
     reply.raw.write(`: connected\n\n`);
 
     const send = (event: string, data: unknown) => {
@@ -49,11 +48,9 @@ export async function scanEventsRoutes(app: FastifyInstance) {
     }
 
     keepalive = setInterval(() => {
-      // keep connection alive through proxies
       reply.raw.write(`event: ping\ndata: {}\n\n`);
     }, 15000);
 
-    // Poll פנימי (בשרת) כל 1 שניה ודחיפה ללקוח רק אם השתנה
     let lastUpdated = String(first.rows[0].updated_at);
 
     interval = setInterval(async () => {

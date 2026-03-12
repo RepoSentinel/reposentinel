@@ -30,14 +30,11 @@ new Worker<ScanJob>(
   async (job) => {
     const { scanId, repoId, dependencyGraph } = job.data;
 
-    // 1) atomic transition queued -> running
     const moved = await transitionToRunning(scanId);
     if (!moved) {
-      // מישהו כבר טיפל בזה / הסטטוס השתנה
       return { skipped: true };
     }
 
-    // 2) analyze (outside transaction)
     const heartbeat = setInterval(() => {
       void db.query(
         "UPDATE scans SET heartbeat_at=NOW() WHERE id=$1 AND status='running'",
@@ -51,7 +48,6 @@ new Worker<ScanJob>(
       if (delayMs > 0) await new Promise((r) => setTimeout(r, delayMs));
       const result = await analyze(req);
 
-      // 3) write done only if still running
       const { rowCount } = await db.query(
         "UPDATE scans SET status='done', result=$2::jsonb, finished_at=NOW(), heartbeat_at=NULL, updated_at=NOW() WHERE id=$1 AND status='running'",
         [scanId, JSON.stringify(result)],
