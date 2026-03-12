@@ -31,20 +31,29 @@ export async function scanRoutes(app: FastifyInstance) {
     }
 
     // הכנסת Job ל-Redis Queue
-    await scanQueue.add(
-      "scan",
-      {
-        scanId,
-        repoId: body.repoId,
-        dependencyGraph: body.dependencyGraph,
-      },
-      {
-        attempts: 3,
-        backoff: { type: "exponential", delay: 2000 },
-        removeOnComplete: true,
-        removeOnFail: false,
-      },
-    );
+    try {
+      await scanQueue.add(
+        "scan",
+        {
+          scanId,
+          repoId: body.repoId,
+          dependencyGraph: body.dependencyGraph,
+        },
+        {
+          jobId: scanId,
+          attempts: 3,
+          backoff: { type: "exponential", delay: 2000 },
+          removeOnComplete: true,
+          removeOnFail: false,
+        },
+      );
+    } catch (e: any) {
+      await db.query(
+        "UPDATE scans SET status='failed', error=$2, finished_at=NOW(), updated_at=NOW() WHERE id=$1 AND status='queued'",
+        [scanId, `enqueue_failed: ${String(e?.message ?? e)}`],
+      );
+      throw e;
+    }
 
     // מחזירים מיד 202
     return reply.code(202).send({
