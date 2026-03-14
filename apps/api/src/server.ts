@@ -1,14 +1,23 @@
 import Fastify from "fastify";
 import "dotenv/config";
 import cors from "@fastify/cors";
+import rawBody from "fastify-raw-body";
 import { indexRoutes } from "./routes/index";
 import { healthRoutes } from "./routes/health";
 import { scanRoutes } from "./routes/scan";
 import { scanEventsRoutes } from "./routes/scanEvents";
 import { simulateUpgradeRoutes } from "./routes/simulateUpgrade";
+import { githubWebhookRoutes } from "./routes/githubWebhook";
 
 async function start() {
   const app = Fastify({ logger: true });
+
+  await app.register(rawBody, {
+    field: "rawBody",
+    global: false,
+    encoding: "utf8",
+    runFirst: true,
+  });
 
   const allowedOrigins = new Set(
     (process.env.CORS_ORIGINS ?? "http://localhost:3000,http://127.0.0.1:3000")
@@ -31,6 +40,7 @@ async function start() {
   app.register(scanRoutes);
   app.register(scanEventsRoutes);
   app.register(simulateUpgradeRoutes);
+  app.register(githubWebhookRoutes);
 
   const port = Number(process.env.PORT ?? 4000);
   const host = process.env.HOST ?? "0.0.0.0";
