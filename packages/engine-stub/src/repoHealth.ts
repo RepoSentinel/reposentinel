@@ -1,6 +1,6 @@
 import type { Finding, Recommendation, RiskSignal, ScoreLayer } from "@reposentinel/shared";
-import type { DependencyGraph } from "./pnpmLock";
-import { fetchJsonCached } from "./http";
+import type { DependencyGraph } from "./pnpmLock.js";
+import { fetchJsonCached } from "./http.js";
 
 type NpmDoc = {
   "dist-tags"?: { latest?: string };

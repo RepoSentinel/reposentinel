@@ -8,8 +8,8 @@ import type {
   ScoreContribution,
   ScoreLayer,
 } from "@reposentinel/shared";
-import { graphFromPnpmLockfile } from "./pnpmLock";
-import { repoHealthFromGraph } from "./repoHealth";
+import { graphFromPnpmLockfile } from "./pnpmLock.js";
+import { repoHealthFromGraph } from "./repoHealth.js";
 
 export async function analyze(req: ScanRequest): Promise<ScanResult> {
   const derivedGraph =

@@ -1,5 +1,5 @@
 import type { FastifyInstance } from "fastify";
-import { db } from "../db";
+import { db } from "../db.js";
 
 export async function alertsRoutes(app: FastifyInstance) {
   app.get("/alerts", async (req, reply) => {

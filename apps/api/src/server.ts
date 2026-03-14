@@ -2,19 +2,22 @@ import Fastify from "fastify";
 import "dotenv/config";
 import cors from "@fastify/cors";
 import rawBody from "fastify-raw-body";
-import { indexRoutes } from "./routes/index";
-import { healthRoutes } from "./routes/health";
-import { scanRoutes } from "./routes/scan";
-import { scanEventsRoutes } from "./routes/scanEvents";
-import { simulateUpgradeRoutes } from "./routes/simulateUpgrade";
-import { githubWebhookRoutes } from "./routes/githubWebhook";
-import { orgDashboardRoutes } from "./routes/orgDashboard";
-import { alertsRoutes } from "./routes/alerts";
-import { policiesRoutes } from "./routes/policies";
-import { benchmarkRoutes } from "./routes/benchmark";
+import { indexRoutes } from "./routes/index.js";
+import { healthRoutes } from "./routes/health.js";
+import { scanRoutes } from "./routes/scan.js";
+import { scanEventsRoutes } from "./routes/scanEvents.js";
+import { simulateUpgradeRoutes } from "./routes/simulateUpgrade.js";
+import { githubWebhookRoutes } from "./routes/githubWebhook.js";
+import { orgDashboardRoutes } from "./routes/orgDashboard.js";
+import { alertsRoutes } from "./routes/alerts.js";
+import { policiesRoutes } from "./routes/policies.js";
+import { benchmarkRoutes } from "./routes/benchmark.js";
+import { runMigrationsIfEnabled } from "./migrate.js";
 
 async function start() {
   const app = Fastify({ logger: true });
+
+  await runMigrationsIfEnabled((msg) => app.log.info(msg));
 
   await app.register(rawBody, {
     field: "rawBody",

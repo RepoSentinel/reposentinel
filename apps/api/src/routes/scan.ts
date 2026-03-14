@@ -1,7 +1,7 @@
 import { FastifyInstance } from "fastify";
-import { db } from "../db";
+import { db } from "../db.js";
 import type { ScanRequest } from "@reposentinel/shared";
-import { createScanAndEnqueue } from "../services/scanService";
+import { createScanAndEnqueue } from "../services/scanService.js";
 
 type ScanStatus = "queued" | "running" | "done" | "failed";
 

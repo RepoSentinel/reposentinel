@@ -1,6 +1,6 @@
-import pkg from "../package.json" assert { type: "json" };
+import pkg from "../package.json" with { type: "json" };
 
 export const appConfig = {
   name: "RepoSentinel API",
-  version: pkg.version
+  version: pkg.version,
 };

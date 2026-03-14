@@ -1,5 +1,5 @@
 import type { FastifyInstance } from "fastify";
-import { db } from "../db";
+import { db } from "../db.js";
 
 type RepoRow = {
   repoId: string;

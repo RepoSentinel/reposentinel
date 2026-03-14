@@ -1,15 +1,14 @@
 {
   "name": "@reposentinel/engine-stub",
   "version": "0.1.0",
-  "description": "",
+  "private": true,
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "check-types": "tsc -p tsconfig.json --noEmit"
   },
-  "keywords": [],
-  "author": "",
   "license": "ISC",
   "dependencies": {
     "@reposentinel/shared": "workspace:^",

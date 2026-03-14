@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./ScanClient.module.css";
 import layoutStyles from "./ScanClientLayout.module.css";
 import { Card, cardStyles } from "../../_components/ui/Card";
@@ -17,6 +17,7 @@ export default function ScanClient({ id }: { id: string }) {
   const [data, setData] = useState<ScanRow | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const [showRaw, setShowRaw] = useState(false);
+  const terminalRef = useRef(false);
 
   useEffect(() => {
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
@@ -24,13 +25,20 @@ export default function ScanClient({ id }: { id: string }) {
 
     es.addEventListener("status", (e) => {
       try {
-        setData(JSON.parse((e as MessageEvent).data));
+        const next = JSON.parse((e as MessageEvent).data) as ScanRow;
+        terminalRef.current = next.status === "done" || next.status === "failed";
+        setErr(null);
+        setData(next);
+        if (terminalRef.current) {
+          es.close();
+        }
       } catch {
         setErr("Failed to parse SSE payload");
       }
     });
 
     es.addEventListener("error", () => {
+      if (terminalRef.current) return;
       setErr((prev) => prev ?? "SSE connection issue (retrying)");
     });
 

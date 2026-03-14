@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify";
 import { randomUUID } from "crypto";
-import { db } from "../db";
+import { db } from "../db.js";
 
 type PolicyRule =
   | { type: "no_deprecated" }

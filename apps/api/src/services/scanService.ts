@@ -1,8 +1,8 @@
 import { randomUUID } from "crypto";
-import { db } from "../db";
-import { scanQueue } from "../queue";
+import { db } from "../db.js";
+import { scanQueue } from "../queue.js";
 import type { ScanLockfileInput } from "@reposentinel/shared";
-import { getLimitsForOwner, getOwnerFromRepoId } from "./tier";
+import { getLimitsForOwner, getOwnerFromRepoId } from "./tier.js";
 
 export async function createScanAndEnqueue({
   scanId,

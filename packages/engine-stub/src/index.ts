@@ -1,2 +1,2 @@
-export { analyze } from "./analyze";
-export { simulateUpgrade } from "./simulateUpgrade";
+export { analyze } from "./analyze.js";
+export { simulateUpgrade } from "./simulateUpgrade.js";

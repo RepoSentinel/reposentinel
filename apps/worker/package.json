@@ -1,14 +1,13 @@
 {
   "name": "@reposentinel/worker",
   "version": "0.1.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
+  "type": "module",
   "scripts": {
     "dev": "tsx watch src/worker.ts",
-    "build": "tsc -p tsconfig.json"
+    "build": "tsc -p tsconfig.json",
+    "start": "node --enable-source-maps dist/worker.js"
   },
-  "keywords": [],
-  "author": "",
   "license": "ISC",
   "dependencies": {
     "@octokit/app": "^16.1.2",

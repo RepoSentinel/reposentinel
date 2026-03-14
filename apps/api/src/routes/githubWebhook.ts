@@ -1,8 +1,8 @@
 import type { FastifyInstance } from "fastify";
 import { App } from "@octokit/app";
 import { createHmac, timingSafeEqual } from "crypto";
-import { createScanAndEnqueue } from "../services/scanService";
-import { upsertGithubRepoSource } from "../services/repoSourceService";
+import { createScanAndEnqueue } from "../services/scanService.js";
+import { upsertGithubRepoSource } from "../services/repoSourceService.js";
 
 type PullRequestEvent = {
   action?: string;

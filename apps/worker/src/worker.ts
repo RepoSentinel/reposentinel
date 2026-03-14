@@ -5,7 +5,7 @@ import type { ScanLockfileInput, ScanRequest, UpgradeSimulationResult } from "@r
 import { analyze, simulateUpgrade } from "@reposentinel/engine-stub";
 import { App } from "@octokit/app";
 import { randomUUID } from "crypto";
-import { getLimitsForOwner, getOwnerFromRepoId } from "./tier";
+import { getLimitsForOwner, getOwnerFromRepoId } from "./tier.js";
 
 const db = new Pool({ connectionString: process.env.DATABASE_URL });
 

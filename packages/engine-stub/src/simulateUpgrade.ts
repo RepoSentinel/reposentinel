@@ -8,8 +8,8 @@ import type {
   UpgradeSimulationRequest,
   UpgradeSimulationResult,
 } from "@reposentinel/shared";
-import { graphFromPnpmLockfile, type DependencyGraph } from "./pnpmLock";
-import { analyze } from "./analyze";
+import { graphFromPnpmLockfile, type DependencyGraph } from "./pnpmLock.js";
+import { analyze } from "./analyze.js";
 
 export async function simulateUpgrade(
   req: UpgradeSimulationRequest,

@@ -1,15 +1,33 @@
 import { FastifyInstance } from "fastify";
-import { db } from "../db";
+import { db } from "../db.js";
 
 export async function scanEventsRoutes(app: FastifyInstance) {
   app.get("/scan/:id/events", async (req, reply) => {
     const id = (req.params as any).id as string;
+
+    const allowedOrigins = new Set(
+      (process.env.CORS_ORIGINS ?? "http://localhost:3000,http://127.0.0.1:3000")
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean),
+    );
+    const origin = String(req.headers.origin ?? "");
+    if (origin && !allowedOrigins.has(origin)) {
+      reply.hijack();
+      reply.raw.writeHead(403, {
+        "Content-Type": "text/plain; charset=utf-8",
+        Vary: "Origin",
+      });
+      reply.raw.end("CORS origin not allowed");
+      return;
+    }
 
     reply.hijack();
     reply.raw.writeHead(200, {
       "Content-Type": "text/event-stream; charset=utf-8",
       "Cache-Control": "no-cache, no-transform",
       Connection: "keep-alive",
+      ...(origin ? { "Access-Control-Allow-Origin": origin, Vary: "Origin" } : {}),
     });
 
     reply.raw.write(`: connected\n\n`);
