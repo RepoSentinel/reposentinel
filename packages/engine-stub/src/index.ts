@@ -2,6 +2,7 @@ import type {
   Finding,
   LayerScores,
   RiskSignal,
+  Recommendation,
   ScanRequest,
   ScanResult,
   ScoreContribution,
@@ -40,6 +41,7 @@ type DependencyStats = {
   directDepsCount: number;
   maxDepthEstimate: number;
   duplicateVersionPackages: number;
+  duplicateTop: Array<{ name: string; versions: string[] }>;
   fanInMax: number;
   fanInTop: Array<{ name: string; version: string; fanIn: number }>;
 };
@@ -52,6 +54,7 @@ function deriveDependencyStats(input: unknown): DependencyStats {
     directDepsCount: 0,
     maxDepthEstimate: 0,
     duplicateVersionPackages: 0,
+    duplicateTop: [],
     fanInMax: 0,
     fanInTop: [],
   };
@@ -88,6 +91,17 @@ function deriveDependencyStats(input: unknown): DependencyStats {
     ? Object.values(versionsByName).filter((v) => Array.isArray(v) && v.length > 1).length
     : 0;
 
+  const duplicateTop = versionsByName
+    ? Object.entries(versionsByName)
+        .map(([name, versions]) => ({
+          name,
+          versions: Array.isArray(versions) ? (versions as unknown[]).map(String) : [],
+        }))
+        .filter((x) => x.versions.length > 1)
+        .sort((a, b) => b.versions.length - a.versions.length)
+        .slice(0, 10)
+    : [];
+
   const fanInTopRaw = Array.isArray(obj.fanInTop) ? (obj.fanInTop as any[]) : [];
   const fanInTop = fanInTopRaw
     .map((x) => ({
@@ -116,6 +130,7 @@ function deriveDependencyStats(input: unknown): DependencyStats {
     directDepsCount: Math.max(0, directDepsCount),
     maxDepthEstimate: Math.max(0, maxDepthEstimate),
     duplicateVersionPackages: Math.max(0, duplicateVersionPackages),
+    duplicateTop,
     fanInMax: Math.max(0, fanInMax),
     fanInTop,
   };
@@ -297,38 +312,101 @@ function buildFindings(stats: DependencyStats): Finding[] {
 }
 
 function buildRecommendations(stats: DependencyStats) {
-  const recs = [];
+  const recs: Recommendation[] = [];
+
+  const push = (rec: Omit<Recommendation, "rank"> & { priorityScore: number }) => {
+    recs.push(rec);
+  };
+
+  const impactFromPriority = (p: number): Recommendation["impact"] =>
+    p >= 70 ? "high" : p >= 35 ? "medium" : "low";
+
+  const clampDelta = (n: number) => Math.max(-100, Math.min(0, Math.round(n)));
+
   if (!stats.hasGraphLikeShape) {
-    recs.push({
+    const priorityScore = 90;
+    push({
       id: "provide-lockfile",
       title: "Add lockfile input for higher-fidelity results",
       rationale: "Lockfile parsing enables transitive graph intelligence and upgrade impact analysis.",
-      impact: "high" as const,
+      impact: impactFromPriority(priorityScore),
+      priorityScore,
+      estimatedScoreDelta: clampDelta(-25),
+      layers: ["security", "maintainability", "upgradeImpact"],
     });
-    return recs;
+    return finalizeRecommendations(recs);
   }
 
   if (stats.duplicateVersionPackages > 0) {
-    recs.push({
+    const priorityScore = clampScore((stats.duplicateVersionPackages / 25) * 80);
+    push({
       id: "dedupe-versions",
       title: "Reduce duplicate dependency versions",
       rationale: "Fewer duplicate versions lowers upgrade complexity and reduces bundle/runtime surface area.",
-      impact: stats.duplicateVersionPackages > 10 ? ("high" as const) : ("medium" as const),
+      impact: impactFromPriority(priorityScore),
+      priorityScore,
+      estimatedScoreDelta: clampDelta(-clampScore((stats.duplicateVersionPackages / 25) * 30)),
+      layers: ["upgradeImpact", "maintainability"],
+      packages: stats.duplicateTop.slice(0, 5).map((x) => x.name),
+      evidence: { top: stats.duplicateTop.slice(0, 3) },
     });
   }
 
   if (stats.maxDepthEstimate >= 6) {
-    recs.push({
+    const priorityScore = clampScore((stats.maxDepthEstimate / 10) * 70);
+    push({
       id: "flatten-graph",
       title: "Flatten dependency depth",
       rationale: "Shallower graphs reduce hidden transitive risk and simplify upgrades.",
-      impact: "medium" as const,
+      impact: impactFromPriority(priorityScore),
+      priorityScore,
+      estimatedScoreDelta: clampDelta(-clampScore((stats.maxDepthEstimate / 10) * 25)),
+      layers: ["maintainability", "upgradeImpact"],
+      evidence: { maxDepthEstimate: stats.maxDepthEstimate },
     });
   }
 
-  return recs;
+  if (stats.fanInTop.length) {
+    const priorityScore = clampScore((stats.fanInMax / 20) * 85);
+    push({
+      id: "monitor-hotspots",
+      title: "Prioritize monitoring for high fan-in transitive packages",
+      rationale:
+        "Packages with very high fan-in have a larger blast radius for vulnerabilities and breaking changes.",
+      impact: impactFromPriority(priorityScore),
+      priorityScore,
+      estimatedScoreDelta: clampDelta(-clampScore((stats.fanInMax / 20) * 25)),
+      layers: ["upgradeImpact", "security"],
+      packages: stats.fanInTop.slice(0, 5).map((x) => x.name),
+      evidence: { top: stats.fanInTop.slice(0, 3) },
+    });
+  }
+
+  if (stats.nodeCount >= 250) {
+    const priorityScore = clampScore((stats.nodeCount / 600) * 40);
+    push({
+      id: "reduce-surface-area",
+      title: "Reduce transitive dependency surface area",
+      rationale: "Lower transitive volume reduces maintenance cost and hidden risk.",
+      impact: impactFromPriority(priorityScore),
+      priorityScore,
+      estimatedScoreDelta: clampDelta(-clampScore((stats.nodeCount / 200) * 15)),
+      layers: ["maintainability", "ecosystem"],
+      evidence: { nodeCount: stats.nodeCount },
+    });
+  }
+
+  return finalizeRecommendations(recs);
 }
 
 function clampScore(n: number): number {
   return Math.max(0, Math.min(100, Math.round(n)));
+}
+
+function finalizeRecommendations(recs: Recommendation[]) {
+  const sorted = [...recs].sort((a, b) => (b.priorityScore ?? 0) - (a.priorityScore ?? 0));
+  sorted.forEach((r, i) => {
+    r.rank = i + 1;
+  });
+  return sorted.slice(0, 5);
 }

@@ -57,6 +57,11 @@ export type Recommendation = {
   rationale: string;
   impact: "low" | "medium" | "high";
   packages?: string[];
+  rank?: number;
+  priorityScore?: number;
+  estimatedScoreDelta?: number;
+  layers?: ScoreLayer[];
+  evidence?: Record<string, unknown>;
 };
 
 export type ScanResult = {
