@@ -1,4 +1,6 @@
 import { AppShell } from "../../../_components/AppShell";
+import { DataTable, TD } from "../../../_components/ui/Table";
+import typo from "../../../_styles/typography.module.css";
 
 type OrgAlerts = {
   owner: string;
@@ -43,52 +45,27 @@ export default async function Page({
 
   return (
     <AppShell title="Alerts" subtitle={`recent: ${data.alerts.length}`} owner={owner}>
-      <div className="rs-card" style={{ padding: 0 }}>
-        <div style={{ overflowX: "auto" }}>
-          <table style={{ borderCollapse: "collapse", width: "100%", minWidth: 900 }}>
-          <thead>
-            <tr>
-              {["Time", "Repo", "Severity", "Title", "Type"].map((h) => (
-                <th
-                  key={h}
-                  style={{
-                    textAlign: "left",
-                    borderBottom: "1px solid var(--border)",
-                    padding: "10px 12px",
-                    whiteSpace: "nowrap",
-                    fontSize: 12,
-                    opacity: 0.8,
-                  }}
-                >
-                  {h}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {data.alerts.map((a) => (
-              <tr key={a.id}>
-                <td style={{ padding: "10px 12px", borderBottom: "1px solid var(--border)" }}>
-                  {new Date(a.created_at).toLocaleString()}
-                </td>
-                <td style={{ padding: "10px 12px", borderBottom: "1px solid var(--border)" }}>
-                  <code>{a.repo_id}</code>
-                </td>
-                <td style={{ padding: "10px 12px", borderBottom: "1px solid var(--border)" }}>{a.severity}</td>
-                <td style={{ padding: "10px 12px", borderBottom: "1px solid var(--border)" }}>{a.title}</td>
-                <td style={{ padding: "10px 12px", borderBottom: "1px solid var(--border)" }}>
-                  <code>{a.type}</code>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-          </table>
-        </div>
-      </div>
+      <DataTable
+        headers={["Time", "Repo", "Severity", "Title", "Type"]}
+        minWidth={900}
+        rows={data.alerts.map((a) => (
+          <tr key={a.id}>
+            <TD>{new Date(a.created_at).toLocaleString()}</TD>
+            <TD>
+              <code>{a.repo_id}</code>
+            </TD>
+            <TD>{a.severity}</TD>
+            <TD>{a.title}</TD>
+            <TD>
+              <code>{a.type}</code>
+            </TD>
+          </tr>
+        ))}
+      />
 
       {data.alerts.length > 0 && (
         <>
-          <h2 style={{ marginTop: 18 }}>Latest alert details</h2>
+          <h2 className={typo.h2}>Latest alert details</h2>
           <pre style={{ whiteSpace: "pre-wrap" }}>
             {JSON.stringify(data.alerts[0]?.details ?? null, null, 2)}
           </pre>

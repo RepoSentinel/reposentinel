@@ -1,4 +1,5 @@
 import Link from "next/link";
+import styles from "./AppShell.module.css";
 
 export function AppShell({
   title,
@@ -12,42 +13,42 @@ export function AppShell({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rs-page">
-      <header className="rs-header">
-        <div className="rs-header__left">
-          <Link href="/" className="rs-brand">
+    <div className={styles.page}>
+      <header className={styles.header}>
+        <div className={styles.headerLeft}>
+          <Link href="/" className={styles.brand}>
             RepoSentinel
           </Link>
-          {owner ? <span className="rs-owner">/ {owner}</span> : null}
+          {owner ? <span className={styles.owner}>/ {owner}</span> : null}
         </div>
-        <nav className="rs-nav">
+        <nav className={styles.nav}>
           {owner ? (
             <>
-              <Link className="rs-nav__link" href={`/org/${encodeURIComponent(owner)}`}>
+              <Link className={styles.navLink} href={`/org/${encodeURIComponent(owner)}`}>
                 Dashboard
               </Link>
-              <Link className="rs-nav__link" href={`/org/${encodeURIComponent(owner)}/alerts`}>
+              <Link className={styles.navLink} href={`/org/${encodeURIComponent(owner)}/alerts`}>
                 Alerts
               </Link>
-              <Link className="rs-nav__link" href={`/org/${encodeURIComponent(owner)}/policies`}>
+              <Link className={styles.navLink} href={`/org/${encodeURIComponent(owner)}/policies`}>
                 Policies
               </Link>
-              <Link className="rs-nav__link" href={`/org/${encodeURIComponent(owner)}/benchmark`}>
+              <Link className={styles.navLink} href={`/org/${encodeURIComponent(owner)}/benchmark`}>
                 Benchmark
               </Link>
             </>
           ) : (
-            <Link className="rs-nav__link" href="/org/demo">
+            <Link className={styles.navLink} href="/org/demo">
               Org demo
             </Link>
           )}
         </nav>
       </header>
 
-      <main className="rs-main">
-        <div className="rs-titlebar">
-          <h1 className="rs-title">{title}</h1>
-          {subtitle ? <p className="rs-subtitle">{subtitle}</p> : null}
+      <main className={styles.main}>
+        <div className={styles.titlebar}>
+          <h1 className={styles.title}>{title}</h1>
+          {subtitle ? <p className={styles.subtitle}>{subtitle}</p> : null}
         </div>
         {children}
       </main>

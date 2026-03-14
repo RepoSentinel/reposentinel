@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { AppShell } from "../../_components/AppShell";
+import { DataTable, TD } from "../../_components/ui/Table";
+import { cardStyles } from "../../_components/ui/Card";
 
 type Dashboard = {
   owner: string;
@@ -40,7 +42,11 @@ export default async function Page({
 
   if (!res.ok) {
     const text = await res.text();
-    return <AppShell title="Org dashboard" subtitle={owner} owner={owner}><pre>{text}</pre></AppShell>;
+    return (
+      <AppShell title="Org dashboard" subtitle={owner} owner={owner}>
+        <pre style={{ whiteSpace: "pre-wrap" }}>{text}</pre>
+      </AppShell>
+    );
   }
 
   const data = (await res.json()) as Dashboard;
@@ -53,62 +59,34 @@ export default async function Page({
       }`}
       owner={owner}
     >
-      <div className="rs-card" style={{ padding: 0 }}>
-        <div style={{ overflowX: "auto" }}>
-          <table style={{ borderCollapse: "collapse", width: "100%", minWidth: 820 }}>
-            <thead>
-              <tr>
-                {["Repo", "Score", "Δ", "Status", "Last scan", ""].map((h) => (
-                  <th
-                    key={h}
-                    style={{
-                      textAlign: "left",
-                      borderBottom: "1px solid var(--border)",
-                      padding: "10px 12px",
-                      whiteSpace: "nowrap",
-                      fontSize: 12,
-                      opacity: 0.8,
-                    }}
-                  >
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {data.repos.map((r) => (
-                <tr key={r.repoId}>
-                  <td style={{ padding: "10px 12px", borderBottom: "1px solid var(--border)" }}>
-                    <code>{r.repoId}</code>
-                  </td>
-                  <td style={{ padding: "10px 12px", borderBottom: "1px solid var(--border)" }}>
-                    <b>{r.latest.totalScore ?? "n/a"}</b>
-                  </td>
-                  <td style={{ padding: "10px 12px", borderBottom: "1px solid var(--border)" }}>
-                    {typeof r.deltaTotalScore === "number"
-                      ? r.deltaTotalScore > 0
-                        ? `+${r.deltaTotalScore}`
-                        : `${r.deltaTotalScore}`
-                      : "—"}
-                  </td>
-                  <td style={{ padding: "10px 12px", borderBottom: "1px solid var(--border)" }}>
-                    {r.latest.status}
-                  </td>
-                  <td style={{ padding: "10px 12px", borderBottom: "1px solid var(--border)" }}>
-                    {new Date(r.latest.createdAt).toLocaleString()}
-                  </td>
-                  <td style={{ padding: "10px 12px", borderBottom: "1px solid var(--border)" }}>
-                    <Link href={`/scan/${r.latest.scanId}`}>Open</Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <DataTable
+        headers={["Repo", "Score", "Δ", "Status", "Last scan", ""]}
+        rows={data.repos.map((r) => (
+          <tr key={r.repoId}>
+            <TD>
+              <code>{r.repoId}</code>
+            </TD>
+            <TD>
+              <b>{r.latest.totalScore ?? "n/a"}</b>
+            </TD>
+            <TD>
+              {typeof r.deltaTotalScore === "number"
+                ? r.deltaTotalScore > 0
+                  ? `+${r.deltaTotalScore}`
+                  : `${r.deltaTotalScore}`
+                : "—"}
+            </TD>
+            <TD>{r.latest.status}</TD>
+            <TD>{new Date(r.latest.createdAt).toLocaleString()}</TD>
+            <TD>
+              <Link href={`/scan/${r.latest.scanId}`}>Open</Link>
+            </TD>
+          </tr>
+        ))}
+      />
 
       {data.summary.worst.length > 0 ? (
-        <div className="rs-note">
+        <div className={cardStyles.note}>
           Worst scores:{" "}
           {data.summary.worst.map((w, i) => (
             <span key={w.repoId}>

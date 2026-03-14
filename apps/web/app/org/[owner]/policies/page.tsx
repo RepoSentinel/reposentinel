@@ -1,4 +1,7 @@
 import { AppShell } from "../../../_components/AppShell";
+import { Card } from "../../../_components/ui/Card";
+import { DataTable, TD } from "../../../_components/ui/Table";
+import typo from "../../../_styles/typography.module.css";
 
 type PoliciesResponse = {
   owner: string;
@@ -65,16 +68,15 @@ export default async function Page({
       subtitle={`policies: ${policies.policies.length} • recent violations: ${violations.violations.length}`}
       owner={owner}
     >
-      <h2 style={{ marginTop: 6 }}>Policies</h2>
+      <h2 className={typo.h2Tight}>Policies</h2>
       {policies.policies.length === 0 ? (
-        <div className="rs-card">
-          <div className="rs-muted">No policies yet. Create one via API:</div>
+        <Card title="No policies yet" subtitle="Create one via API:">
           <pre style={{ whiteSpace: "pre-wrap" }}>
 {`curl -X POST "${baseUrl}/org/${owner}/policies" \\
   -H "Content-Type: application/json" \\
   -d '{"name":"baseline","enabled":true,"rules":[{"type":"no_deprecated"},{"type":"max_stale_releases_count","max":3}]}'`}
           </pre>
-        </div>
+        </Card>
       ) : (
         <ul>
           {policies.policies.map((p) => (
@@ -87,53 +89,28 @@ export default async function Page({
         </ul>
       )}
 
-      <h2 style={{ marginTop: 18 }}>Recent violations</h2>
-      <div className="rs-card" style={{ padding: 0 }}>
-        <div style={{ overflowX: "auto" }}>
-          <table style={{ borderCollapse: "collapse", width: "100%", minWidth: 900 }}>
-          <thead>
-            <tr>
-              {["Time", "Repo", "Severity", "Title", "Policy"].map((h) => (
-                <th
-                  key={h}
-                  style={{
-                    textAlign: "left",
-                    borderBottom: "1px solid var(--border)",
-                    padding: "10px 12px",
-                    whiteSpace: "nowrap",
-                    fontSize: 12,
-                    opacity: 0.8,
-                  }}
-                >
-                  {h}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {violations.violations.map((v) => (
-              <tr key={v.id}>
-                <td style={{ padding: "10px 12px", borderBottom: "1px solid var(--border)" }}>
-                  {new Date(v.created_at).toLocaleString()}
-                </td>
-                <td style={{ padding: "10px 12px", borderBottom: "1px solid var(--border)" }}>
-                  <code>{v.repo_id}</code>
-                </td>
-                <td style={{ padding: "10px 12px", borderBottom: "1px solid var(--border)" }}>{v.severity}</td>
-                <td style={{ padding: "10px 12px", borderBottom: "1px solid var(--border)" }}>{v.title}</td>
-                <td style={{ padding: "10px 12px", borderBottom: "1px solid var(--border)" }}>
-                  <code>{v.policy_id}</code>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-          </table>
-        </div>
-      </div>
+      <h2 className={typo.h2}>Recent violations</h2>
+      <DataTable
+        headers={["Time", "Repo", "Severity", "Title", "Policy"]}
+        minWidth={900}
+        rows={violations.violations.map((v) => (
+          <tr key={v.id}>
+            <TD>{new Date(v.created_at).toLocaleString()}</TD>
+            <TD>
+              <code>{v.repo_id}</code>
+            </TD>
+            <TD>{v.severity}</TD>
+            <TD>{v.title}</TD>
+            <TD>
+              <code>{v.policy_id}</code>
+            </TD>
+          </tr>
+        ))}
+      />
 
       {violations.violations.length > 0 && (
         <>
-          <h2 style={{ marginTop: 18 }}>Latest violation details</h2>
+          <h2 className={typo.h2}>Latest violation details</h2>
           <pre style={{ whiteSpace: "pre-wrap" }}>
             {JSON.stringify(violations.violations[0]?.details ?? null, null, 2)}
           </pre>

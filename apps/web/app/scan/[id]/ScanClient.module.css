@@ -1,0 +1,12 @@
+.score {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin-top: 6px;
+}
+
+.detailsPre {
+  white-space: pre-wrap;
+  margin-top: 10px;
+}
+

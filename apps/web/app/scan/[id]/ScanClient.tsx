@@ -1,6 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import styles from "./ScanClient.module.css";
+import layoutStyles from "./ScanClientLayout.module.css";
+import { Card, cardStyles } from "../../_components/ui/Card";
+import { Button, Row } from "../../_components/ui/Form";
 
 type ScanRow = {
   id: string;
@@ -33,8 +37,8 @@ export default function ScanClient({ id }: { id: string }) {
     return () => es.close();
   }, [id]);
 
-  if (err) return <div className="rs-card">Error: {err}</div>;
-  if (!data) return <div className="rs-card">Connecting…</div>;
+  if (err) return <Card title="Error">{err}</Card>;
+  if (!data) return <Card title="Connecting">Waiting for events…</Card>;
 
   const score = data.result?.totalScore;
   const layers = data.result?.layerScores;
@@ -42,69 +46,61 @@ export default function ScanClient({ id }: { id: string }) {
   const findings = Array.isArray(data.result?.findings) ? data.result.findings : [];
 
   return (
-    <div className="rs-grid">
-      <section className="rs-card">
-        <h2 className="rs-card__title">Status</h2>
-        <p className="rs-muted">
-          <b>{data.status}</b>
-        </p>
+    <div className={layoutStyles.grid}>
+      <Card title="Status" subtitle={<b>{data.status}</b>}>
         {data.status === "running" || data.status === "queued" ? (
-          <div className="rs-note">This page updates automatically.</div>
+          <div className={cardStyles.note}>This page updates automatically.</div>
         ) : null}
-      </section>
+      </Card>
 
-      <section className="rs-card">
-        <h2 className="rs-card__title">Risk score</h2>
-        <div style={{ fontSize: 32, fontWeight: 700, letterSpacing: "-0.03em", marginTop: 6 }}>
-          {typeof score === "number" ? score : "n/a"}
-        </div>
+      <Card title="Risk score">
+        <div className={styles.score}>{typeof score === "number" ? score : "n/a"}</div>
         {layers ? (
-          <div className="rs-note">
+          <div className={cardStyles.note}>
             security: <b>{layers.security}</b> • maintainability: <b>{layers.maintainability}</b> • ecosystem:{" "}
             <b>{layers.ecosystem}</b> • upgradeImpact: <b>{layers.upgradeImpact}</b>
           </div>
         ) : (
-          <div className="rs-muted">No layer breakdown yet.</div>
+          <div className={cardStyles.muted}>No layer breakdown yet.</div>
         )}
-      </section>
+      </Card>
 
       {data.status === "done" && (
-        <section className="rs-card">
-          <h2 className="rs-card__title">Top actions</h2>
+        <Card title="Top actions">
           {recs.length === 0 ? (
-            <div className="rs-muted">No recommendations yet.</div>
+            <div className={cardStyles.muted}>No recommendations yet.</div>
           ) : (
             <ol style={{ marginTop: 10, paddingLeft: 18 }}>
               {recs.slice(0, 5).map((r: any) => (
                 <li key={String(r.id ?? r.title)}>
                   <b>{String(r.title ?? "Untitled")}</b>{" "}
-                  <span className="rs-muted">({Number(r.priorityScore ?? 0)})</span>
+                  <span className={cardStyles.muted}>({Number(r.priorityScore ?? 0)})</span>
                 </li>
               ))}
             </ol>
           )}
           {findings.length ? (
-            <div className="rs-note">Findings: <b>{findings.length}</b></div>
+            <div className={cardStyles.note}>
+              Findings: <b>{findings.length}</b>
+            </div>
           ) : null}
-        </section>
+        </Card>
       )}
 
       {data.status === "failed" && (
-        <section className="rs-card">
-          <h2 className="rs-card__title">Failure</h2>
+        <Card title="Failure">
           <pre style={{ whiteSpace: "pre-wrap" }}>{data.error}</pre>
-        </section>
+        </Card>
       )}
 
-      <section className="rs-card">
-        <h2 className="rs-card__title">Details</h2>
-        <div className="rs-row">
-          <button className="rs-button rs-button--secondary" onClick={() => setShowRaw((s) => !s)}>
+      <Card title="Details">
+        <Row>
+          <Button variant="secondary" onClick={() => setShowRaw((s) => !s)}>
             {showRaw ? "Hide" : "Show"} raw JSON
-          </button>
-        </div>
-        {showRaw ? <pre style={{ whiteSpace: "pre-wrap", marginTop: 10 }}>{JSON.stringify(data, null, 2)}</pre> : null}
-      </section>
+          </Button>
+        </Row>
+        {showRaw ? <pre className={styles.detailsPre}>{JSON.stringify(data, null, 2)}</pre> : null}
+      </Card>
     </div>
   );
 }

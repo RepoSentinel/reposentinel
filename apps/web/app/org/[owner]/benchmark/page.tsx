@@ -1,4 +1,8 @@
 import { AppShell } from "../../../_components/AppShell";
+import { DataTable, TD } from "../../../_components/ui/Table";
+import { Card, cardStyles } from "../../../_components/ui/Card";
+import styles from "./Benchmark.module.css";
+import typo from "../../../_styles/typography.module.css";
 
 type Summary = {
   scope: "global" | "owner";
@@ -43,16 +47,16 @@ export default async function Page({ params }: { params: Promise<{ owner: string
       subtitle="Higher totalScore means higher relative risk."
       owner={owner}
     >
-      <h2 style={{ marginTop: 6 }}>Global distribution</h2>
+      <h2 className={typo.h2Tight}>Global distribution</h2>
       <SummaryCards s={global} />
 
-      <h2 style={{ marginTop: 18 }}>Org distribution</h2>
+      <h2 className={typo.h2}>Org distribution</h2>
       <SummaryCards s={org} />
 
-      <h2 style={{ marginTop: 18 }}>Org worst (highest risk)</h2>
+      <h2 className={typo.h2}>Org worst (highest risk)</h2>
       <RepoList rows={org.worst} />
 
-      <h2 style={{ marginTop: 18 }}>Org best (lowest risk)</h2>
+      <h2 className={typo.h2}>Org best (lowest risk)</h2>
       <RepoList rows={org.best} />
     </AppShell>
   );
@@ -70,27 +74,33 @@ function SummaryCards({ s }: { s: Summary }) {
   ];
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 10 }}>
+    <div className={styles.grid}>
       {items.map(([k, v]) => (
-        <div key={k} style={{ border: "1px solid var(--border)", borderRadius: 10, padding: 12 }}>
-          <div style={{ fontSize: 12, opacity: 0.7 }}>{k}</div>
-          <div style={{ fontSize: 20, fontWeight: 600 }}>{v}</div>
-        </div>
+        <Card key={k} as="div" title={k} subtitle={<b className={styles.metricValue}>{v}</b>}>
+          <div />
+        </Card>
       ))}
     </div>
   );
 }
 
 function RepoList({ rows }: { rows: Array<{ repoId: string; totalScore: number; createdAt: string }> }) {
-  if (!rows.length) return <div style={{ opacity: 0.8 }}>No scored repos yet.</div>;
+  if (!rows.length) return <div className={cardStyles.muted}>No scored repos yet.</div>;
   return (
-    <ul>
-      {rows.map((r) => (
-        <li key={r.repoId}>
-          <code>{r.repoId}</code> — <b>{r.totalScore}</b> ({new Date(r.createdAt).toLocaleString()})
-        </li>
+    <DataTable
+      headers={["Repo", "Score", "Last scan"]}
+      rows={rows.map((r) => (
+        <tr key={r.repoId}>
+          <TD>
+            <code>{r.repoId}</code>
+          </TD>
+          <TD>
+            <b>{r.totalScore}</b>
+          </TD>
+          <TD>{new Date(r.createdAt).toLocaleString()}</TD>
+        </tr>
       ))}
-    </ul>
+    />
   );
 }
 
