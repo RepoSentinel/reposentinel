@@ -32,6 +32,18 @@ export type ScanRequest = {
 
 export type ScoreLayer = keyof LayerScores;
 
+export type RiskConfidence = "low" | "medium" | "high";
+
+export type RiskSignal = {
+  id: string;
+  layer: ScoreLayer;
+  name: string;
+  value: number;
+  weight: number;
+  scoreImpact: number;
+  evidence?: Record<string, unknown>;
+};
+
 export type ScoreContribution = {
   id: string;
   layer: ScoreLayer;
@@ -51,6 +63,9 @@ export type ScanResult = {
   totalScore: number;
   layerScores: LayerScores;
   findings: Finding[];
+  methodologyVersion?: string;
+  confidence?: RiskConfidence;
+  signals?: RiskSignal[];
   contributions?: ScoreContribution[];
   recommendations?: Recommendation[];
   generatedAt: string;
