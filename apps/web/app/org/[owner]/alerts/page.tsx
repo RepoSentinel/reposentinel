@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { AppShell } from "../../../_components/AppShell";
 
 type OrgAlerts = {
   owner: string;
@@ -33,32 +33,19 @@ export default async function Page({
   if (!res.ok) {
     const text = await res.text();
     return (
-      <div style={{ padding: 16 }}>
-        <h1>Alerts: {owner}</h1>
-        <pre>{text}</pre>
-      </div>
+      <AppShell title="Alerts" subtitle={owner} owner={owner}>
+        <pre style={{ whiteSpace: "pre-wrap" }}>{text}</pre>
+      </AppShell>
     );
   }
 
   const data = (await res.json()) as OrgAlerts;
 
   return (
-    <div style={{ padding: 16 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
-        <div>
-          <h1 style={{ margin: 0 }}>Alerts: {data.owner}</h1>
-          <div style={{ opacity: 0.8, marginTop: 6 }}>
-            total: <b>{data.alerts.length}</b>
-          </div>
-        </div>
-        <div style={{ display: "flex", gap: 12, alignSelf: "center" }}>
-          <Link href={`/org/${encodeURIComponent(owner)}`}>Dashboard</Link>
-          <Link href="/">Home</Link>
-        </div>
-      </div>
-
-      <div style={{ overflowX: "auto", marginTop: 16 }}>
-        <table style={{ borderCollapse: "collapse", width: "100%", minWidth: 900 }}>
+    <AppShell title="Alerts" subtitle={`recent: ${data.alerts.length}`} owner={owner}>
+      <div className="rs-card" style={{ padding: 0 }}>
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ borderCollapse: "collapse", width: "100%", minWidth: 900 }}>
           <thead>
             <tr>
               {["Time", "Repo", "Severity", "Title", "Type"].map((h) => (
@@ -66,9 +53,11 @@ export default async function Page({
                   key={h}
                   style={{
                     textAlign: "left",
-                    borderBottom: "1px solid #ddd",
-                    padding: "10px 8px",
+                    borderBottom: "1px solid var(--border)",
+                    padding: "10px 12px",
                     whiteSpace: "nowrap",
+                    fontSize: 12,
+                    opacity: 0.8,
                   }}
                 >
                   {h}
@@ -79,21 +68,22 @@ export default async function Page({
           <tbody>
             {data.alerts.map((a) => (
               <tr key={a.id}>
-                <td style={{ padding: "10px 8px", borderBottom: "1px solid #f0f0f0" }}>
+                <td style={{ padding: "10px 12px", borderBottom: "1px solid var(--border)" }}>
                   {new Date(a.created_at).toLocaleString()}
                 </td>
-                <td style={{ padding: "10px 8px", borderBottom: "1px solid #f0f0f0" }}>
+                <td style={{ padding: "10px 12px", borderBottom: "1px solid var(--border)" }}>
                   <code>{a.repo_id}</code>
                 </td>
-                <td style={{ padding: "10px 8px", borderBottom: "1px solid #f0f0f0" }}>{a.severity}</td>
-                <td style={{ padding: "10px 8px", borderBottom: "1px solid #f0f0f0" }}>{a.title}</td>
-                <td style={{ padding: "10px 8px", borderBottom: "1px solid #f0f0f0" }}>
+                <td style={{ padding: "10px 12px", borderBottom: "1px solid var(--border)" }}>{a.severity}</td>
+                <td style={{ padding: "10px 12px", borderBottom: "1px solid var(--border)" }}>{a.title}</td>
+                <td style={{ padding: "10px 12px", borderBottom: "1px solid var(--border)" }}>
                   <code>{a.type}</code>
                 </td>
               </tr>
             ))}
           </tbody>
-        </table>
+          </table>
+        </div>
       </div>
 
       {data.alerts.length > 0 && (
@@ -104,7 +94,7 @@ export default async function Page({
           </pre>
         </>
       )}
-    </div>
+    </AppShell>
   );
 }
 

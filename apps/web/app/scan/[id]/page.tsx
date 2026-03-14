@@ -1,4 +1,5 @@
 import ScanClient from "./ScanClient";
+import { AppShell } from "../../_components/AppShell";
 
 export default async function Page({
   params,
@@ -6,5 +7,9 @@ export default async function Page({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  return <ScanClient id={id} />;
+  return (
+    <AppShell title="Scan" subtitle={id}>
+      <ScanClient id={id} />
+    </AppShell>
+  );
 }

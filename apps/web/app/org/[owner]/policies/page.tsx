@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { AppShell } from "../../../_components/AppShell";
 
 type PoliciesResponse = {
   owner: string;
@@ -49,11 +49,10 @@ export default async function Page({
     const t1 = await pRes.text();
     const t2 = await vRes.text();
     return (
-      <div style={{ padding: 16 }}>
-        <h1>Policies: {owner}</h1>
-        <pre>{t1}</pre>
-        <pre>{t2}</pre>
-      </div>
+      <AppShell title="Policies" subtitle={owner} owner={owner}>
+        <pre style={{ whiteSpace: "pre-wrap" }}>{t1}</pre>
+        <pre style={{ whiteSpace: "pre-wrap" }}>{t2}</pre>
+      </AppShell>
     );
   }
 
@@ -61,26 +60,15 @@ export default async function Page({
   const violations = (await vRes.json()) as ViolationsResponse;
 
   return (
-    <div style={{ padding: 16 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
-        <div>
-          <h1 style={{ margin: 0 }}>Policies: {owner}</h1>
-          <div style={{ opacity: 0.8, marginTop: 6 }}>
-            policies: <b>{policies.policies.length}</b> • recent violations:{" "}
-            <b>{violations.violations.length}</b>
-          </div>
-        </div>
-        <div style={{ display: "flex", gap: 12, alignSelf: "center" }}>
-          <Link href={`/org/${encodeURIComponent(owner)}`}>Dashboard</Link>
-          <Link href={`/org/${encodeURIComponent(owner)}/alerts`}>Alerts</Link>
-          <Link href="/">Home</Link>
-        </div>
-      </div>
-
-      <h2 style={{ marginTop: 18 }}>Policies</h2>
+    <AppShell
+      title="Policies"
+      subtitle={`policies: ${policies.policies.length} • recent violations: ${violations.violations.length}`}
+      owner={owner}
+    >
+      <h2 style={{ marginTop: 6 }}>Policies</h2>
       {policies.policies.length === 0 ? (
-        <div style={{ opacity: 0.8 }}>
-          No policies yet. Create one via API:
+        <div className="rs-card">
+          <div className="rs-muted">No policies yet. Create one via API:</div>
           <pre style={{ whiteSpace: "pre-wrap" }}>
 {`curl -X POST "${baseUrl}/org/${owner}/policies" \\
   -H "Content-Type: application/json" \\
@@ -100,8 +88,9 @@ export default async function Page({
       )}
 
       <h2 style={{ marginTop: 18 }}>Recent violations</h2>
-      <div style={{ overflowX: "auto" }}>
-        <table style={{ borderCollapse: "collapse", width: "100%", minWidth: 900 }}>
+      <div className="rs-card" style={{ padding: 0 }}>
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ borderCollapse: "collapse", width: "100%", minWidth: 900 }}>
           <thead>
             <tr>
               {["Time", "Repo", "Severity", "Title", "Policy"].map((h) => (
@@ -109,9 +98,11 @@ export default async function Page({
                   key={h}
                   style={{
                     textAlign: "left",
-                    borderBottom: "1px solid #ddd",
-                    padding: "10px 8px",
+                    borderBottom: "1px solid var(--border)",
+                    padding: "10px 12px",
                     whiteSpace: "nowrap",
+                    fontSize: 12,
+                    opacity: 0.8,
                   }}
                 >
                   {h}
@@ -122,21 +113,22 @@ export default async function Page({
           <tbody>
             {violations.violations.map((v) => (
               <tr key={v.id}>
-                <td style={{ padding: "10px 8px", borderBottom: "1px solid #f0f0f0" }}>
+                <td style={{ padding: "10px 12px", borderBottom: "1px solid var(--border)" }}>
                   {new Date(v.created_at).toLocaleString()}
                 </td>
-                <td style={{ padding: "10px 8px", borderBottom: "1px solid #f0f0f0" }}>
+                <td style={{ padding: "10px 12px", borderBottom: "1px solid var(--border)" }}>
                   <code>{v.repo_id}</code>
                 </td>
-                <td style={{ padding: "10px 8px", borderBottom: "1px solid #f0f0f0" }}>{v.severity}</td>
-                <td style={{ padding: "10px 8px", borderBottom: "1px solid #f0f0f0" }}>{v.title}</td>
-                <td style={{ padding: "10px 8px", borderBottom: "1px solid #f0f0f0" }}>
+                <td style={{ padding: "10px 12px", borderBottom: "1px solid var(--border)" }}>{v.severity}</td>
+                <td style={{ padding: "10px 12px", borderBottom: "1px solid var(--border)" }}>{v.title}</td>
+                <td style={{ padding: "10px 12px", borderBottom: "1px solid var(--border)" }}>
                   <code>{v.policy_id}</code>
                 </td>
               </tr>
             ))}
           </tbody>
-        </table>
+          </table>
+        </div>
       </div>
 
       {violations.violations.length > 0 && (
@@ -147,7 +139,7 @@ export default async function Page({
           </pre>
         </>
       )}
-    </div>
+    </AppShell>
   );
 }
 

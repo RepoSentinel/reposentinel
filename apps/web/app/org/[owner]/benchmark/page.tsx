@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { AppShell } from "../../../_components/AppShell";
 
 type Summary = {
   scope: "global" | "owner";
@@ -27,11 +27,10 @@ export default async function Page({ params }: { params: Promise<{ owner: string
     const t1 = await globalRes.text();
     const t2 = await ownerRes.text();
     return (
-      <div style={{ padding: 16 }}>
-        <h1>Benchmark: {owner}</h1>
-        <pre>{t1}</pre>
-        <pre>{t2}</pre>
-      </div>
+      <AppShell title="Benchmark" subtitle={owner} owner={owner}>
+        <pre style={{ whiteSpace: "pre-wrap" }}>{t1}</pre>
+        <pre style={{ whiteSpace: "pre-wrap" }}>{t2}</pre>
+      </AppShell>
     );
   }
 
@@ -39,23 +38,12 @@ export default async function Page({ params }: { params: Promise<{ owner: string
   const org = (await ownerRes.json()) as Summary;
 
   return (
-    <div style={{ padding: 16 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
-        <div>
-          <h1 style={{ margin: 0 }}>Benchmark: {owner}</h1>
-          <div style={{ opacity: 0.8, marginTop: 6 }}>
-            Higher <code>totalScore</code> means higher relative risk.
-          </div>
-        </div>
-        <div style={{ display: "flex", gap: 12, alignSelf: "center" }}>
-          <Link href={`/org/${encodeURIComponent(owner)}`}>Dashboard</Link>
-          <Link href={`/org/${encodeURIComponent(owner)}/alerts`}>Alerts</Link>
-          <Link href={`/org/${encodeURIComponent(owner)}/policies`}>Policies</Link>
-          <Link href="/">Home</Link>
-        </div>
-      </div>
-
-      <h2 style={{ marginTop: 18 }}>Global distribution</h2>
+    <AppShell
+      title="Benchmark"
+      subtitle="Higher totalScore means higher relative risk."
+      owner={owner}
+    >
+      <h2 style={{ marginTop: 6 }}>Global distribution</h2>
       <SummaryCards s={global} />
 
       <h2 style={{ marginTop: 18 }}>Org distribution</h2>
@@ -66,7 +54,7 @@ export default async function Page({ params }: { params: Promise<{ owner: string
 
       <h2 style={{ marginTop: 18 }}>Org best (lowest risk)</h2>
       <RepoList rows={org.best} />
-    </div>
+    </AppShell>
   );
 }
 
@@ -84,7 +72,7 @@ function SummaryCards({ s }: { s: Summary }) {
   return (
     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 10 }}>
       {items.map(([k, v]) => (
-        <div key={k} style={{ border: "1px solid #eee", borderRadius: 10, padding: 12 }}>
+        <div key={k} style={{ border: "1px solid var(--border)", borderRadius: 10, padding: 12 }}>
           <div style={{ fontSize: 12, opacity: 0.7 }}>{k}</div>
           <div style={{ fontSize: 20, fontWeight: 600 }}>{v}</div>
         </div>
