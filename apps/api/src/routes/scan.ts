@@ -35,6 +35,7 @@ export async function scanRoutes(app: FastifyInstance) {
           scanId,
           repoId: body.repoId,
           dependencyGraph: body.dependencyGraph,
+          lockfile: body.lockfile,
         },
         {
           jobId: scanId,

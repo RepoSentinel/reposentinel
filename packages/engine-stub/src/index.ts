@@ -1,4 +1,5 @@
 import type {
+  Finding,
   LayerScores,
   RiskSignal,
   ScanRequest,
@@ -6,9 +7,15 @@ import type {
   ScoreContribution,
   ScoreLayer,
 } from "@reposentinel/shared";
+import { graphFromPnpmLockfile } from "./pnpmLock";
 
 export async function analyze(req: ScanRequest): Promise<ScanResult> {
-  const stats = deriveDependencyStats(req.dependencyGraph);
+  const derivedGraph =
+    req.lockfile?.manager === "pnpm" && typeof req.lockfile.content === "string"
+      ? graphFromPnpmLockfile(req.lockfile.content)
+      : null;
+
+  const stats = deriveDependencyStats(derivedGraph ?? req.dependencyGraph);
   const signals = buildSignals(stats);
   const layerScores = computeLayerScores(signals);
   const totalScore = computeTotalScore(layerScores);
@@ -33,6 +40,8 @@ type DependencyStats = {
   directDepsCount: number;
   maxDepthEstimate: number;
   duplicateVersionPackages: number;
+  fanInMax: number;
+  fanInTop: Array<{ name: string; version: string; fanIn: number }>;
 };
 
 function deriveDependencyStats(input: unknown): DependencyStats {
@@ -43,6 +52,8 @@ function deriveDependencyStats(input: unknown): DependencyStats {
     directDepsCount: 0,
     maxDepthEstimate: 0,
     duplicateVersionPackages: 0,
+    fanInMax: 0,
+    fanInTop: [],
   };
 
   if (!input || typeof input !== "object") return empty;
@@ -61,12 +72,12 @@ function deriveDependencyStats(input: unknown): DependencyStats {
 
   const edgeCount = edgesArr?.length ?? 0;
 
-  const directDepsCount =
-    typeof obj.directDependencies === "object" && obj.directDependencies
-      ? Object.keys(obj.directDependencies as any).length
-      : typeof obj.directDeps === "object" && obj.directDeps
-        ? Object.keys(obj.directDeps as any).length
-        : 0;
+  const directDepsObj =
+    (typeof (obj as any).directDeps === "object" && (obj as any).directDeps) ||
+    (typeof (obj as any).directDependencies === "object" && (obj as any).directDependencies) ||
+    null;
+
+  const directDepsCount = directDepsObj ? Object.keys(directDepsObj as any).length : 0;
 
   const versionsByName =
     typeof obj.versionsByName === "object" && obj.versionsByName
@@ -76,6 +87,19 @@ function deriveDependencyStats(input: unknown): DependencyStats {
   const duplicateVersionPackages = versionsByName
     ? Object.values(versionsByName).filter((v) => Array.isArray(v) && v.length > 1).length
     : 0;
+
+  const fanInTopRaw = Array.isArray(obj.fanInTop) ? (obj.fanInTop as any[]) : [];
+  const fanInTop = fanInTopRaw
+    .map((x) => ({
+      name: String(x?.name ?? ""),
+      version: String(x?.version ?? ""),
+      fanIn: Number(x?.fanIn ?? 0),
+    }))
+    .filter((x) => x.name && x.version && Number.isFinite(x.fanIn) && x.fanIn > 0)
+    .sort((a, b) => b.fanIn - a.fanIn)
+    .slice(0, 10);
+
+  const fanInMax = fanInTop.length ? fanInTop[0].fanIn : 0;
 
   const hasGraphLikeShape =
     Boolean(nodesArr) || Boolean(edgesArr) || (deps && typeof deps === "object") || directDepsCount > 0;
@@ -92,6 +116,8 @@ function deriveDependencyStats(input: unknown): DependencyStats {
     directDepsCount: Math.max(0, directDepsCount),
     maxDepthEstimate: Math.max(0, maxDepthEstimate),
     duplicateVersionPackages: Math.max(0, duplicateVersionPackages),
+    fanInMax: Math.max(0, fanInMax),
+    fanInTop,
   };
 }
 
@@ -146,6 +172,16 @@ function buildSignals(stats: DependencyStats): RiskSignal[] {
     1,
     clampScore((stats.duplicateVersionPackages / 25) * 30),
     { duplicateVersionPackages: stats.duplicateVersionPackages },
+  );
+
+  add(
+    "graph.fan_in_max",
+    "upgradeImpact",
+    "Transitive blast radius (max fan-in)",
+    stats.fanInMax,
+    1,
+    clampScore((stats.fanInMax / 20) * 25),
+    { top: stats.fanInTop.slice(0, 3) },
   );
 
   add(
@@ -220,7 +256,7 @@ function signalsToContributions(signals: RiskSignal[]): ScoreContribution[] {
   }));
 }
 
-function buildFindings(stats: DependencyStats) {
+function buildFindings(stats: DependencyStats): Finding[] {
   if (!stats.hasGraphLikeShape) {
     return [
       {
@@ -228,22 +264,36 @@ function buildFindings(stats: DependencyStats) {
         title: "Limited input; confidence reduced",
         description:
           "No dependency graph or lockfile-derived graph was provided. Scores are conservative and based on minimal heuristics.",
-        severity: "medium" as const,
+        severity: "medium",
         packageName: "repository",
         recommendation: "Provide a lockfile (pnpm-lock.yaml or package-lock.json) for deeper analysis.",
       },
     ];
   }
 
-  return [
+  const findings: Finding[] = [
     {
       id: "engine-v1",
       title: "Explainable scoring enabled",
       description: "This scan includes per-signal score contributions and a methodology version.",
-      severity: "low" as const,
+      severity: "low",
       packageName: "repository",
     },
   ];
+
+  if (stats.fanInTop.length) {
+    findings.push({
+      id: "transitive-hotspots",
+      title: "Transitive dependency hotspots detected",
+      description:
+        "Some transitive packages are depended on by many others, increasing blast radius for vulnerabilities and upgrades.",
+      severity: "medium",
+      packageName: stats.fanInTop[0].name,
+      recommendation: "Prioritize monitoring and cautious upgrades for the highest fan-in transitive packages.",
+    });
+  }
+
+  return findings;
 }
 
 function buildRecommendations(stats: DependencyStats) {

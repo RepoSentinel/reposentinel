@@ -12,6 +12,7 @@ type ScanJob = {
   scanId: string;
   repoId: string;
   dependencyGraph: unknown;
+  lockfile?: ScanRequest["lockfile"];
 };
 
 const connection = { url: process.env.REDIS_URL! };
@@ -28,7 +29,7 @@ setInterval(() => {
 new Worker<ScanJob>(
   "scan-queue",
   async (job) => {
-    const { scanId, repoId, dependencyGraph } = job.data;
+    const { scanId, repoId, dependencyGraph, lockfile } = job.data;
 
     const moved = await transitionToRunning(scanId);
     if (!moved) {
@@ -43,7 +44,7 @@ new Worker<ScanJob>(
     }, heartbeatEveryMs);
 
     try {
-      const req: ScanRequest = { repoId, dependencyGraph };
+      const req: ScanRequest = { repoId, dependencyGraph, lockfile };
       const delayMs = Number(process.env.SCAN_SIMULATE_DELAY_MS ?? 0);
       if (delayMs > 0) await new Promise((r) => setTimeout(r, delayMs));
       const result = await analyze(req);

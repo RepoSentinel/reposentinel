@@ -12,7 +12,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@reposentinel/shared": "workspace:^"
+    "@reposentinel/shared": "workspace:^",
+    "yaml": "^2.8.2"
   },
   "devDependencies": {
     "@types/node": "^22.15.3",
