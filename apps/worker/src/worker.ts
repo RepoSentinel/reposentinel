@@ -100,6 +100,13 @@ new Worker<ScanJob>(
         throw new Error("Scan is not running; refusing to overwrite result");
       }
 
+      try {
+        await evaluatePoliciesForScan({ repoId, scanId, result });
+      } catch (e: any) {
+        // eslint-disable-next-line no-console
+        console.error("Policy evaluation failed:", String(e?.message ?? e));
+      }
+
       if (github?.prNumber) {
         try {
           await postGithubPrReviewComment({
@@ -542,4 +549,106 @@ async function withConcurrency<T>(
     }
   });
   await Promise.all(workers);
+}
+
+type PolicyRule =
+  | { type: "no_deprecated" }
+  | { type: "max_stale_releases_count"; max: number }
+  | { type: "max_bus_factor_low_count"; max: number };
+
+type PolicyRow = {
+  id: string;
+  owner: string;
+  name: string;
+  enabled: boolean;
+  rules: PolicyRule[];
+};
+
+async function evaluatePoliciesForScan(opts: { repoId: string; scanId: string; result: any }) {
+  const owner = opts.repoId.includes("/") ? opts.repoId.split("/")[0] : opts.repoId;
+  if (!owner) return;
+
+  const { rows } = await db.query(
+    "SELECT id, owner, name, enabled, rules FROM policies WHERE owner=$1 AND enabled=true ORDER BY created_at DESC",
+    [owner],
+  );
+  if (!rows.length) return;
+
+  const policies = rows as PolicyRow[];
+  const signalsById = indexSignalsById(Array.isArray(opts.result?.signals) ? opts.result.signals : []);
+
+  for (const p of policies) {
+    const violations = evaluatePolicy(p, { repoId: opts.repoId, scanId: opts.scanId, signalsById });
+    if (violations.length === 0) continue;
+    for (const v of violations) {
+      await db.query(
+        "INSERT INTO policy_violations (id, policy_id, owner, repo_id, fingerprint, severity, title, details) VALUES ($1,$2,$3,$4,$5,$6,$7,$8::jsonb) ON CONFLICT (policy_id, repo_id, fingerprint) DO NOTHING",
+        [
+          randomUUID(),
+          p.id,
+          owner,
+          opts.repoId,
+          v.fingerprint,
+          v.severity,
+          v.title,
+          JSON.stringify(v.details),
+        ],
+      );
+    }
+  }
+}
+
+function evaluatePolicy(
+  policy: PolicyRow,
+  ctx: { repoId: string; scanId: string; signalsById: Record<string, any> },
+) {
+  const out: Array<{
+    fingerprint: string;
+    severity: "low" | "medium" | "high";
+    title: string;
+    details: any;
+  }> = [];
+
+  const deprecatedCount = toNumber(ctx.signalsById["health.deprecated_count"]?.value);
+  const staleCount = toNumber(ctx.signalsById["health.stale_releases_count"]?.value);
+  const busLowCount = toNumber(ctx.signalsById["health.bus_factor_low_count"]?.value);
+
+  for (const r of Array.isArray(policy.rules) ? policy.rules : []) {
+    if (r.type === "no_deprecated") {
+      if (deprecatedCount !== null && deprecatedCount > 0) {
+        out.push({
+          fingerprint: `no_deprecated:${deprecatedCount}`,
+          severity: "high",
+          title: `Policy violation: deprecated dependencies (${deprecatedCount})`,
+          details: { policy: policy.name, rule: r, signalId: "health.deprecated_count", value: deprecatedCount },
+        });
+      }
+    } else if (r.type === "max_stale_releases_count") {
+      if (staleCount !== null && staleCount > r.max) {
+        out.push({
+          fingerprint: `max_stale_releases_count:${r.max}:${staleCount}`,
+          severity: "medium",
+          title: `Policy violation: stale releases count ${staleCount} > ${r.max}`,
+          details: { policy: policy.name, rule: r, signalId: "health.stale_releases_count", value: staleCount },
+        });
+      }
+    } else if (r.type === "max_bus_factor_low_count") {
+      if (busLowCount !== null && busLowCount > r.max) {
+        out.push({
+          fingerprint: `max_bus_factor_low_count:${r.max}:${busLowCount}`,
+          severity: "medium",
+          title: `Policy violation: low bus-factor deps ${busLowCount} > ${r.max}`,
+          details: { policy: policy.name, rule: r, signalId: "health.bus_factor_low_count", value: busLowCount },
+        });
+      }
+    }
+  }
+
+  return out;
+}
+
+function toNumber(v: unknown): number | null {
+  if (v === null || v === undefined) return null;
+  const n = typeof v === "number" ? v : Number(v);
+  return Number.isFinite(n) ? n : null;
 }
