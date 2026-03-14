@@ -1,135 +1,216 @@
-# Turborepo starter
+## RepoSentinel
 
-This Turborepo starter is maintained by the Turborepo core team.
+RepoSentinel is a dependency risk intelligence platform designed to produce **actionable, explainable risk scores** for repositories.
 
-## Using this example
+This repository is an **early, working end-to-end system** (web + API + worker + Postgres + Redis) with a pluggable analysis engine. The current engine is `@reposentinel/engine-stub` (open, evolving) and can later be swapped for a proprietary engine without changing the surrounding platform.
 
-Run the following command:
+### License and disclaimer
 
-```sh
-npx create-turbo@latest
+RepoSentinel is licensed under **Apache-2.0** (see `LICENSE`).
+
+This software is provided **“as is”**, without warranty of any kind. You are responsible for validating outputs before acting on them.
+No security guarantees are provided; do not rely on this as your sole security control.
+
+### Demo (local)
+
+- **Web UI**: `http://localhost:3000`
+- **API**: `http://localhost:4000`
+
+### What you can do today
+
+- **Run scans asynchronously** via API (`POST /scan` → worker processes → results persisted in Postgres)
+- **Watch scan progress live** via SSE (`GET /scan/:id/events`)
+- **See results in a simple UI** (`/scan/:id`)
+- **Local CLI scan** (run analysis before committing): `pnpm rs scan`
+- **Upgrade impact simulation** (`POST /simulate/upgrade`)
+- **Org views**: dashboard, alerts, policies, benchmarks
+- **GitHub App ingestion** (optional): enqueue scans on PR / push lockfile changes
+- **Tier-based cost caps** (free/paid gating for expensive actions)
+
+---
+
+## Quickstart (local)
+
+### Requirements
+
+- **Node**: use `.nvmrc` (recommended: Node 22)
+- **pnpm**: workspace package manager
+- **Docker**: for Postgres + Redis
+
+### Install
+
+From the repo root:
+
+```bash
+nvm use
+pnpm install
+docker compose up -d
 ```
 
-## What's inside?
+### Configure environment
 
-This Turborepo includes the following packages/apps:
+API:
 
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
-
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
+```bash
+cp apps/api/.env.example apps/api/.env
 ```
 
-You can build a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
+Web (create `apps/web/.env.local`):
 
-```
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
-
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
+```bash
+NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
 ```
 
-### Develop
+### Run dev servers (recommended)
 
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
-
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
+```bash
+pnpm -C apps/api dev
+pnpm -C apps/worker dev
+pnpm -C apps/web dev
 ```
 
-You can develop a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
+---
 
-```
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
+## CLI (local analysis)
 
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
+Run from any repo directory:
+
+```bash
+pnpm rs scan
 ```
 
-### Remote Caching
+Useful flags:
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
+```bash
+pnpm rs scan --json
+pnpm rs scan --out reposentinel-result.json
+pnpm rs scan --lockfile pnpm-lock.yaml
+pnpm rs scan --fail-above 20
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+Notes:
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+- The CLI currently runs **locally** (no `scanId`).
+- Remote mode (submit to API + stream SSE) can be added later as an opt-in.
 
+---
+
+## API usage (smoke test)
+
+Create a scan:
+
+```bash
+curl -sS -X POST "http://localhost:4000/scan" \
+  -H "Content-Type: application/json" \
+  -d '{"repoId":"demo/repo","dependencyGraph":{}}'
 ```
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
 
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
+Then fetch status:
+
+```bash
+curl -sS "http://localhost:4000/scan/<scanId>"
 ```
 
-## Useful Links
+Stream events (SSE):
 
-Learn more about the power of Turborepo:
+```bash
+curl -iN --http1.1 "http://localhost:4000/scan/<scanId>/events"
+```
 
-- [Tasks](https://turborepo.dev/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.dev/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.dev/docs/reference/configuration)
-- [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)
+---
+
+## Architecture
+
+### Components
+
+- **`apps/web`**: Next.js UI (App Router)
+- **`apps/api`**: Fastify API, CORS, SSE, webhooks, quotas/caps
+- **`apps/worker`**: BullMQ worker that runs analysis and persists results
+- **Postgres**: scan persistence + derived views (alerts, policies, benchmarks)
+- **Redis**: job queue (BullMQ)
+- **`packages/shared`**: TypeScript contracts
+- **`packages/engine-stub`**: analysis engine stub (`analyze`, `simulateUpgrade`)
+
+### Flow
+
+1. Client calls `POST /scan`
+2. API inserts scan row (`queued`) + enqueues a BullMQ job
+3. Worker transitions scan to `running`, runs engine analysis, persists `result` and score summary columns
+4. UI watches `GET /scan/:id/events` (SSE) for live updates
+
+---
+
+## Endpoints (high level)
+
+### Scans
+
+- `POST /scan`
+- `GET /scan/:id`
+- `GET /scan/:id/events` (SSE)
+- `GET /scans?repoId=...`
+
+### Simulation
+
+- `POST /simulate/upgrade`
+
+### Org views
+
+- `GET /org/:owner/dashboard`
+- `GET /org/:owner/alerts`
+- `GET /org/:owner/policies`
+- `GET /org/:owner/policy/violations`
+
+### Benchmarking
+
+- `GET /benchmark/global`
+- `GET /benchmark/org/:owner`
+- `GET /benchmark/repo?repoId=...`
+
+### GitHub App (optional)
+
+- `POST /github/webhook`
+
+See setup doc: `docs/github-app.md`.
+
+---
+
+## Migrations (local)
+
+The API can auto-apply SQL migrations on startup.
+
+- **Enabled by default**: `REPOSENTINEL_AUTO_MIGRATE=1`
+- **Disable**: set `REPOSENTINEL_AUTO_MIGRATE=0`
+
+Manual migration command:
+
+```bash
+pnpm -C apps/api migrate
+```
+
+---
+
+## Configuration notes
+
+### CORS
+
+API reads `CORS_ORIGINS` (comma-separated) from `apps/api/.env`:
+
+```bash
+CORS_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
+```
+
+### Tier caps (cost control)
+
+RepoSentinel supports a basic free/paid tier model for expensive operations.
+
+Environment variables include:
+
+- `REPOSENTINEL_DEFAULT_TIER` (`free` | `paid`)
+- `REPOSENTINEL_OWNER_TIERS` (e.g. `acme=paid,other=free`)
+- `FREE_*` and `PAID_*` limits for scans / PR comments / alerts
+
+---
+
+## Roadmap / disclaimer
+
+This is an early product build. Expect APIs and the scoring methodology to evolve. The engine output is designed to remain **explainable** and **forward-compatible** through shared contracts in `packages/shared`.
