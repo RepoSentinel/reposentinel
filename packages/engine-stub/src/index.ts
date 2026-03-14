@@ -44,6 +44,8 @@ type DependencyStats = {
   duplicateTop: Array<{ name: string; versions: string[] }>;
   fanInMax: number;
   fanInTop: Array<{ name: string; version: string; fanIn: number }>;
+  blastRadiusMax: number;
+  blastRadiusTop: Array<{ name: string; version: string; roots: number }>;
 };
 
 function deriveDependencyStats(input: unknown): DependencyStats {
@@ -57,6 +59,8 @@ function deriveDependencyStats(input: unknown): DependencyStats {
     duplicateTop: [],
     fanInMax: 0,
     fanInTop: [],
+    blastRadiusMax: 0,
+    blastRadiusTop: [],
   };
 
   if (!input || typeof input !== "object") return empty;
@@ -115,6 +119,19 @@ function deriveDependencyStats(input: unknown): DependencyStats {
 
   const fanInMax = fanInTop.length ? fanInTop[0].fanIn : 0;
 
+  const blastRadiusTopRaw = Array.isArray(obj.blastRadiusTop) ? (obj.blastRadiusTop as any[]) : [];
+  const blastRadiusTop = blastRadiusTopRaw
+    .map((x) => ({
+      name: String(x?.name ?? ""),
+      version: String(x?.version ?? ""),
+      roots: Number(x?.roots ?? 0),
+    }))
+    .filter((x) => x.name && x.version && Number.isFinite(x.roots) && x.roots > 0)
+    .sort((a, b) => b.roots - a.roots)
+    .slice(0, 10);
+
+  const blastRadiusMax = blastRadiusTop.length ? blastRadiusTop[0].roots : 0;
+
   const hasGraphLikeShape =
     Boolean(nodesArr) || Boolean(edgesArr) || (deps && typeof deps === "object") || directDepsCount > 0;
 
@@ -133,6 +150,8 @@ function deriveDependencyStats(input: unknown): DependencyStats {
     duplicateTop,
     fanInMax: Math.max(0, fanInMax),
     fanInTop,
+    blastRadiusMax: Math.max(0, blastRadiusMax),
+    blastRadiusTop,
   };
 }
 
@@ -197,6 +216,16 @@ function buildSignals(stats: DependencyStats): RiskSignal[] {
     1,
     clampScore((stats.fanInMax / 20) * 25),
     { top: stats.fanInTop.slice(0, 3) },
+  );
+
+  add(
+    "graph.blast_radius_roots_max",
+    "upgradeImpact",
+    "Root blast radius (direct deps affected)",
+    stats.blastRadiusMax,
+    1,
+    clampScore((stats.blastRadiusMax / 25) * 30),
+    { top: stats.blastRadiusTop.slice(0, 3) },
   );
 
   add(
@@ -308,6 +337,18 @@ function buildFindings(stats: DependencyStats): Finding[] {
     });
   }
 
+  if (stats.blastRadiusTop.length) {
+    findings.push({
+      id: "blast-radius",
+      title: "High blast radius dependencies detected",
+      description:
+        "Some transitive dependencies are reachable from a large fraction of your direct dependencies, so changes can have wide impact.",
+      severity: "medium",
+      packageName: stats.blastRadiusTop[0].name,
+      recommendation: "Use smaller upgrade steps and validate with tests when touching the highest blast-radius packages.",
+    });
+  }
+
   return findings;
 }
 
@@ -379,6 +420,22 @@ function buildRecommendations(stats: DependencyStats) {
       layers: ["upgradeImpact", "security"],
       packages: stats.fanInTop.slice(0, 5).map((x) => x.name),
       evidence: { top: stats.fanInTop.slice(0, 3) },
+    });
+  }
+
+  if (stats.blastRadiusTop.length) {
+    const priorityScore = clampScore((stats.blastRadiusMax / 25) * 80);
+    push({
+      id: "minimize-blast-radius",
+      title: "Use smaller upgrade steps for high blast-radius packages",
+      rationale:
+        "Packages reachable from many direct dependencies can cause widespread breakage when upgraded; incremental upgrades reduce risk.",
+      impact: impactFromPriority(priorityScore),
+      priorityScore,
+      estimatedScoreDelta: clampDelta(-clampScore((stats.blastRadiusMax / 25) * 20)),
+      layers: ["upgradeImpact", "maintainability"],
+      packages: stats.blastRadiusTop.slice(0, 5).map((x) => x.name),
+      evidence: { top: stats.blastRadiusTop.slice(0, 3) },
     });
   }
 

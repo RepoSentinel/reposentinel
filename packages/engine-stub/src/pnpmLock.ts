@@ -9,6 +9,7 @@ export type DependencyGraph = {
   versionsByName: Record<string, string[]>;
   maxDepth: number;
   fanInTop: Array<{ id: DepNodeId; name: string; version: string; fanIn: number }>;
+  blastRadiusTop: Array<{ id: DepNodeId; name: string; version: string; roots: number }>;
 };
 
 type PnpmLock = {
@@ -88,6 +89,7 @@ export function graphFromPnpmLockfile(lockfileYaml: string): DependencyGraph {
 
   const maxDepth = estimateMaxDepth(edges, Array.from(Object.entries(directDeps)).map(([n, v]) => `${n}@${v}`));
   const fanInTop = computeTopFanIn(nodes, edges, 10);
+  const blastRadiusTop = computeTopBlastRadius(nodes, edges, Object.entries(directDeps).map(([n, v]) => `${n}@${v}`), 10);
 
   return {
     nodes: Array.from(nodes.values()),
@@ -98,6 +100,7 @@ export function graphFromPnpmLockfile(lockfileYaml: string): DependencyGraph {
     ),
     maxDepth,
     fanInTop,
+    blastRadiusTop,
   };
 }
 
@@ -183,6 +186,47 @@ function computeTopFanIn(
       return n ? { id, name: n.name, version: n.version, fanIn: count } : null;
     })
     .filter(Boolean) as Array<{ id: string; name: string; version: string; fanIn: number }>;
+
+  return ranked;
+}
+
+function computeTopBlastRadius(
+  nodes: Map<string, { id: string; name: string; version: string }>,
+  edges: Array<{ from: string; to: string }>,
+  roots: string[],
+  limit: number,
+) {
+  const adj = new Map<string, string[]>();
+  for (const e of edges) {
+    const a = adj.get(e.from);
+    if (a) a.push(e.to);
+    else adj.set(e.from, [e.to]);
+  }
+
+  const reachCount = new Map<string, number>();
+
+  for (const root of roots) {
+    const seen = new Set<string>();
+    const stack = [root];
+    while (stack.length) {
+      const cur = stack.pop()!;
+      if (seen.has(cur)) continue;
+      seen.add(cur);
+      reachCount.set(cur, (reachCount.get(cur) ?? 0) + 1);
+      const next = adj.get(cur);
+      if (!next) continue;
+      for (const n of next) stack.push(n);
+    }
+  }
+
+  const ranked = Array.from(reachCount.entries())
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, limit)
+    .map(([id, rootsCount]) => {
+      const n = nodes.get(id);
+      return n ? { id, name: n.name, version: n.version, roots: rootsCount } : null;
+    })
+    .filter(Boolean) as Array<{ id: string; name: string; version: string; roots: number }>;
 
   return ranked;
 }
