@@ -1,9 +1,23 @@
 .card {
-  border: 1px solid var(--border);
-  background: var(--card);
-  border-radius: 14px;
-  padding: 14px;
-  box-shadow: 0 1px 10px var(--shadow);
+  border: 1px solid color-mix(in oklab, var(--rs-color-border) 90%, transparent);
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--rs-color-surface-emphasis) 65%, transparent),
+    var(--rs-color-surface)
+  );
+  border-radius: var(--rs-radius-lg);
+  padding: 16px;
+  box-shadow: var(--rs-shadow-sm);
+  backdrop-filter: blur(10px);
+  transition:
+    transform 140ms ease,
+    border-color 140ms ease,
+    background 140ms ease;
+}
+
+.card:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in oklab, var(--rs-color-border) 70%, var(--rs-color-accent) 30%);
 }
 
 .noPadding {
@@ -11,26 +25,34 @@
 }
 
 .title {
-  font-size: 16px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.9;
+  font-weight: 700;
+}
+
+.title + * {
+  margin-top: 10px;
   letter-spacing: -0.01em;
 }
 
 .muted {
   margin-top: 6px;
-  color: var(--muted);
+  color: var(--rs-color-text-muted);
   font-size: 13px;
 }
 
 .note {
   margin-top: 14px;
-  color: var(--muted);
+  color: var(--rs-color-text-muted);
   font-size: 13px;
 }
 
 .note code {
-  background: color-mix(in oklab, var(--card) 70%, transparent);
+  background: color-mix(in oklab, var(--rs-color-surface-emphasis) 70%, transparent);
   padding: 2px 6px;
   border-radius: 8px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--rs-color-border);
 }
 

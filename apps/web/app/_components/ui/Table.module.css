@@ -1,8 +1,13 @@
 .card {
-  border: 1px solid var(--border);
-  background: var(--card);
-  border-radius: 14px;
-  box-shadow: 0 1px 10px var(--shadow);
+  border: 1px solid var(--rs-color-border);
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--rs-color-surface-emphasis) 55%, transparent),
+    var(--rs-color-surface)
+  );
+  border-radius: var(--rs-radius-lg);
+  box-shadow: var(--rs-shadow-sm);
+  backdrop-filter: blur(10px);
 }
 
 .wrap {
@@ -17,16 +22,22 @@
 
 .th {
   text-align: left;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--rs-color-border);
   padding: 10px 12px;
   white-space: nowrap;
   font-size: 12px;
   opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 .td {
   padding: 10px 12px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--rs-color-border);
   vertical-align: top;
+}
+
+.table tbody tr:hover .td {
+  background: color-mix(in oklab, var(--rs-color-surface-emphasis) 50%, transparent);
 }
 

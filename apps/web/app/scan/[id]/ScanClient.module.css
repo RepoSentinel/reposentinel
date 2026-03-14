@@ -1,12 +1,80 @@
 .score {
-  font-size: 32px;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  margin-top: 6px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.scoreValue {
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  background: linear-gradient(90deg, var(--rs-color-accent), var(--rs-color-accent-alt));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.scoreMeta {
+  color: var(--rs-color-text-muted);
+  font-size: 13px;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--rs-color-border);
+  background: color-mix(in oklab, var(--rs-color-surface-emphasis) 75%, transparent);
+  font-size: 13px;
+  color: var(--rs-color-text);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--rs-color-text-muted);
+}
+
+.dotQueued {
+  background: var(--rs-color-warning);
+}
+
+.dotRunning {
+  background: var(--rs-color-accent-alt);
+}
+
+.dotDone {
+  background: var(--rs-color-success);
+}
+
+.dotFailed {
+  background: var(--rs-color-danger);
 }
 
 .detailsPre {
   white-space: pre-wrap;
   margin-top: 10px;
+  border-radius: var(--rs-radius-md);
+  border: 1px solid var(--rs-color-border);
+  background: color-mix(in oklab, var(--rs-color-surface) 85%, transparent);
+  padding: 12px;
+  overflow: auto;
+}
+
+.list {
+  margin-top: 10px;
+  padding-left: 18px;
+}
+
+.failurePre {
+  white-space: pre-wrap;
+  border-radius: var(--rs-radius-md);
+  border: 1px solid color-mix(in oklab, var(--rs-color-border) 70%, var(--rs-color-danger) 30%);
+  background: color-mix(in oklab, var(--rs-color-danger) 12%, var(--rs-color-surface));
+  padding: 12px;
 }
 

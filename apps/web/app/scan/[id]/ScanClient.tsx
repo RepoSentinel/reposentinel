@@ -52,17 +52,36 @@ export default function ScanClient({ id }: { id: string }) {
   const layers = data.result?.layerScores;
   const recs = Array.isArray(data.result?.recommendations) ? data.result.recommendations : [];
   const findings = Array.isArray(data.result?.findings) ? data.result.findings : [];
+  const dotClass =
+    data.status === "queued"
+      ? styles.dotQueued
+      : data.status === "running"
+        ? styles.dotRunning
+        : data.status === "done"
+          ? styles.dotDone
+          : styles.dotFailed;
 
   return (
     <div className={layoutStyles.grid}>
-      <Card title="Status" subtitle={<b>{data.status}</b>}>
+      <Card
+        title="Status"
+        subtitle={
+          <span className={styles.pill}>
+            <span className={[styles.dot, dotClass].join(" ")} />
+            {data.status}
+          </span>
+        }
+      >
         {data.status === "running" || data.status === "queued" ? (
           <div className={cardStyles.note}>This page updates automatically.</div>
         ) : null}
       </Card>
 
       <Card title="Risk score">
-        <div className={styles.score}>{typeof score === "number" ? score : "n/a"}</div>
+        <div className={styles.score}>
+          <div className={styles.scoreValue}>{typeof score === "number" ? score : "n/a"}</div>
+          <div className={styles.scoreMeta}>0 is best • 100 is worst</div>
+        </div>
         {layers ? (
           <div className={cardStyles.note}>
             security: <b>{layers.security}</b> • maintainability: <b>{layers.maintainability}</b> • ecosystem:{" "}
@@ -78,7 +97,7 @@ export default function ScanClient({ id }: { id: string }) {
           {recs.length === 0 ? (
             <div className={cardStyles.muted}>No recommendations yet.</div>
           ) : (
-            <ol style={{ marginTop: 10, paddingLeft: 18 }}>
+            <ol className={styles.list}>
               {recs.slice(0, 5).map((r: any) => (
                 <li key={String(r.id ?? r.title)}>
                   <b>{String(r.title ?? "Untitled")}</b>{" "}
@@ -97,7 +116,7 @@ export default function ScanClient({ id }: { id: string }) {
 
       {data.status === "failed" && (
         <Card title="Failure">
-          <pre style={{ whiteSpace: "pre-wrap" }}>{data.error}</pre>
+          <pre className={styles.failurePre}>{data.error}</pre>
         </Card>
       )}
 
