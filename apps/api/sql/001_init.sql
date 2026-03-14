@@ -4,6 +4,7 @@ CREATE TABLE scans (
   id            TEXT PRIMARY KEY,
   repo_id       TEXT NOT NULL,
   status        scan_status NOT NULL DEFAULT 'queued',
+  source        TEXT NOT NULL DEFAULT 'manual',
   attempt       INT NOT NULL DEFAULT 0,
   worker_id     TEXT,
   started_at    TIMESTAMPTZ,
@@ -26,6 +27,7 @@ CREATE INDEX scans_repo_id_idx ON scans(repo_id);
 CREATE INDEX scans_repo_created_at_idx ON scans(repo_id, created_at DESC);
 CREATE INDEX scans_status_idx ON scans(status);
 CREATE INDEX scans_running_heartbeat_idx ON scans(status, heartbeat_at);
+CREATE INDEX scans_source_created_at_idx ON scans(source, created_at DESC);
 
 CREATE TABLE repo_sources (
   repo_id         TEXT PRIMARY KEY,

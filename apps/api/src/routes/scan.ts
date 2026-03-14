@@ -9,13 +9,21 @@ export async function scanRoutes(app: FastifyInstance) {
   app.post("/scan", async (req, reply) => {
     const body = req.body as ScanRequest;
 
-    const { scanId } = await createScanAndEnqueue({
-      repoId: body.repoId,
-      dependencyGraph: body.dependencyGraph,
-      lockfile: body.lockfile,
-    });
+    try {
+      const { scanId } = await createScanAndEnqueue({
+        repoId: body.repoId,
+        dependencyGraph: body.dependencyGraph,
+        lockfile: body.lockfile,
+        source: "manual",
+      });
 
-    return reply.code(202).send({ scanId, status: "queued" as ScanStatus });
+      return reply.code(202).send({ scanId, status: "queued" as ScanStatus });
+    } catch (e: any) {
+      const code = Number(e?.statusCode ?? 500);
+      if (code === 413) return reply.code(413).send({ message: "lockfile too large" });
+      if (code === 429) return reply.code(429).send({ message: "scan quota exceeded" });
+      throw e;
+    }
   });
 
   app.get("/scan/:id", async (req, reply) => {

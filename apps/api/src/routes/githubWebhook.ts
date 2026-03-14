@@ -126,26 +126,34 @@ async function handlePullRequest(app: App, payload: PullRequestEvent, delivery: 
     lockfileManager: match.manager,
   });
   const scanId = delivery || undefined;
-  const { scanId: created } = await createScanAndEnqueue({
-    scanId,
-    repoId,
-    dependencyGraph: {},
-    lockfile: { manager: match.manager, content: lockfileContent, path: match.path },
-    baseLockfile: baseLockfileContent
-      ? { manager: match.manager, content: baseLockfileContent, path: match.path }
-      : undefined,
-    github: {
-      owner,
-      repo,
-      prNumber: number,
-      headSha,
-      baseSha,
-      installationId,
-      deliveryId: delivery || undefined,
-    },
-  });
+  try {
+    const { scanId: created } = await createScanAndEnqueue({
+      scanId,
+      repoId,
+      dependencyGraph: {},
+      lockfile: { manager: match.manager, content: lockfileContent, path: match.path },
+      baseLockfile: baseLockfileContent
+        ? { manager: match.manager, content: baseLockfileContent, path: match.path }
+        : undefined,
+      github: {
+        owner,
+        repo,
+        prNumber: number,
+        headSha,
+        baseSha,
+        installationId,
+        deliveryId: delivery || undefined,
+      },
+      source: "github",
+    });
 
-  return { queued: true, scanId: created, repoId, source: "pull_request", pr: number, headSha, baseSha };
+    return { queued: true, scanId: created, repoId, source: "pull_request", pr: number, headSha, baseSha };
+  } catch (e: any) {
+    const code = Number(e?.statusCode ?? 500);
+    if (code === 413) return { ignored: true, reason: "lockfile_too_large" };
+    if (code === 429) return { ignored: true, reason: "quota_exceeded" };
+    throw e;
+  }
 }
 
 async function handlePush(app: App, payload: PushEvent, delivery: string) {
@@ -186,14 +194,22 @@ async function handlePush(app: App, payload: PushEvent, delivery: string) {
     defaultBranch,
   });
   const scanId = delivery || undefined;
-  const { scanId: created } = await createScanAndEnqueue({
-    scanId,
-    repoId,
-    dependencyGraph: {},
-    lockfile: { manager: match.manager, content: lockfileContent, path: match.path },
-  });
+  try {
+    const { scanId: created } = await createScanAndEnqueue({
+      scanId,
+      repoId,
+      dependencyGraph: {},
+      lockfile: { manager: match.manager, content: lockfileContent, path: match.path },
+      source: "github",
+    });
 
-  return { queued: true, scanId: created, repoId, source: "push", sha };
+    return { queued: true, scanId: created, repoId, source: "push", sha };
+  } catch (e: any) {
+    const code = Number(e?.statusCode ?? 500);
+    if (code === 413) return { ignored: true, reason: "lockfile_too_large" };
+    if (code === 429) return { ignored: true, reason: "quota_exceeded" };
+    throw e;
+  }
 }
 
 function verifySignature(body: string, signatureHeader: string, secret: string) {

@@ -5,6 +5,7 @@ import type { ScanLockfileInput, ScanRequest, UpgradeSimulationResult } from "@r
 import { analyze, simulateUpgrade } from "@reposentinel/engine-stub";
 import { App } from "@octokit/app";
 import { randomUUID } from "crypto";
+import { getLimitsForOwner, getOwnerFromRepoId } from "./tier";
 
 const db = new Pool({ connectionString: process.env.DATABASE_URL });
 
@@ -39,9 +40,6 @@ setInterval(() => {
 }, reapEveryMs);
 
 const alertsEveryMs = Number(process.env.ALERTS_INTERVAL_MS ?? 60 * 60 * 1000);
-const alertsBatchLimit = Math.max(1, Math.min(200, Number(process.env.ALERTS_BATCH_LIMIT ?? 50)));
-const alertsConcurrency = Math.max(1, Math.min(10, Number(process.env.ALERTS_CONCURRENCY ?? 4)));
-const alertsMinScoreImpact = Number(process.env.ALERTS_MIN_SCORE_IMPACT ?? 8);
 
 setTimeout(() => {
   void runAlertsTick();
@@ -107,7 +105,10 @@ new Worker<ScanJob>(
         console.error("Policy evaluation failed:", String(e?.message ?? e));
       }
 
-      if (github?.prNumber) {
+      const owner = getOwnerFromRepoId(repoId);
+      const limits = getLimitsForOwner(owner);
+
+      if (github?.prNumber && limits.prCommentsEnabled) {
         try {
           await postGithubPrReviewComment({
             scanId,
@@ -130,7 +131,10 @@ new Worker<ScanJob>(
         [scanId, String(e?.message ?? e)],
       );
 
-      if (github?.prNumber) {
+      const owner = getOwnerFromRepoId(repoId);
+      const limits = getLimitsForOwner(owner);
+
+      if (github?.prNumber && limits.prCommentsEnabled) {
         try {
           await postGithubPrFailureComment({
             scanId,
@@ -389,14 +393,36 @@ async function runAlertsTick() {
 
     const { rows } = await db.query(
       "SELECT repo_id, owner, repo, installation_id, lockfile_path, lockfile_manager, default_branch FROM repo_sources ORDER BY updated_at DESC LIMIT $1",
-      [alertsBatchLimit],
+      [200],
     );
 
     const sources = rows as RepoSource[];
     if (sources.length === 0) return;
 
-    await withConcurrency(alertsConcurrency, sources, async (src) => {
-      await checkRepoForAlerts(ghApp, src);
+    const filtered = sources.filter((s) => getLimitsForOwner(s.owner).alertsEnabled);
+    if (filtered.length === 0) return;
+
+    const perOwner = new Map<string, RepoSource[]>();
+    for (const s of filtered) {
+      const a = perOwner.get(s.owner);
+      if (a) a.push(s);
+      else perOwner.set(s.owner, [s]);
+    }
+
+    const planned: RepoSource[] = [];
+    for (const [owner, xs] of perOwner.entries()) {
+      const lim = getLimitsForOwner(owner);
+      planned.push(...xs.slice(0, lim.alertsBatchLimit));
+    }
+
+    const concurrency = Math.max(
+      1,
+      Math.min(10, Math.max(...planned.map((s) => getLimitsForOwner(s.owner).alertsConcurrency), 1)),
+    );
+
+    await withConcurrency(concurrency, planned, async (src) => {
+      const lim = getLimitsForOwner(src.owner);
+      await checkRepoForAlerts(ghApp, src, { minScoreImpact: lim.alertsMinScoreImpact });
     });
   } catch (e: any) {
     // eslint-disable-next-line no-console
@@ -406,7 +432,11 @@ async function runAlertsTick() {
   }
 }
 
-async function checkRepoForAlerts(ghApp: App, src: RepoSource) {
+async function checkRepoForAlerts(
+  ghApp: App,
+  src: RepoSource,
+  { minScoreImpact }: { minScoreImpact: number },
+) {
   if (src.lockfile_manager !== "pnpm") return;
 
   const octokit = await ghApp.getInstallationOctokit(src.installation_id);
@@ -449,7 +479,7 @@ async function checkRepoForAlerts(ghApp: App, src: RepoSource) {
     repoId: src.repo_id,
     beforeSignals,
     afterSignals: after.signals ?? [],
-    minScoreImpact: alertsMinScoreImpact,
+    minScoreImpact,
   });
   if (candidates.length === 0) return;
 

@@ -2,6 +2,7 @@ import { randomUUID } from "crypto";
 import { db } from "../db";
 import { scanQueue } from "../queue";
 import type { ScanLockfileInput } from "@reposentinel/shared";
+import { getLimitsForOwner, getOwnerFromRepoId } from "./tier";
 
 export async function createScanAndEnqueue({
   scanId,
@@ -10,6 +11,7 @@ export async function createScanAndEnqueue({
   lockfile,
   baseLockfile,
   github,
+  source,
 }: {
   scanId?: string;
   repoId: string;
@@ -25,16 +27,50 @@ export async function createScanAndEnqueue({
     installationId: number;
     deliveryId?: string;
   };
+  source?: "manual" | "github";
 }) {
   const id = scanId ?? randomUUID();
+  const owner = getOwnerFromRepoId(repoId);
+  const limits = getLimitsForOwner(owner);
+
+  const lockfileBytes = lockfile?.content ? Buffer.byteLength(lockfile.content, "utf8") : 0;
+  if (lockfileBytes > limits.scanMaxLockfileBytes) {
+    const err: any = new Error("lockfile too large");
+    err.statusCode = 413;
+    throw err;
+  }
+
+  const scansPerDay = limits.scansPerOwnerPerDay;
+  const githubScansPerDay = limits.githubScansPerOwnerPerDay;
+  const isGithub = Boolean(github) || source === "github";
+  const limit = isGithub ? githubScansPerDay : scansPerDay;
+
+  if (limit >= 0) {
+    const { rows } = isGithub
+      ? await db.query(
+          "SELECT COUNT(*)::int AS c FROM scans WHERE split_part(repo_id,'/',1)=$1 AND source='github' AND created_at > NOW() - INTERVAL '24 hours'",
+          [owner],
+        )
+      : await db.query(
+          "SELECT COUNT(*)::int AS c FROM scans WHERE split_part(repo_id,'/',1)=$1 AND created_at > NOW() - INTERVAL '24 hours'",
+          [owner],
+        );
+    const c = Number(rows?.[0]?.c ?? 0);
+    if (c >= limit) {
+      const err: any = new Error("scan quota exceeded");
+      err.statusCode = 429;
+      err.expose = true;
+      throw err;
+    }
+  }
 
   const client = await db.connect();
   try {
     await client.query("BEGIN");
 
     await client.query(
-      "INSERT INTO scans (id, repo_id, status) VALUES ($1, $2, 'queued') ON CONFLICT (id) DO NOTHING",
-      [id, repoId],
+      "INSERT INTO scans (id, repo_id, status, source) VALUES ($1, $2, 'queued', $3) ON CONFLICT (id) DO NOTHING",
+      [id, repoId, isGithub ? "github" : "manual"],
     );
 
     await client.query("COMMIT");
