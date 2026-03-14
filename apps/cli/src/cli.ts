@@ -132,6 +132,7 @@ function printSummary(opts: { repoId: string; lockfile?: ScanLockfileInput; resu
   const layers = result.layerScores ?? ({} as any);
   const findings = Array.isArray(result.findings) ? result.findings : [];
   const recs = Array.isArray(result.recommendations) ? result.recommendations : [];
+  const reasons = Array.isArray((result as any)?.explain?.reasons) ? (result as any).explain.reasons : [];
 
   const lockfileLine = opts.lockfile ? `${opts.lockfile.path} (${opts.lockfile.manager})` : "none";
 
@@ -144,6 +145,16 @@ function printSummary(opts: { repoId: string; lockfile?: ScanLockfileInput; resu
   lines.push(`Total score: ${score ?? "n/a"} (0 best → 100 worst)`);
   lines.push(`Layers: ${formatLayers(layers)}`);
   lines.push(`Findings: ${findings.length} • Recommendations: ${recs.length}`);
+
+  if (reasons.length) {
+    lines.push("");
+    lines.push("Why this is risky:");
+    for (const r of reasons.slice(0, 6)) {
+      const title = String((r as any)?.title ?? (r as any)?.id ?? "Reason");
+      const impact = Number((r as any)?.scoreImpact ?? 0);
+      lines.push(`- ${title} (+${impact})`);
+    }
+  }
 
   if (recs.length) {
     lines.push("");

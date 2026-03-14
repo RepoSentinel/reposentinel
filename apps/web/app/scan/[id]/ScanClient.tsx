@@ -52,6 +52,7 @@ export default function ScanClient({ id }: { id: string }) {
   const layers = data.result?.layerScores;
   const recs = Array.isArray(data.result?.recommendations) ? data.result.recommendations : [];
   const findings = Array.isArray(data.result?.findings) ? data.result.findings : [];
+  const reasons = Array.isArray(data.result?.explain?.reasons) ? data.result.explain.reasons : [];
   const dotClass =
     data.status === "queued"
       ? styles.dotQueued
@@ -111,6 +112,23 @@ export default function ScanClient({ id }: { id: string }) {
               Findings: <b>{findings.length}</b>
             </div>
           ) : null}
+        </Card>
+      )}
+
+      {data.status === "done" && (
+        <Card title="Why this is risky" subtitle={<span className={cardStyles.muted}>Top contributing signals</span>}>
+          {reasons.length === 0 ? (
+            <div className={cardStyles.muted}>No explainability data yet.</div>
+          ) : (
+            <ul className={styles.list}>
+              {reasons.slice(0, 6).map((r: any) => (
+                <li key={String(r.id ?? r.title)}>
+                  <b>{String(r.title ?? "Reason")}</b>{" "}
+                  <span className={cardStyles.muted}>(+{Number(r.scoreImpact ?? 0)})</span>
+                </li>
+              ))}
+            </ul>
+          )}
         </Card>
       )}
 

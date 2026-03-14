@@ -251,3 +251,9 @@ Environment variables include:
 ## Roadmap / disclaimer
 
 This is an early product build. Expect APIs and the scoring methodology to evolve. The engine output is designed to remain **explainable** and **forward-compatible** through shared contracts in `packages/shared`.
+
+Explainability is exposed in scan results via:
+
+- `signals[]`: the raw set of risk signals (each with `scoreImpact` and optional `evidence`)
+- `contributions[]`: per-signal contribution list for simple UIs
+- `explain.reasons[]`: a short “Why this is risky” list derived from the highest-impact signals

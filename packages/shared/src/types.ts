@@ -80,6 +80,19 @@ export type ScanDataset = {
   packageHealth?: PackageHealthObservation[];
 };
 
+export type ExplainReason = {
+  id: string;
+  layer: ScoreLayer;
+  title: string;
+  value?: number;
+  scoreImpact: number;
+  evidence?: Record<string, unknown>;
+};
+
+export type ExplainBlock = {
+  reasons: ExplainReason[];
+};
+
 export type ScanResult = {
   totalScore: number;
   layerScores: LayerScores;
@@ -90,6 +103,7 @@ export type ScanResult = {
   contributions?: ScoreContribution[];
   recommendations?: Recommendation[];
   dataset?: ScanDataset;
+  explain?: ExplainBlock;
   generatedAt: string;
 };
 
