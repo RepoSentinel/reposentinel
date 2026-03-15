@@ -49,12 +49,32 @@ export default async function Page({
     );
   }
 
+  // 6. Empty state
+  const hasRepos = data.repos.length > 0;
+
   return (
     <AppShell
       title="Org dashboard"
       subtitle={owner}
       owner={owner}
     >
+      {/* 5. Highlight worst repos - moved to top */}
+      {data.summary.worst.length > 0 && (
+        <Card as="div" title="⚠️ High Risk Repositories" padding={true}>
+          <div className={styles.warningCard}>
+            <p className={cardStyles.muted}>These repositories have the highest risk scores and require immediate attention:</p>
+            <div className={styles.worstReposList}>
+              {data.summary.worst.map((w) => (
+                <div key={w.repoId} className={styles.worstRepoItem}>
+                  <code className={styles.worstRepoName}>{w.repoId}</code>
+                  <ScoreBadge score={w.totalScore} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </Card>
+      )}
+
       {/* Summary Cards */}
       <div className={styles.grid}>
         <Card as="div" title="Total Repos">
@@ -67,45 +87,64 @@ export default async function Page({
           <div className={styles.metricValue}>
             {data.summary.avgScore !== null ? Math.round(data.summary.avgScore) : "n/a"}
           </div>
+          {/* 8. Score distribution visualization */}
+          {data.summary.avgScore !== null && (
+            <div className={styles.scoreBar}>
+              <div 
+                className={styles.scoreBarFill} 
+                style={{ width: `${data.summary.avgScore}%` }}
+              />
+            </div>
+          )}
         </Card>
       </div>
 
-      {/* Repository Table */}
-      <DataTable
-        headers={["Repo", "Score", "Δ", "Status", "Last scan", ""]}
-        rows={data.repos.map((r) => (
-          <tr key={r.repoId}>
-            <TD>
-              <code>{r.repoId}</code>
-            </TD>
-            <TD>
-              <ScoreBadge score={r.latest.totalScore} />
-            </TD>
-            <TD>
-              <DeltaBadge delta={r.deltaTotalScore} />
-            </TD>
-            <TD>
-              <StatusBadge status={r.latest.status} />
-            </TD>
-            <TD>{new Date(r.latest.createdAt).toLocaleString()}</TD>
-            <TD>
-              <Link href={`/scan/${r.latest.scanId}`}>Open</Link>
-            </TD>
-          </tr>
-        ))}
-      />
-
-      {data.summary.worst.length > 0 ? (
-        <div className={cardStyles.note}>
-          Worst scores:{" "}
-          {data.summary.worst.map((w, i) => (
-            <span key={w.repoId}>
-              <code>{w.repoId}</code> ({w.totalScore})
-              {i < data.summary.worst.length - 1 ? ", " : ""}
-            </span>
-          ))}
-        </div>
-      ) : null}
+      {/* 6. Empty State */}
+      {!hasRepos ? (
+        <Card as="div" title="No Repositories Yet">
+          <div className={styles.emptyState}>
+            <p className={cardStyles.muted}>
+              No repositories have been scanned for this organization yet.
+            </p>
+            <p className={cardStyles.note}>
+              To get started, scan a repository using the CLI or API.
+            </p>
+          </div>
+        </Card>
+      ) : (
+        <>
+          {/* Repository Table */}
+          <DataTable
+            headers={["Repo", "Score", "Δ", "Status", "Last scan", ""]}
+            rows={data.repos.map((r) => (
+              <tr 
+                key={r.repoId}
+                className={styles.tableRow}
+                onClick={() => window.location.href = `/scan/${r.latest.scanId}`}
+              >
+                <TD>
+                  <code>{r.repoId}</code>
+                </TD>
+                <TD>
+                  <ScoreBadge score={r.latest.totalScore} />
+                </TD>
+                <TD>
+                  <DeltaBadge delta={r.deltaTotalScore} />
+                </TD>
+                <TD>
+                  <StatusBadge status={r.latest.status} />
+                </TD>
+                <TD>{new Date(r.latest.createdAt).toLocaleString()}</TD>
+                <TD>
+                  <Link href={`/scan/${r.latest.scanId}`} className={styles.openLink}>
+                    Open
+                  </Link>
+                </TD>
+              </tr>
+            ))}
+          />
+        </>
+      )}
     </AppShell>
   );
 }

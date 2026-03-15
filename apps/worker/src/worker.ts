@@ -278,15 +278,16 @@ function renderPrComment(opts: {
   const { simulation } = opts;
   const lines: string[] = [];
   lines.push(PR_COMMENT_MARKER);
-  lines.push("## RepoSentinel Dependency Risk Report");
+  lines.push("# 🛡️ RepoSentinel Dependency Risk Report");
   lines.push("");
-  lines.push(`Repo: \`${opts.repoId}\` • PR: #${opts.github.prNumber} • scanId: \`${opts.scanId}\``);
+  lines.push(`📦 **Repository**: \`${opts.repoId}\` • **PR**: #${opts.github.prNumber}`);
+  lines.push(`🔍 **Scan ID**: \`${opts.scanId}\``);
   lines.push("");
 
   if (!simulation?.after || !simulation?.delta) {
-    lines.push(
-      "No lockfile delta available (base vs PR comparison requires a lockfile in both base and head).",
-    );
+    lines.push("> ⚠️ **No lockfile delta available**");
+    lines.push(">");
+    lines.push("> Base vs PR comparison requires a lockfile in both base and head branches.");
     return lines.join("\n");
   }
 
@@ -295,54 +296,94 @@ function renderPrComment(opts: {
   const d = simulation.delta;
   const dep = (d as any)?.dependencyDelta;
 
-  if (dep) {
-    if (dep.directKnown === false) {
-      lines.push("This PR changes dependencies (direct dependency list is not available for this lockfile type).");
-    } else if (dep.directAdded > 0) {
-      lines.push(`This PR introduces **${dep.directAdded}** new direct dependencies.`);
-    } else {
-      lines.push("This PR does not introduce new direct dependencies.");
+  // Overall risk impact - prominently displayed
+  const scoreDelta = d.totalScoreDelta ?? 0;
+  const riskIcon = scoreDelta > 0 ? "⚠️" : scoreDelta < 0 ? "✅" : "ℹ️";
+  const riskLabel = scoreDelta > 0 ? "INCREASED" : scoreDelta < 0 ? "DECREASED" : "NO CHANGE";
+  
+  lines.push("## 📊 Risk Assessment");
+  lines.push("");
+  lines.push(`### ${riskIcon} Overall Risk Impact: ${riskLabel}`);
+  lines.push("");
+  lines.push(`| Metric | Before | After | Change |`);
+  lines.push(`|--------|--------|-------|--------|`);
+  lines.push(`| **Risk Score** | ${before.totalScore} | ${after.totalScore} | ${formatSignedWithIcon(scoreDelta)} |`);
+  lines.push("");
+
+  // Layer breakdown
+  const layerDeltas = d.layerScoreDeltas ?? {};
+  if (Object.keys(layerDeltas).length > 0) {
+    lines.push("#### 🔍 Risk Layer Breakdown");
+    lines.push("");
+    lines.push("| Layer | Change |");
+    lines.push("|-------|--------|");
+    for (const [layer, delta] of Object.entries(layerDeltas)) {
+      if (typeof delta === "number" && delta !== 0) {
+        lines.push(`| ${capitalizeFirst(layer)} | ${formatSignedWithIcon(delta)} |`);
+      }
     }
     lines.push("");
-    lines.push(
-      `**Dependency changes**: +${dep.directAdded} added, -${dep.directRemoved} removed, ~${dep.directUpdated} updated direct deps • lockfile packages: +${dep.packagesAdded}, -${dep.packagesRemoved}`,
-    );
+  }
+
+  // Dependency changes
+  if (dep) {
+    lines.push("## 📦 Dependency Changes");
+    lines.push("");
+    
+    if (dep.directKnown === false) {
+      lines.push("> ℹ️ This PR changes dependencies (direct dependency list is not available for this lockfile type).");
+    } else if (dep.directAdded > 0) {
+      lines.push(`> ⚠️ This PR introduces **${dep.directAdded}** new direct ${dep.directAdded === 1 ? "dependency" : "dependencies"}.`);
+    } else {
+      lines.push("> ✅ This PR does not introduce new direct dependencies.");
+    }
+    lines.push("");
+
+    // Summary table
+    lines.push("| Type | Added | Removed | Updated |");
+    lines.push("|------|-------|---------|---------|");
+    lines.push(`| **Direct** | ${dep.directAdded} | ${dep.directRemoved} | ${dep.directUpdated} |`);
+    lines.push(`| **Total Packages** | ${dep.packagesAdded} | ${dep.packagesRemoved} | — |`);
+    lines.push("");
+
+    // Details
     if (Array.isArray(dep.topDirectAdded) && dep.topDirectAdded.length) {
-      lines.push(`- Added: ${dep.topDirectAdded.slice(0, 6).map((x: any) => `\`${x}\``).join(", ")}`);
+      lines.push(`**➕ Added**: ${dep.topDirectAdded.slice(0, 6).map((x: any) => `\`${x}\``).join(", ")}`);
+      lines.push("");
     }
     if (Array.isArray(dep.topDirectUpdated) && dep.topDirectUpdated.length) {
-      lines.push(`- Updated: ${dep.topDirectUpdated.slice(0, 6).map((x: any) => `\`${x}\``).join(", ")}`);
+      lines.push(`**🔄 Updated**: ${dep.topDirectUpdated.slice(0, 6).map((x: any) => `\`${x}\``).join(", ")}`);
+      lines.push("");
     }
     if (Array.isArray(dep.topDirectRemoved) && dep.topDirectRemoved.length) {
-      lines.push(`- Removed: ${dep.topDirectRemoved.slice(0, 6).map((x: any) => `\`${x}\``).join(", ")}`);
+      lines.push(`**➖ Removed**: ${dep.topDirectRemoved.slice(0, 6).map((x: any) => `\`${x}\``).join(", ")}`);
+      lines.push("");
+    }
+  }
+
+  // Findings
+  const findings = buildPrFindings({ before, after, dep });
+  if (findings.length) {
+    lines.push("## 🔎 Key Findings");
+    lines.push("");
+    for (const f of findings.slice(0, 6)) {
+      lines.push(`- ⚠️ ${f}`);
     }
     lines.push("");
   }
 
-  lines.push(
-    `**Overall Risk Impact**: ${formatSigned(d.totalScoreDelta ?? 0)} (score ${before.totalScore} → ${after.totalScore})`,
-  );
-  lines.push("");
-
-  lines.push(
-    `**Layer deltas**: ${formatLayerDeltaBits(d.layerScoreDeltas ?? {})}`,
-  );
-  lines.push("");
-
-  const findings = buildPrFindings({ before, after, dep });
-  if (findings.length) {
-    lines.push("**Findings**:");
-    for (const f of findings.slice(0, 6)) lines.push(`- ${f}`);
-    lines.push("");
-  }
-
+  // Recommended actions
   const actions = buildPrActions({ after, dep });
   if (actions.length) {
-    lines.push("**Action**:");
-    for (const a of actions.slice(0, 6)) lines.push(`- ${a}`);
+    lines.push("## ✅ Recommended Actions");
+    lines.push("");
+    for (const a of actions.slice(0, 6)) {
+      lines.push(`- 🔧 ${a}`);
+    }
     lines.push("");
   }
 
+  // Contributing factors
   const top = d.topSignalDeltas ?? [];
   if (top.length) {
     const beforeSignals = indexSignalsById(before.signals ?? []);
@@ -355,34 +396,50 @@ function renderPrComment(opts: {
       }))
       .sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta));
 
-    lines.push("**Reasons**:");
+    lines.push("<details>");
+    lines.push("<summary>📈 <strong>Contributing Risk Factors</strong> (click to expand)</summary>");
+    lines.push("");
+    lines.push("| Risk Factor | Layer | Impact |");
+    lines.push("|-------------|-------|--------|");
     for (const s of ordered.slice(0, 6)) {
-      lines.push(
-        `- ${s.name} (${s.layer}) Δ ${formatSigned(s.delta)}`,
-      );
+      lines.push(`| ${s.name} | ${s.layer} | ${formatSignedWithIcon(s.delta)} |`);
     }
+    lines.push("");
+    lines.push("</details>");
     lines.push("");
   }
 
+  // Top recommendations
   const recs = after.recommendations ?? [];
   if (recs.length) {
-    lines.push("**Top recommendations**:");
+    lines.push("<details>");
+    lines.push("<summary>💡 <strong>Top Recommendations</strong> (click to expand)</summary>");
+    lines.push("");
     for (const r of recs.slice(0, 4)) {
       const pkgs = Array.isArray((r as any)?.packages) ? (r as any).packages.slice(0, 6) : [];
-      lines.push(`- ${r.title}${pkgs.length ? ` — ${pkgs.map((p: any) => `\`${p}\``).join(", ")}` : ""}`);
+      lines.push(`### ${r.title}`);
+      if (pkgs.length) {
+        lines.push(`**Affects**: ${pkgs.map((p: any) => `\`${p}\``).join(", ")}`);
+      }
+      lines.push("");
     }
+    lines.push("</details>");
     lines.push("");
   }
 
-  lines.push("_Generated by RepoSentinel._");
+  lines.push("---");
+  lines.push("_🤖 Generated by [RepoSentinel](https://github.com/reposentinel)_");
   return lines.join("\n");
 }
 
-function formatLayerDeltaBits(layerDeltas: Record<string, unknown>) {
-  const bits = Object.entries(layerDeltas)
-    .filter(([, v]) => typeof v === "number" && v !== 0)
-    .map(([k, v]) => `${k}: ${formatSigned(v as number)}`);
-  return bits.length ? bits.join(", ") : "no change";
+function formatSignedWithIcon(value: number): string {
+  if (value > 0) return `🔴 +${value}`;
+  if (value < 0) return `🟢 ${value}`;
+  return `⚪ 0`;
+}
+
+function capitalizeFirst(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 function buildPrFindings(opts: { before: any; after: any; dep: any }) {

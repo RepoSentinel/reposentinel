@@ -12,6 +12,87 @@
   letter-spacing: -0.02em;
 }
 
+/* 8. Score distribution visualization */
+.scoreBar {
+  margin-top: 12px;
+  height: 8px;
+  background: color-mix(in oklab, var(--rs-color-border) 50%, transparent);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.scoreBarFill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* 5. Highlight worst repos */
+.warningCard {
+  padding: 0;
+}
+
+.worstReposList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.worstRepoItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background: color-mix(in oklab, var(--rs-color-surface-emphasis) 40%, transparent);
+  border-radius: 8px;
+  border: 1px solid color-mix(in oklab, var(--rs-color-border) 60%, transparent);
+  transition: all 0.15s ease;
+}
+
+.worstRepoItem:hover {
+  background: color-mix(in oklab, var(--rs-color-surface-emphasis) 60%, transparent);
+  border-color: color-mix(in oklab, #ef4444 30%, var(--rs-color-border) 70%);
+}
+
+.worstRepoName {
+  font-weight: 600;
+}
+
+/* 6. Empty state */
+.emptyState {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.emptyState p {
+  margin: 8px 0;
+}
+
+/* 7. Table interactivity - clickable rows */
+.tableRow {
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.tableRow:hover {
+  background: color-mix(in oklab, var(--rs-color-surface-emphasis) 60%, transparent) !important;
+}
+
+.openLink {
+  color: var(--rs-color-accent);
+  text-decoration: none;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background 0.15s ease;
+}
+
+.openLink:hover {
+  background: color-mix(in oklab, var(--rs-color-accent) 15%, transparent);
+}
+
 .scoreCell {
   display: inline-flex;
   align-items: center;
