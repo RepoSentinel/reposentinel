@@ -18,6 +18,52 @@ import { githubSignalsFromPackageHealth } from "./githubSignals.js";
 import { explainFromSignals } from "./explain.js";
 import { buildGraphInsights } from "./graphInsights.js";
 
+/**
+ * Centralized scoring configuration to eliminate magic numbers.
+ * These thresholds and weights control risk scoring behavior.
+ * 
+ * Thresholds represent "reference points" where a metric reaches ~80-100% of max score impact.
+ * Lower thresholds = more sensitive scoring. Higher thresholds = more lenient.
+ * 
+ * Future: Replace with calibrated values from production data or A/B tests.
+ */
+const SCORING_CONFIG = {
+  thresholds: {
+    transitiveVolume: 200,
+    dependencyDepth: 10,
+    duplicateVersions: 25,
+    fanInMax: 20,
+    blastRadiusRoots: 25,
+    directDepsCount: 80,
+    packageSurfaceArea: 250,
+    largeDependencyGraph: 250,
+    moderateDependencyGraph: 600,
+    moderateDepth: 6,
+  },
+  layerWeights: {
+    security: 0.35,
+    maintainability: 0.25,
+    ecosystem: 0.15,
+    upgradeImpact: 0.25,
+  },
+  scoreImpacts: {
+    transitiveVolume: 35,
+    dependencyDepth: 25,
+    duplicateVersions: 30,
+    fanInMax: 25,
+    blastRadiusRoots: 30,
+    directDepsCount: 20,
+    packageSurfaceArea: 20,
+    missingGraphPenalty: 25,
+  },
+  recommendations: {
+    priorityThresholds: {
+      high: 70,
+      medium: 35,
+    },
+  },
+} as const;
+
 export async function analyze(req: ScanRequest): Promise<ScanResult> {
   const derivedGraph =
     req.lockfile?.manager === "pnpm" && typeof req.lockfile.content === "string"
@@ -244,7 +290,7 @@ function buildSignals(stats: DependencyStats): RiskSignal[] {
     "Transitive dependency volume",
     stats.nodeCount,
     1,
-    clampScore((stats.nodeCount / 200) * 35),
+    clampScore((stats.nodeCount / SCORING_CONFIG.thresholds.transitiveVolume) * SCORING_CONFIG.scoreImpacts.transitiveVolume),
     { nodeCount: stats.nodeCount },
   );
 
@@ -254,7 +300,7 @@ function buildSignals(stats: DependencyStats): RiskSignal[] {
     "Dependency depth",
     stats.maxDepthEstimate,
     1,
-    clampScore((stats.maxDepthEstimate / 10) * 25),
+    clampScore((stats.maxDepthEstimate / SCORING_CONFIG.thresholds.dependencyDepth) * SCORING_CONFIG.scoreImpacts.dependencyDepth),
     { maxDepthEstimate: stats.maxDepthEstimate },
   );
 
@@ -264,7 +310,7 @@ function buildSignals(stats: DependencyStats): RiskSignal[] {
     "Duplicate versions across packages",
     stats.duplicateVersionPackages,
     1,
-    clampScore((stats.duplicateVersionPackages / 25) * 30),
+    clampScore((stats.duplicateVersionPackages / SCORING_CONFIG.thresholds.duplicateVersions) * SCORING_CONFIG.scoreImpacts.duplicateVersions),
     { duplicateVersionPackages: stats.duplicateVersionPackages },
   );
 
@@ -274,7 +320,7 @@ function buildSignals(stats: DependencyStats): RiskSignal[] {
     "Transitive blast radius (max fan-in)",
     stats.fanInMax,
     1,
-    clampScore((stats.fanInMax / 20) * 25),
+    clampScore((stats.fanInMax / SCORING_CONFIG.thresholds.fanInMax) * SCORING_CONFIG.scoreImpacts.fanInMax),
     { top: stats.fanInTop.slice(0, 3) },
   );
 
@@ -284,7 +330,7 @@ function buildSignals(stats: DependencyStats): RiskSignal[] {
     "Root blast radius (direct deps affected)",
     stats.blastRadiusMax,
     1,
-    clampScore((stats.blastRadiusMax / 25) * 30),
+    clampScore((stats.blastRadiusMax / SCORING_CONFIG.thresholds.blastRadiusRoots) * SCORING_CONFIG.scoreImpacts.blastRadiusRoots),
     { top: stats.blastRadiusTop.slice(0, 3) },
   );
 
@@ -294,7 +340,7 @@ function buildSignals(stats: DependencyStats): RiskSignal[] {
     "Input coverage confidence penalty",
     stats.hasGraphLikeShape ? 1 : 0,
     1,
-    stats.hasGraphLikeShape ? 0 : 25,
+    stats.hasGraphLikeShape ? 0 : SCORING_CONFIG.scoreImpacts.missingGraphPenalty,
     { hasGraphLikeShape: stats.hasGraphLikeShape },
   );
 
@@ -304,7 +350,7 @@ function buildSignals(stats: DependencyStats): RiskSignal[] {
     "Direct dependencies count",
     stats.directDepsCount,
     1,
-    clampScore((stats.directDepsCount / 80) * 20),
+    clampScore((stats.directDepsCount / SCORING_CONFIG.thresholds.directDepsCount) * SCORING_CONFIG.scoreImpacts.directDepsCount),
     { directDepsCount: stats.directDepsCount },
   );
 
@@ -314,7 +360,7 @@ function buildSignals(stats: DependencyStats): RiskSignal[] {
     "Package surface area",
     stats.nodeCount,
     1,
-    clampScore((stats.nodeCount / 250) * 20),
+    clampScore((stats.nodeCount / SCORING_CONFIG.thresholds.packageSurfaceArea) * SCORING_CONFIG.scoreImpacts.packageSurfaceArea),
     { nodeCount: stats.nodeCount },
   );
 
@@ -337,12 +383,7 @@ function computeLayerScores(signals: RiskSignal[]): LayerScores {
 }
 
 function computeTotalScore(layerScores: LayerScores): number {
-  const weights: Record<ScoreLayer, number> = {
-    security: 0.35,
-    maintainability: 0.25,
-    ecosystem: 0.15,
-    upgradeImpact: 0.25,
-  };
+  const weights = SCORING_CONFIG.layerWeights;
 
   let sum = 0;
   for (const layer of Object.keys(weights) as ScoreLayer[]) {
@@ -420,7 +461,11 @@ function buildRecommendations(stats: DependencyStats) {
   };
 
   const impactFromPriority = (p: number): Recommendation["impact"] =>
-    p >= 70 ? "high" : p >= 35 ? "medium" : "low";
+    p >= SCORING_CONFIG.recommendations.priorityThresholds.high 
+      ? "high" 
+      : p >= SCORING_CONFIG.recommendations.priorityThresholds.medium 
+        ? "medium" 
+        : "low";
 
   const clampDelta = (n: number) => Math.max(-100, Math.min(0, Math.round(n)));
 
@@ -439,36 +484,36 @@ function buildRecommendations(stats: DependencyStats) {
   }
 
   if (stats.duplicateVersionPackages > 0) {
-    const priorityScore = clampScore((stats.duplicateVersionPackages / 25) * 80);
+    const priorityScore = clampScore((stats.duplicateVersionPackages / SCORING_CONFIG.thresholds.duplicateVersions) * 80);
     push({
       id: "dedupe-versions",
       title: "Reduce duplicate dependency versions",
       rationale: "Fewer duplicate versions lowers upgrade complexity and reduces bundle/runtime surface area.",
       impact: impactFromPriority(priorityScore),
       priorityScore,
-      estimatedScoreDelta: clampDelta(-clampScore((stats.duplicateVersionPackages / 25) * 30)),
+      estimatedScoreDelta: clampDelta(-clampScore((stats.duplicateVersionPackages / SCORING_CONFIG.thresholds.duplicateVersions) * SCORING_CONFIG.scoreImpacts.duplicateVersions)),
       layers: ["upgradeImpact", "maintainability"],
       packages: stats.duplicateTop.slice(0, 5).map((x) => x.name),
       evidence: { top: stats.duplicateTop.slice(0, 3) },
     });
   }
 
-  if (stats.maxDepthEstimate >= 6) {
-    const priorityScore = clampScore((stats.maxDepthEstimate / 10) * 70);
+  if (stats.maxDepthEstimate >= SCORING_CONFIG.thresholds.moderateDepth) {
+    const priorityScore = clampScore((stats.maxDepthEstimate / SCORING_CONFIG.thresholds.dependencyDepth) * 70);
     push({
       id: "flatten-graph",
       title: "Flatten dependency depth",
       rationale: "Shallower graphs reduce hidden transitive risk and simplify upgrades.",
       impact: impactFromPriority(priorityScore),
       priorityScore,
-      estimatedScoreDelta: clampDelta(-clampScore((stats.maxDepthEstimate / 10) * 25)),
+      estimatedScoreDelta: clampDelta(-clampScore((stats.maxDepthEstimate / SCORING_CONFIG.thresholds.dependencyDepth) * SCORING_CONFIG.scoreImpacts.dependencyDepth)),
       layers: ["maintainability", "upgradeImpact"],
       evidence: { maxDepthEstimate: stats.maxDepthEstimate },
     });
   }
 
   if (stats.fanInTop.length) {
-    const priorityScore = clampScore((stats.fanInMax / 20) * 85);
+    const priorityScore = clampScore((stats.fanInMax / SCORING_CONFIG.thresholds.fanInMax) * 85);
     push({
       id: "monitor-hotspots",
       title: "Prioritize monitoring for high fan-in transitive packages",
@@ -476,7 +521,7 @@ function buildRecommendations(stats: DependencyStats) {
         "Packages with very high fan-in have a larger blast radius for vulnerabilities and breaking changes.",
       impact: impactFromPriority(priorityScore),
       priorityScore,
-      estimatedScoreDelta: clampDelta(-clampScore((stats.fanInMax / 20) * 25)),
+      estimatedScoreDelta: clampDelta(-clampScore((stats.fanInMax / SCORING_CONFIG.thresholds.fanInMax) * SCORING_CONFIG.scoreImpacts.fanInMax)),
       layers: ["upgradeImpact", "security"],
       packages: stats.fanInTop.slice(0, 5).map((x) => x.name),
       evidence: { top: stats.fanInTop.slice(0, 3) },
@@ -484,7 +529,7 @@ function buildRecommendations(stats: DependencyStats) {
   }
 
   if (stats.blastRadiusTop.length) {
-    const priorityScore = clampScore((stats.blastRadiusMax / 25) * 80);
+    const priorityScore = clampScore((stats.blastRadiusMax / SCORING_CONFIG.thresholds.blastRadiusRoots) * 80);
     push({
       id: "minimize-blast-radius",
       title: "Use smaller upgrade steps for high blast-radius packages",
@@ -492,22 +537,22 @@ function buildRecommendations(stats: DependencyStats) {
         "Packages reachable from many direct dependencies can cause widespread breakage when upgraded; incremental upgrades reduce risk.",
       impact: impactFromPriority(priorityScore),
       priorityScore,
-      estimatedScoreDelta: clampDelta(-clampScore((stats.blastRadiusMax / 25) * 20)),
+      estimatedScoreDelta: clampDelta(-clampScore((stats.blastRadiusMax / SCORING_CONFIG.thresholds.blastRadiusRoots) * 20)),
       layers: ["upgradeImpact", "maintainability"],
       packages: stats.blastRadiusTop.slice(0, 5).map((x) => x.name),
       evidence: { top: stats.blastRadiusTop.slice(0, 3) },
     });
   }
 
-  if (stats.nodeCount >= 250) {
-    const priorityScore = clampScore((stats.nodeCount / 600) * 40);
+  if (stats.nodeCount >= SCORING_CONFIG.thresholds.largeDependencyGraph) {
+    const priorityScore = clampScore((stats.nodeCount / SCORING_CONFIG.thresholds.moderateDependencyGraph) * 40);
     push({
       id: "reduce-surface-area",
       title: "Reduce transitive dependency surface area",
       rationale: "Lower transitive volume reduces maintenance cost and hidden risk.",
       impact: impactFromPriority(priorityScore),
       priorityScore,
-      estimatedScoreDelta: clampDelta(-clampScore((stats.nodeCount / 200) * 15)),
+      estimatedScoreDelta: clampDelta(-clampScore((stats.nodeCount / SCORING_CONFIG.thresholds.transitiveVolume) * 15)),
       layers: ["maintainability", "ecosystem"],
       evidence: { nodeCount: stats.nodeCount },
     });
