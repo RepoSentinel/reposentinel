@@ -120,6 +120,7 @@ function inferManagerFromFilename(p: string): ScanLockfileInput["manager"] | nul
   const base = path.basename(p).toLowerCase();
   if (base === "pnpm-lock.yaml") return "pnpm";
   if (base === "package-lock.json") return "npm";
+  if (base === "yarn.lock") return "yarn";
   return null;
 }
 

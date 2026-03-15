@@ -296,7 +296,9 @@ function renderPrComment(opts: {
   const dep = (d as any)?.dependencyDelta;
 
   if (dep) {
-    if (dep.directAdded > 0) {
+    if (dep.directKnown === false) {
+      lines.push("This PR changes dependencies (direct dependency list is not available for this lockfile type).");
+    } else if (dep.directAdded > 0) {
       lines.push(`This PR introduces **${dep.directAdded}** new direct dependencies.`);
     } else {
       lines.push("This PR does not introduce new direct dependencies.");

@@ -24,6 +24,7 @@ type PushEvent = {
 const LOCKFILE_CANDIDATES = [
   { path: "pnpm-lock.yaml", manager: "pnpm" as const },
   { path: "package-lock.json", manager: "npm" as const },
+  { path: "yarn.lock", manager: "yarn" as const },
 ];
 
 export async function githubWebhookRoutes(app: FastifyInstance) {

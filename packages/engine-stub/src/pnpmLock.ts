@@ -1,4 +1,5 @@
 import { parse as parseYaml } from "yaml";
+import { computeGraphMetrics } from "./graphMetrics.js";
 
 export type DepNodeId = string;
 
@@ -97,20 +98,20 @@ export function graphFromPnpmLockfile(lockfileYaml: string): DependencyGraph {
     ensureNode(name, version);
   }
 
-  const maxDepth = estimateMaxDepth(edges, Array.from(Object.entries(directDeps)).map(([n, v]) => `${n}@${v}`));
-  const fanInTop = computeTopFanIn(nodes, edges, 10);
-  const blastRadiusTop = computeTopBlastRadius(nodes, edges, Object.entries(directDeps).map(([n, v]) => `${n}@${v}`), 10);
+  const metrics = computeGraphMetrics({
+    nodes: Array.from(nodes.values()),
+    edges,
+    directDeps,
+  });
 
   return {
     nodes: Array.from(nodes.values()),
     edges,
     directDeps,
-    versionsByName: Object.fromEntries(
-      Array.from(versionsByName.entries()).map(([k, v]) => [k, Array.from(v.values()).sort()]),
-    ),
-    maxDepth,
-    fanInTop,
-    blastRadiusTop,
+    versionsByName: metrics.versionsByName,
+    maxDepth: metrics.maxDepth,
+    fanInTop: metrics.fanInTop,
+    blastRadiusTop: metrics.blastRadiusTop,
   };
 }
 
@@ -151,93 +152,5 @@ function parseNameVersion(input: string): { name: string; version: string } | nu
   const version = s.slice(at + 1);
   if (!name || !version) return null;
   return { name, version };
-}
-
-function estimateMaxDepth(edges: Array<{ from: string; to: string }>, roots: string[]): number {
-  const adj = new Map<string, string[]>();
-  for (const e of edges) {
-    const a = adj.get(e.from);
-    if (a) a.push(e.to);
-    else adj.set(e.from, [e.to]);
-  }
-
-  const visited = new Set<string>();
-  let max = 0;
-
-  const stack: Array<{ id: string; depth: number }> = roots.map((id) => ({ id, depth: 1 }));
-  while (stack.length) {
-    const cur = stack.pop()!;
-    if (cur.depth > max) max = cur.depth;
-    if (cur.depth > 100) continue;
-    const key = `${cur.id}@${cur.depth}`;
-    if (visited.has(key)) continue;
-    visited.add(key);
-    const next = adj.get(cur.id);
-    if (!next) continue;
-    for (const n of next) stack.push({ id: n, depth: cur.depth + 1 });
-  }
-
-  return max;
-}
-
-function computeTopFanIn(
-  nodes: Map<string, { id: string; name: string; version: string }>,
-  edges: Array<{ from: string; to: string }>,
-  limit: number,
-) {
-  const fanIn = new Map<string, number>();
-  for (const e of edges) fanIn.set(e.to, (fanIn.get(e.to) ?? 0) + 1);
-
-  const ranked = Array.from(fanIn.entries())
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, limit)
-    .map(([id, count]) => {
-      const n = nodes.get(id);
-      return n ? { id, name: n.name, version: n.version, fanIn: count } : null;
-    })
-    .filter(Boolean) as Array<{ id: string; name: string; version: string; fanIn: number }>;
-
-  return ranked;
-}
-
-function computeTopBlastRadius(
-  nodes: Map<string, { id: string; name: string; version: string }>,
-  edges: Array<{ from: string; to: string }>,
-  roots: string[],
-  limit: number,
-) {
-  const adj = new Map<string, string[]>();
-  for (const e of edges) {
-    const a = adj.get(e.from);
-    if (a) a.push(e.to);
-    else adj.set(e.from, [e.to]);
-  }
-
-  const reachCount = new Map<string, number>();
-
-  for (const root of roots) {
-    const seen = new Set<string>();
-    const stack = [root];
-    while (stack.length) {
-      const cur = stack.pop()!;
-      if (seen.has(cur)) continue;
-      seen.add(cur);
-      reachCount.set(cur, (reachCount.get(cur) ?? 0) + 1);
-      const next = adj.get(cur);
-      if (!next) continue;
-      for (const n of next) stack.push(n);
-    }
-  }
-
-  const ranked = Array.from(reachCount.entries())
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, limit)
-    .map(([id, rootsCount]) => {
-      const n = nodes.get(id);
-      return n ? { id, name: n.name, version: n.version, roots: rootsCount } : null;
-    })
-    .filter(Boolean) as Array<{ id: string; name: string; version: string; roots: number }>;
-
-  return ranked;
 }
 

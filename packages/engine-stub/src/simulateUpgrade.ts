@@ -9,6 +9,8 @@ import type {
   UpgradeSimulationResult,
 } from "@reposentinel/shared";
 import { graphFromPnpmLockfile, type DependencyGraph } from "./pnpmLock.js";
+import { graphFromPackageLock } from "./npmLock.js";
+import { graphFromYarnLock } from "./yarnLock.js";
 import { analyze } from "./analyze.js";
 
 export async function simulateUpgrade(
@@ -56,10 +58,10 @@ function sameManager(a: ScanLockfileInput, b: ScanLockfileInput) {
 }
 
 function graphFromLockfile(lockfile: ScanLockfileInput): DependencyGraph {
-  if (lockfile.manager !== "pnpm") {
-    throw new Error(`Unsupported lockfile manager: ${lockfile.manager}`);
-  }
-  return graphFromPnpmLockfile(lockfile.content);
+  if (lockfile.manager === "pnpm") return graphFromPnpmLockfile(lockfile.content);
+  if (lockfile.manager === "npm") return graphFromPackageLock(lockfile.content);
+  if (lockfile.manager === "yarn") return graphFromYarnLock(lockfile.content);
+  throw new Error(`Unsupported lockfile manager: ${lockfile.manager}`);
 }
 
 function computeDelta(before: ScanResult, after: ScanResult): UpgradeSimulationDelta {
@@ -117,6 +119,7 @@ export function computeDependencyDelta(beforeGraph: DependencyGraph, afterGraph:
   const packagesRemoved = [...beforePkgs].filter((id) => !afterPkgs.has(id)).length;
 
   return {
+    directKnown: beforeNames.size > 0 || afterNames.size > 0,
     directAdded: directAdded.length,
     directRemoved: directRemoved.length,
     directUpdated: directUpdated.length,

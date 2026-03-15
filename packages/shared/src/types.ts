@@ -16,7 +16,7 @@ export type Finding = {
   recommendation?: string;
 };
 
-export type LockfileManager = "pnpm" | "npm";
+export type LockfileManager = "pnpm" | "npm" | "yarn";
 
 export type ScanLockfileInput = {
   manager: LockfileManager;
@@ -153,6 +153,7 @@ export type UpgradeSimulationDelta = {
     scoreImpactAfter?: number;
   }>;
   dependencyDelta?: {
+    directKnown?: boolean;
     directAdded: number;
     directRemoved: number;
     directUpdated: number;

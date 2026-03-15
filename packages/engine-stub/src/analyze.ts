@@ -9,6 +9,8 @@ import type {
   ScoreLayer,
 } from "@reposentinel/shared";
 import { graphFromPnpmLockfile } from "./pnpmLock.js";
+import { graphFromPackageLock } from "./npmLock.js";
+import { graphFromYarnLock } from "./yarnLock.js";
 import { repoHealthFromGraph } from "./repoHealth.js";
 import { osvVulnerabilitiesFromGraph } from "./osv.js";
 import { adoptionSignalsFromGraph } from "./adoption.js";
@@ -20,7 +22,11 @@ export async function analyze(req: ScanRequest): Promise<ScanResult> {
   const derivedGraph =
     req.lockfile?.manager === "pnpm" && typeof req.lockfile.content === "string"
       ? graphFromPnpmLockfile(req.lockfile.content)
-      : null;
+      : req.lockfile?.manager === "npm" && typeof req.lockfile.content === "string"
+        ? graphFromPackageLock(req.lockfile.content)
+        : req.lockfile?.manager === "yarn" && typeof req.lockfile.content === "string"
+          ? graphFromYarnLock(req.lockfile.content)
+        : null;
 
   const stats = deriveDependencyStats(derivedGraph ?? req.dependencyGraph);
   const baseSignals = buildSignals(stats);

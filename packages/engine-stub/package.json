@@ -12,10 +12,12 @@
   "license": "ISC",
   "dependencies": {
     "@reposentinel/shared": "workspace:^",
+    "@yarnpkg/lockfile": "^1.1.0",
     "yaml": "^2.8.2"
   },
   "devDependencies": {
     "@types/node": "^22.15.3",
+    "@types/yarnpkg__lockfile": "^1.1.9",
     "typescript": "^5.9.3"
   }
 }

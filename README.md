@@ -190,6 +190,12 @@ When configured and installed, RepoSentinel will **analyze PR lockfile changes**
 - risk score delta and top signal deltas
 - “Why this is risky” reasons derived from explainable signals
 
+Supported lockfiles:
+
+- `pnpm-lock.yaml` (best supported; PR base vs head comparisons, graph intelligence)
+- `package-lock.json` (supported)
+- `yarn.lock` (supported; direct dependency list may be unavailable from lockfile alone)
+
 ---
 
 ## Migrations (local)
