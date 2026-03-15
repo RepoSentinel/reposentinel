@@ -24,6 +24,12 @@ export async function benchmarkRoutes(app: FastifyInstance) {
   app.get("/benchmark/org/:owner", async (req, reply) => {
     const owner = String((req.params as any).owner ?? "").trim();
     if (!owner) return sendProblem(reply, req, { status: 400, title: "Bad Request", detail: "owner is required" });
+
+    // Authorization check: ensure authenticated owner matches requested owner
+    if (req.authenticatedOwner && req.authenticatedOwner !== owner) {
+      return sendProblem(reply, req, { status: 403, title: "Forbidden", detail: "Access denied to this organization" });
+    }
+
     return await getBenchmarkSummary({ scope: "owner", owner });
   });
 
@@ -32,6 +38,11 @@ export async function benchmarkRoutes(app: FastifyInstance) {
     if (!repoId) return sendProblem(reply, req, { status: 400, title: "Bad Request", detail: "repoId is required" });
 
     const owner = repoId.includes("/") ? repoId.split("/")[0] : repoId;
+
+    // Authorization check: if using org-scoped API key, ensure repoId belongs to owner
+    if (req.authenticatedOwner && req.authenticatedOwner !== owner) {
+      return sendProblem(reply, req, { status: 403, title: "Forbidden", detail: "Access denied to this repository" });
+    }
 
     const { rows } = await db.query(
       `

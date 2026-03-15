@@ -23,6 +23,11 @@ export async function policiesRoutes(app: FastifyInstance) {
     const owner = String((req.params as any).owner ?? "").trim();
     if (!owner) return sendProblem(reply, req, { status: 400, title: "Bad Request", detail: "owner is required" });
 
+    // Authorization check: ensure authenticated owner matches requested owner
+    if (req.authenticatedOwner && req.authenticatedOwner !== owner) {
+      return sendProblem(reply, req, { status: 403, title: "Forbidden", detail: "Access denied to this organization" });
+    }
+
     const { rows } = await db.query(
       "SELECT id, owner, name, enabled, rules, created_at, updated_at FROM policies WHERE owner=$1 ORDER BY created_at DESC",
       [owner],
@@ -34,6 +39,11 @@ export async function policiesRoutes(app: FastifyInstance) {
   app.post("/org/:owner/policies", async (req, reply) => {
     const owner = String((req.params as any).owner ?? "").trim();
     if (!owner) return sendProblem(reply, req, { status: 400, title: "Bad Request", detail: "owner is required" });
+
+    // Authorization check: ensure authenticated owner matches requested owner
+    if (req.authenticatedOwner && req.authenticatedOwner !== owner) {
+      return sendProblem(reply, req, { status: 403, title: "Forbidden", detail: "Access denied to this organization" });
+    }
 
     const body = (req.body ?? {}) as any;
     const name = String(body.name ?? "").trim();
@@ -57,6 +67,18 @@ export async function policiesRoutes(app: FastifyInstance) {
   app.patch("/policies/:id", async (req, reply) => {
     const id = String((req.params as any).id ?? "").trim();
     if (!id) return sendProblem(reply, req, { status: 400, title: "Bad Request", detail: "id is required" });
+
+    // First, fetch the policy to check ownership
+    const { rows: existing } = await db.query("SELECT owner FROM policies WHERE id=$1", [id]);
+    if (!existing.length) {
+      return sendProblem(reply, req, { status: 404, title: "Not Found", detail: "policy not found" });
+    }
+
+    // Authorization check: ensure authenticated owner matches policy owner
+    const policyOwner = existing[0].owner;
+    if (req.authenticatedOwner && req.authenticatedOwner !== policyOwner) {
+      return sendProblem(reply, req, { status: 403, title: "Forbidden", detail: "Access denied to this policy" });
+    }
 
     const body = (req.body ?? {}) as any;
     const fields: string[] = [];
@@ -96,6 +118,11 @@ export async function policiesRoutes(app: FastifyInstance) {
   app.get("/org/:owner/policy/violations", async (req, reply) => {
     const owner = String((req.params as any).owner ?? "").trim();
     if (!owner) return sendProblem(reply, req, { status: 400, title: "Bad Request", detail: "owner is required" });
+
+    // Authorization check: ensure authenticated owner matches requested owner
+    if (req.authenticatedOwner && req.authenticatedOwner !== owner) {
+      return sendProblem(reply, req, { status: 403, title: "Forbidden", detail: "Access denied to this organization" });
+    }
 
     const { repoId, limit } = req.query as any;
     const n = Math.max(1, Math.min(500, Number(limit ?? 100)));

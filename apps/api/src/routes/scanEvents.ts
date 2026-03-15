@@ -6,6 +6,45 @@ export async function scanEventsRoutes(app: FastifyInstance) {
   app.get("/scan/:id/events", async (req, reply) => {
     const id = (req.params as any).id as string;
 
+    // Authorization check: fetch scan and verify ownership before streaming
+    const scanCheck = await db.query("SELECT repo_id FROM scans WHERE id=$1", [id]);
+    if (scanCheck.rows.length === 0) {
+      reply.hijack();
+      reply.raw.writeHead(404, {
+        "Content-Type": "application/problem+json; charset=utf-8",
+        "x-request-id": String((req as any).id ?? ""),
+      });
+      reply.raw.end(
+        problemJsonString(req as any, {
+          status: 404,
+          title: "Not Found",
+          detail: "scan not found",
+        }),
+      );
+      return;
+    }
+
+    if (req.authenticatedOwner) {
+      const repoOwner = scanCheck.rows[0].repo_id.includes("/")
+        ? scanCheck.rows[0].repo_id.split("/")[0]
+        : scanCheck.rows[0].repo_id;
+      if (repoOwner !== req.authenticatedOwner) {
+        reply.hijack();
+        reply.raw.writeHead(403, {
+          "Content-Type": "application/problem+json; charset=utf-8",
+          "x-request-id": String((req as any).id ?? ""),
+        });
+        reply.raw.end(
+          problemJsonString(req as any, {
+            status: 403,
+            title: "Forbidden",
+            detail: "Access denied to this scan",
+          }),
+        );
+        return;
+      }
+    }
+
     const allowedOrigins = new Set(
       (process.env.CORS_ORIGINS ?? "http://localhost:3000,http://127.0.0.1:3000")
         .split(",")

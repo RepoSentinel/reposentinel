@@ -10,6 +10,14 @@ export async function scanRoutes(app: FastifyInstance) {
   app.post("/scan", async (req, reply) => {
     const body = req.body as ScanRequest;
 
+    // Authorization check: if using org-scoped API key, ensure repoId matches owner
+    if (req.authenticatedOwner) {
+      const repoOwner = body.repoId.includes("/") ? body.repoId.split("/")[0] : body.repoId;
+      if (repoOwner !== req.authenticatedOwner) {
+        return sendProblem(reply, req, { status: 403, title: "Forbidden", detail: "Access denied to this repository" });
+      }
+    }
+
     try {
       const { scanId } = await createScanAndEnqueue({
         repoId: body.repoId,
@@ -43,13 +51,30 @@ export async function scanRoutes(app: FastifyInstance) {
       return sendProblem(reply, req, { status: 404, title: "Not Found", detail: "scan not found" });
     }
 
-    return rows[0];
+    // Authorization check: if using org-scoped API key, ensure scan belongs to owner
+    const scan = rows[0];
+    if (req.authenticatedOwner) {
+      const repoOwner = scan.repo_id.includes("/") ? scan.repo_id.split("/")[0] : scan.repo_id;
+      if (repoOwner !== req.authenticatedOwner) {
+        return sendProblem(reply, req, { status: 403, title: "Forbidden", detail: "Access denied to this scan" });
+      }
+    }
+
+    return scan;
   });
 
   app.get("/scans", async (req, reply) => {
     const { repoId, limit } = req.query as any;
     if (!repoId || typeof repoId !== "string") {
       return sendProblem(reply, req, { status: 400, title: "Bad Request", detail: "repoId is required" });
+    }
+
+    // Authorization check: if using org-scoped API key, ensure repoId belongs to owner
+    if (req.authenticatedOwner) {
+      const repoOwner = repoId.includes("/") ? repoId.split("/")[0] : repoId;
+      if (repoOwner !== req.authenticatedOwner) {
+        return sendProblem(reply, req, { status: 403, title: "Forbidden", detail: "Access denied to this repository" });
+      }
     }
 
     const n = Math.max(1, Math.min(200, Number(limit ?? 50)));
