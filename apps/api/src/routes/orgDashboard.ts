@@ -28,6 +28,11 @@ export async function orgDashboardRoutes(app: FastifyInstance) {
     const owner = String((req.params as any).owner ?? "").trim();
     if (!owner) return sendProblem(reply, req, { status: 400, title: "Bad Request", detail: "owner is required" });
 
+    // Authorization check: ensure authenticated owner matches requested owner
+    if (req.authenticatedOwner && req.authenticatedOwner !== owner) {
+      return sendProblem(reply, req, { status: 403, title: "Forbidden", detail: "Access denied to this organization" });
+    }
+
     const limitRaw = (req.query as any)?.limit;
     const n = Math.max(1, Math.min(200, Number(limitRaw ?? 50)));
 
