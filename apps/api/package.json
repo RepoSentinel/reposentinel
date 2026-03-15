@@ -9,7 +9,11 @@
     "start": "node --enable-source-maps dist/server.js",
     "migrate": "tsx src/migrateCli.ts",
     "generate-api-key": "tsx src/generateApiKey.ts",
-    "bootstrap-migrations": "tsx src/bootstrapMigrations.ts"
+    "bootstrap-migrations": "tsx src/bootstrapMigrations.ts",
+    "check-types": "tsc -p tsconfig.json --noEmit",
+    "lint": "echo 'No lint configured for API'",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "license": "ISC",
   "dependencies": {
@@ -30,6 +34,7 @@
     "@types/pg": "^8.16.0",
     "prisma": "^7.4.1",
     "tsx": "^4.21.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^2.1.8"
   }
 }

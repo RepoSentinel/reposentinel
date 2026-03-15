@@ -9,7 +9,11 @@
   "scripts": {
     "dev": "tsx src/cli.ts",
     "build": "tsc -p tsconfig.json",
-    "start": "node --enable-source-maps dist/cli.js"
+    "start": "node --enable-source-maps dist/cli.js",
+    "check-types": "tsc -p tsconfig.json --noEmit",
+    "lint": "echo 'No lint configured for CLI'",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@reposentinel/engine": "workspace:^",
@@ -18,7 +22,7 @@
   "devDependencies": {
     "@types/node": "^22.15.3",
     "tsx": "^4.21.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^2.1.8"
   }
 }
-
