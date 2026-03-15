@@ -160,6 +160,8 @@ export type UpgradeSimulationDelta = {
     packagesAdded: number;
     packagesRemoved: number;
     topDirectAdded?: string[];
+    topDirectRemoved?: string[];
+    topDirectUpdated?: string[];
   };
 };
 

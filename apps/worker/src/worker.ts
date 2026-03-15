@@ -260,7 +260,7 @@ async function computePrSimulation(opts: {
 }): Promise<UpgradeSimulationResult | null> {
   const { baseLockfile, headLockfile } = opts;
   if (!baseLockfile || !headLockfile) return null;
-  if (baseLockfile.manager !== "pnpm" || headLockfile.manager !== "pnpm") return null;
+  if (baseLockfile.manager !== headLockfile.manager) return null;
 
   return simulateUpgrade({
     repoId: opts.repoId,
@@ -285,7 +285,7 @@ function renderPrComment(opts: {
 
   if (!simulation?.after || !simulation?.delta) {
     lines.push(
-      "No lockfile delta available (currently only `pnpm-lock.yaml` supports base vs PR comparison).",
+      "No lockfile delta available (base vs PR comparison requires a lockfile in both base and head).",
     );
     return lines.join("\n");
   }
@@ -310,6 +310,12 @@ function renderPrComment(opts: {
     if (Array.isArray(dep.topDirectAdded) && dep.topDirectAdded.length) {
       lines.push(`- Added: ${dep.topDirectAdded.slice(0, 6).map((x: any) => `\`${x}\``).join(", ")}`);
     }
+    if (Array.isArray(dep.topDirectUpdated) && dep.topDirectUpdated.length) {
+      lines.push(`- Updated: ${dep.topDirectUpdated.slice(0, 6).map((x: any) => `\`${x}\``).join(", ")}`);
+    }
+    if (Array.isArray(dep.topDirectRemoved) && dep.topDirectRemoved.length) {
+      lines.push(`- Removed: ${dep.topDirectRemoved.slice(0, 6).map((x: any) => `\`${x}\``).join(", ")}`);
+    }
     lines.push("");
   }
 
@@ -327,6 +333,13 @@ function renderPrComment(opts: {
   if (findings.length) {
     lines.push("**Findings**:");
     for (const f of findings.slice(0, 6)) lines.push(`- ${f}`);
+    lines.push("");
+  }
+
+  const actions = buildPrActions({ after, dep });
+  if (actions.length) {
+    lines.push("**Action**:");
+    for (const a of actions.slice(0, 6)) lines.push(`- ${a}`);
     lines.push("");
   }
 
@@ -353,9 +366,10 @@ function renderPrComment(opts: {
 
   const recs = after.recommendations ?? [];
   if (recs.length) {
-    lines.push("**Recommendation**:");
-    for (const r of recs.slice(0, 3)) {
-      lines.push(`- ${r.title}`);
+    lines.push("**Top recommendations**:");
+    for (const r of recs.slice(0, 4)) {
+      const pkgs = Array.isArray((r as any)?.packages) ? (r as any).packages.slice(0, 6) : [];
+      lines.push(`- ${r.title}${pkgs.length ? ` — ${pkgs.map((p: any) => `\`${p}\``).join(", ")}` : ""}`);
     }
     lines.push("");
   }
@@ -377,6 +391,8 @@ function buildPrFindings(opts: { before: any; after: any; dep: any }) {
   const dep = opts.dep;
 
   const addedDirect = Array.isArray(dep?.topDirectAdded) ? dep.topDirectAdded.map(String) : [];
+  const updatedDirect = Array.isArray(dep?.topDirectUpdated) ? dep.topDirectUpdated.map(String) : [];
+  const focusDirect = [...addedDirect, ...updatedDirect].slice(0, 10);
   const pkgHealth = Array.isArray(after?.dataset?.packageHealth) ? after.dataset.packageHealth : [];
   const healthByName = new Map<string, any>(pkgHealth.map((p: any) => [String(p?.name ?? ""), p]));
 
@@ -384,7 +400,7 @@ function buildPrFindings(opts: { before: any; after: any; dep: any }) {
   const veryStaleDays = clampInt(process.env.REPOSENTINEL_HEALTH_VERY_STALE_DAYS, 730);
   const now = Date.now();
 
-  for (const name of addedDirect.slice(0, 6)) {
+  for (const name of focusDirect.slice(0, 8)) {
     const h = healthByName.get(name);
     if (!h) continue;
 
@@ -407,7 +423,7 @@ function buildPrFindings(opts: { before: any; after: any; dep: any }) {
   const osvTotal = (after?.signals ?? []).find((s: any) => String(s?.id ?? "") === "vuln.osv_total_vulns");
   const osvTop = (osvTotal?.evidence as any)?.top;
   if (Array.isArray(osvTop) && osvTop.length) {
-    const relevant = addedDirect.length ? osvTop.filter((x: any) => addedDirect.includes(String(x?.name ?? ""))) : osvTop;
+    const relevant = focusDirect.length ? osvTop.filter((x: any) => focusDirect.includes(String(x?.name ?? ""))) : osvTop;
     const pool = (relevant.length ? relevant : osvTop) as any[];
     const worst = [...pool].sort(
       (a: any, b: any) => (b?.worstScore ?? 0) - (a?.worstScore ?? 0) || (b?.count ?? 0) - (a?.count ?? 0),
@@ -426,6 +442,71 @@ function buildPrFindings(opts: { before: any; after: any; dep: any }) {
   }
 
   // De-dupe while preserving order
+  const seen = new Set<string>();
+  return out.filter((x) => (seen.has(x) ? false : (seen.add(x), true))).slice(0, 6);
+}
+
+function buildPrActions(opts: { after: any; dep: any }) {
+  const after = opts.after;
+  const dep = opts.dep;
+  const out: string[] = [];
+
+  const addedDirect = Array.isArray(dep?.topDirectAdded) ? dep.topDirectAdded.map(String) : [];
+  const updatedDirect = Array.isArray(dep?.topDirectUpdated) ? dep.topDirectUpdated.map(String) : [];
+  const focusDirect = [...addedDirect, ...updatedDirect].slice(0, 10);
+
+  const pkgHealth = Array.isArray(after?.dataset?.packageHealth) ? after.dataset.packageHealth : [];
+  const healthByName = new Map<string, any>(pkgHealth.map((p: any) => [String(p?.name ?? ""), p]));
+
+  const staleDays = clampInt(process.env.REPOSENTINEL_HEALTH_STALE_DAYS, 365);
+  const veryStaleDays = clampInt(process.env.REPOSENTINEL_HEALTH_VERY_STALE_DAYS, 730);
+  const now = Date.now();
+
+  for (const name of focusDirect.slice(0, 8)) {
+    const h = healthByName.get(name);
+    if (!h) continue;
+
+    const latest = h.latestPublishedAt ? Date.parse(String(h.latestPublishedAt)) : NaN;
+    if (Number.isFinite(latest)) {
+      const days = Math.floor((now - latest) / (24 * 60 * 60 * 1000));
+      if (days >= veryStaleDays) {
+        out.push(`\`${name}\`: review justification / consider maintained alternative (very stale releases)`);
+      } else if (days >= staleDays) {
+        out.push(`\`${name}\`: confirm maintenance posture (stale releases)`);
+      }
+    }
+
+    const m = Number(h.maintainersCount ?? NaN);
+    if (Number.isFinite(m) && m <= 1) {
+      out.push(`\`${name}\`: assess bus factor risk (single maintainer)`);
+    }
+  }
+
+  const osvTotal = (after?.signals ?? []).find((s: any) => String(s?.id ?? "") === "vuln.osv_total_vulns");
+  const osvTop = (osvTotal?.evidence as any)?.top;
+  if (Array.isArray(osvTop) && osvTop.length) {
+    const relevant = focusDirect.length ? osvTop.filter((x: any) => focusDirect.includes(String(x?.name ?? ""))) : osvTop;
+    const pool = (relevant.length ? relevant : osvTop) as any[];
+    const worst = [...pool].sort(
+      (a: any, b: any) => (b?.worstScore ?? 0) - (a?.worstScore ?? 0) || (b?.count ?? 0) - (a?.count ?? 0),
+    )[0];
+    if (worst?.name) {
+      out.push(
+        `\`${String(worst.name)}\`: review advisories and upgrade/override if possible (known advisories detected)`,
+      );
+    }
+  }
+
+  const hotspots = after?.graphInsights?.hotspots;
+  if (Array.isArray(hotspots) && hotspots.length) {
+    const h = hotspots[0];
+    if (h?.packageName) {
+      out.push(
+        `\`${String(h.packageName)}\`: treat as transitive hotspot (high fan-in); prefer upgrading the direct parent(s) listed in “via”`,
+      );
+    }
+  }
+
   const seen = new Set<string>();
   return out.filter((x) => (seen.has(x) ? false : (seen.add(x), true))).slice(0, 6);
 }

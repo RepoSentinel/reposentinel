@@ -126,6 +126,8 @@ export function computeDependencyDelta(beforeGraph: DependencyGraph, afterGraph:
     packagesAdded,
     packagesRemoved,
     topDirectAdded: directAdded.slice(0, 8),
+    topDirectRemoved: directRemoved.slice(0, 8),
+    topDirectUpdated: directUpdated.slice(0, 8),
   };
 }
 
