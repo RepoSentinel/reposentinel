@@ -2,6 +2,7 @@ import { AppShell } from "../../../_components/AppShell";
 import { Card } from "../../../_components/ui/Card";
 import { DataTable, TD } from "../../../_components/ui/Table";
 import typo from "../../../_styles/typography.module.css";
+import { apiGet, ApiError, getApiBaseUrl } from "../../../../lib/api";
 
 type PoliciesResponse = {
   owner: string;
@@ -42,25 +43,23 @@ export default async function Page({
   const sp = (await searchParams) ?? {};
   const limit = sp.limit ? Number(sp.limit) : 100;
 
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4000";
-  const [pRes, vRes] = await Promise.all([
-    fetch(`${baseUrl}/org/${encodeURIComponent(owner)}/policies`, { cache: "no-store" }),
-    fetch(`${baseUrl}/org/${encodeURIComponent(owner)}/policy/violations?limit=${limit}`, { cache: "no-store" }),
-  ]);
+  const baseUrl = getApiBaseUrl();
 
-  if (!pRes.ok || !vRes.ok) {
-    const t1 = await pRes.text();
-    const t2 = await vRes.text();
+  let policies: PoliciesResponse;
+  let violations: ViolationsResponse;
+  try {
+    [policies, violations] = await Promise.all([
+      apiGet<PoliciesResponse>(`/org/${encodeURIComponent(owner)}/policies`),
+      apiGet<ViolationsResponse>(`/org/${encodeURIComponent(owner)}/policy/violations?limit=${limit}`),
+    ]);
+  } catch (err: unknown) {
+    const errorText = err instanceof ApiError ? err.body ?? err.message : String(err);
     return (
       <AppShell title="Policies" subtitle={owner} owner={owner}>
-        <pre style={{ whiteSpace: "pre-wrap" }}>{t1}</pre>
-        <pre style={{ whiteSpace: "pre-wrap" }}>{t2}</pre>
+        <pre style={{ whiteSpace: "pre-wrap" }}>{errorText}</pre>
       </AppShell>
     );
   }
-
-  const policies = (await pRes.json()) as PoliciesResponse;
-  const violations = (await vRes.json()) as ViolationsResponse;
 
   return (
     <AppShell

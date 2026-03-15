@@ -5,6 +5,7 @@ import styles from "./ScanClient.module.css";
 import layoutStyles from "./ScanClientLayout.module.css";
 import { Card, cardStyles } from "../../_components/ui/Card";
 import { Button, Row } from "../../_components/ui/Form";
+import { getApiBaseUrl } from "../../../lib/api";
 
 type ScanRow = {
   id: string;
@@ -20,7 +21,7 @@ export default function ScanClient({ id }: { id: string }) {
   const terminalRef = useRef(false);
 
   useEffect(() => {
-    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
+    const baseUrl = getApiBaseUrl();
     const es = new EventSource(`${baseUrl}/scan/${id}/events`);
 
     es.addEventListener("status", (e) => {
@@ -147,7 +148,7 @@ export default function ScanClient({ id }: { id: string }) {
                 <li key={String(x.packageName ?? x.version ?? Math.random())}>
                   <b>{String(x.packageName ?? "package")}</b>{" "}
                   <span className={cardStyles.muted}>
-                    {Boolean(x.direct) ? "direct" : "transitive"} • depth {Number(x.depth ?? 0)}
+                    {x.direct ? "direct" : "transitive"} • depth {Number(x.depth ?? 0)}
                   </span>
                   {Array.isArray(x.via) && x.via.length ? (
                     <div className={cardStyles.note} style={{ marginTop: 6 }}>

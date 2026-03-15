@@ -1,6 +1,7 @@
 import { AppShell } from "../../../_components/AppShell";
 import { DataTable, TD } from "../../../_components/ui/Table";
 import typo from "../../../_styles/typography.module.css";
+import { apiGet, ApiError } from "../../../../lib/api";
 
 type OrgAlerts = {
   owner: string;
@@ -26,22 +27,17 @@ export default async function Page({
   const sp = (await searchParams) ?? {};
   const limit = sp.limit ? Number(sp.limit) : 100;
 
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4000";
-  const res = await fetch(
-    `${baseUrl}/org/${encodeURIComponent(owner)}/alerts?limit=${limit}`,
-    { cache: "no-store" },
-  );
-
-  if (!res.ok) {
-    const text = await res.text();
+  let data: OrgAlerts;
+  try {
+    data = await apiGet<OrgAlerts>(`/org/${encodeURIComponent(owner)}/alerts?limit=${limit}`);
+  } catch (err: unknown) {
+    const errorText = err instanceof ApiError ? err.body ?? err.message : String(err);
     return (
       <AppShell title="Alerts" subtitle={owner} owner={owner}>
-        <pre style={{ whiteSpace: "pre-wrap" }}>{text}</pre>
+        <pre style={{ whiteSpace: "pre-wrap" }}>{errorText}</pre>
       </AppShell>
     );
   }
-
-  const data = (await res.json()) as OrgAlerts;
 
   return (
     <AppShell title="Alerts" subtitle={`recent: ${data.alerts.length}`} owner={owner}>

@@ -3,6 +3,7 @@ import { DataTable, TD } from "../../../_components/ui/Table";
 import { Card, cardStyles } from "../../../_components/ui/Card";
 import styles from "./Benchmark.module.css";
 import typo from "../../../_styles/typography.module.css";
+import { apiGet, ApiError } from "../../../../lib/api";
 
 type Summary = {
   scope: "global" | "owner";
@@ -20,26 +21,22 @@ type Summary = {
 
 export default async function Page({ params }: { params: Promise<{ owner: string }> }) {
   const { owner } = await params;
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4000";
 
-  const [globalRes, ownerRes] = await Promise.all([
-    fetch(`${baseUrl}/benchmark/global`, { cache: "no-store" }),
-    fetch(`${baseUrl}/benchmark/org/${encodeURIComponent(owner)}`, { cache: "no-store" }),
-  ]);
-
-  if (!globalRes.ok || !ownerRes.ok) {
-    const t1 = await globalRes.text();
-    const t2 = await ownerRes.text();
+  let global: Summary;
+  let org: Summary;
+  try {
+    [global, org] = await Promise.all([
+      apiGet<Summary>(`/benchmark/global`),
+      apiGet<Summary>(`/benchmark/org/${encodeURIComponent(owner)}`),
+    ]);
+  } catch (err: unknown) {
+    const errorText = err instanceof ApiError ? err.body ?? err.message : String(err);
     return (
       <AppShell title="Benchmark" subtitle={owner} owner={owner}>
-        <pre style={{ whiteSpace: "pre-wrap" }}>{t1}</pre>
-        <pre style={{ whiteSpace: "pre-wrap" }}>{t2}</pre>
+        <pre style={{ whiteSpace: "pre-wrap" }}>{errorText}</pre>
       </AppShell>
     );
   }
-
-  const global = (await globalRes.json()) as Summary;
-  const org = (await ownerRes.json()) as Summary;
 
   return (
     <AppShell

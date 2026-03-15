@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import styles from "./HomeClient.module.css";
 import { Card, cardStyles } from "./ui/Card";
 import { Button, ButtonLink, Row, TextInput } from "./ui/Form";
+import { getApiBaseUrl } from "../../lib/api";
 
 export function HomeClient() {
   const router = useRouter();
@@ -46,7 +47,7 @@ export function HomeClient() {
           />
           <ButtonLink
             variant="secondary"
-            href={`${process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4000"}/benchmark/repo?repoId=${encodeURIComponent(repoId.trim())}`}
+            href={`${getApiBaseUrl()}/benchmark/repo?repoId=${encodeURIComponent(repoId.trim())}`}
             target="_blank"
             rel="noreferrer"
           >

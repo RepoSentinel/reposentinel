@@ -2,6 +2,7 @@ import Link from "next/link";
 import { AppShell } from "../../_components/AppShell";
 import { DataTable, TD } from "../../_components/ui/Table";
 import { cardStyles } from "../../_components/ui/Card";
+import { apiGet, ApiError } from "../../../lib/api";
 
 type Dashboard = {
   owner: string;
@@ -35,21 +36,17 @@ export default async function Page({
   const sp = (await searchParams) ?? {};
   const limit = sp.limit ? Number(sp.limit) : 50;
 
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4000";
-  const res = await fetch(`${baseUrl}/org/${encodeURIComponent(owner)}/dashboard?limit=${limit}`, {
-    cache: "no-store",
-  });
-
-  if (!res.ok) {
-    const text = await res.text();
+  let data: Dashboard;
+  try {
+    data = await apiGet<Dashboard>(`/org/${encodeURIComponent(owner)}/dashboard?limit=${limit}`);
+  } catch (err: unknown) {
+    const errorText = err instanceof ApiError ? err.body ?? err.message : String(err);
     return (
       <AppShell title="Org dashboard" subtitle={owner} owner={owner}>
-        <pre style={{ whiteSpace: "pre-wrap" }}>{text}</pre>
+        <pre style={{ whiteSpace: "pre-wrap" }}>{errorText}</pre>
       </AppShell>
     );
   }
-
-  const data = (await res.json()) as Dashboard;
 
   return (
     <AppShell
