@@ -231,6 +231,9 @@ When configured and installed, RepoSentinel will **analyze PR lockfile changes**
 - risk score delta and top signal deltas
 - “Why this is risky” reasons derived from explainable signals
 
+
+**Important**: To enable PR comments, set `FREE_PR_COMMENTS_ENABLED=1` in `apps/worker/.env` (copy from `.env.example` if needed). Without this setting, scans will complete successfully but PR comments will not be posted.
+
 Supported lockfiles:
 
 - `pnpm-lock.yaml` (best supported; PR base vs head comparisons, graph intelligence)

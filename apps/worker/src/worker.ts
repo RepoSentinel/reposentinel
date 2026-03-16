@@ -136,6 +136,8 @@ new Worker<ScanJob>(
       }
 
       if (github?.prNumber && limits.prCommentsEnabled) {
+        // NOTE: prCommentsEnabled is controlled by FREE_PR_COMMENTS_ENABLED / PAID_PR_COMMENTS_ENABLED
+        // in apps/worker/.env. See tier.ts for configuration details.
         try {
           await postGithubPrReviewComment({
             scanId,
