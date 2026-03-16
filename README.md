@@ -2,6 +2,8 @@
 
 RepoSentinel is a dependency risk intelligence platform designed to produce **actionable, explainable risk scores** for repositories.
 
+<!-- Test PR scan -->
+
 This repository is an **early, working end-to-end system** (web + API + worker + Postgres + Redis) with a pluggable analysis engine. The platform calls `@reposentinel/engine` (a stable facade) which loads `@reposentinel/engine-stub` by default and can be swapped for a proprietary engine without changing the surrounding platform (see `REPOSENTINEL_ENGINE_IMPL`).
 
 **Note**: This public repository contains the platform components (API, web, CLI) and an open-source reference engine implementation. The production worker and proprietary analysis engine are maintained in a private package: `@reposentinel/engine-private`.
