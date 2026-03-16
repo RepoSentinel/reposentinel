@@ -6,6 +6,7 @@ import { registerErrorHandling } from "./http/errors.js";
 import { registerRawBody } from "./http/rawBody.js";
 import { registerCors } from "./http/cors.js";
 import { registerAuth } from "./http/auth.js";
+import { registerRateLimit } from "./http/rateLimit.js";
 import { appConfig } from "./config.js";
 
 export async function createApp() {
@@ -42,6 +43,7 @@ export async function createApp() {
 
   await registerRawBody(app);
   await registerCors(app);
+  await registerRateLimit(app);
   registerAuth(app);
 
   await registerRoutes(app);
