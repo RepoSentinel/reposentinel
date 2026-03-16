@@ -40,9 +40,9 @@ This fix addresses critical security vulnerabilities in the RepoSentinel API aut
   - `GET /benchmark/repo?repoId=...`
 
 ### 5. ✅ Fail-Secure Authentication
-- **Before**: When `REPOSENTINEL_API_KEY` was unset, API was completely unauthenticated
-- **After**: Auth hook always runs and validates API keys from database
-- Legacy `REPOSENTINEL_API_KEY` still supported for backward compatibility but doesn't provide org scoping
+- **Before**: When `REPOSENTINEL_API_KEY` was unset, API was completely unauthenticated. Legacy API key set `req.authenticatedOwner = undefined`, bypassing all multi-tenant checks.
+- **After**: Auth hook always runs and validates API keys from database. Legacy key support **removed** to enforce multi-tenant isolation.
+- **Security Impact**: All authorization checks now properly enforce tenant boundaries. No path to bypass ownership verification.
 
 ### 6. ✅ Timing Attack Prevention
 - **Before**: Non-constant-time string comparison (`===`)
@@ -80,10 +80,10 @@ This will:
 
 ## Migration Path
 
-1. **Immediate**: Deploy the fix (backward compatible with legacy keys)
+1. **Immediate**: Deploy the fix (legacy key support removed for security)
 2. **Generate org-scoped keys**: Run `generate-api-key` for each organization
 3. **Distribute keys**: Provide each org with their specific API key
-4. **Deprecate legacy key**: Remove `REPOSENTINEL_API_KEY` from environment after migration
+4. **Update environment**: Remove `REPOSENTINEL_API_KEY` from environment (no longer used)
 
 ## Security Testing
 
@@ -127,6 +127,6 @@ Expected: `401 Unauthorized - Missing or invalid API key`
 
 ## Backward Compatibility
 
-- Legacy `REPOSENTINEL_API_KEY` environment variable still works
-- **Warning**: Legacy keys bypass org scoping (all orgs accessible)
-- Recommended: Migrate to org-scoped keys as soon as possible
+- **BREAKING CHANGE**: Legacy `REPOSENTINEL_API_KEY` environment variable is **no longer supported**
+- All API clients must use org-scoped API keys from the `api_keys` table
+- Recommended: Generate org-scoped keys before deploying this security fix

@@ -1,5 +1,5 @@
 import type { FastifyInstance } from "fastify";
-import { timingSafeEqual, createHash } from "crypto";
+import { createHash } from "crypto";
 import { queries } from "../db.js";
 import { sendProblem } from "../problem.js";
 
@@ -10,8 +10,6 @@ declare module "fastify" {
 }
 
 export function registerAuth(app: FastifyInstance) {
-  const legacyApiKey = (process.env.REPOSENTINEL_API_KEY ?? "").trim();
-
   app.addHook("onRequest", async (req, reply) => {
     const url = String(req.url ?? "");
     const method = String(req.method ?? "GET").toUpperCase();
@@ -40,7 +38,7 @@ export function registerAuth(app: FastifyInstance) {
       });
     }
 
-    // Try org-scoped API keys first
+    // Validate org-scoped API keys
     const keyHash = hashApiKey(providedKey);
     try {
       const apiKey = await queries.apiKeys.findByHash(keyHash);
@@ -51,14 +49,8 @@ export function registerAuth(app: FastifyInstance) {
         return;
       }
     } catch (err) {
-      // Table may not exist yet during migration, fall through to legacy auth
-    }
-
-    // Fall back to legacy single API key
-    if (legacyApiKey && constantTimeEqual(providedKey, legacyApiKey)) {
-      // Legacy mode: no owner scoping (security risk, but maintains backward compatibility)
-      req.authenticatedOwner = undefined;
-      return;
+      // Database error - fail closed for security
+      // Log the error for debugging but return unauthorized
     }
 
     return sendProblem(reply, req, {
@@ -71,18 +63,5 @@ export function registerAuth(app: FastifyInstance) {
 
 function hashApiKey(key: string): string {
   return createHash("sha256").update(key).digest("hex");
-}
-
-function constantTimeEqual(a: string, b: string): boolean {
-  if (a.length !== b.length) {
-    // Perform a dummy comparison to prevent timing attacks on length
-    timingSafeEqual(Buffer.from(a.padEnd(64, "0")), Buffer.from(b.padEnd(64, "0")));
-    return false;
-  }
-  try {
-    return timingSafeEqual(Buffer.from(a), Buffer.from(b));
-  } catch {
-    return false;
-  }
 }
 

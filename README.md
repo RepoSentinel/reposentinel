@@ -106,26 +106,64 @@ This repo includes a CI workflow that runs a local RepoSentinel scan on pull req
 
 ---
 
+## API Authentication
+
+The API requires org-scoped API keys for all non-public endpoints. Generate a key for your organization:
+
+```bash
+cd apps/api
+pnpm migrate  # Ensure api_keys table exists
+pnpm generate-api-key <owner> "<description>"
+```
+
+Example:
+
+```bash
+pnpm generate-api-key acme "Production API key for Acme Corp"
+```
+
+This will output a key like `rs_abc123...`. Save it securely - it won't be shown again.
+
+Use the key in the `Authorization` header:
+
+```bash
+Authorization: Bearer rs_abc123...
+```
+
+**Note**: The legacy `REPOSENTINEL_API_KEY` environment variable is no longer supported for security reasons (enforces multi-tenant isolation).
+
+---
+
 ## API usage (smoke test)
 
-Create a scan:
+Create a scan (requires authentication):
 
 ```bash
 curl -sS -X POST "http://localhost:4000/scan" \
   -H "Content-Type: application/json" \
+  -H "Authorization: Bearer rs_your_api_key_here" \
   -d '{"repoId":"demo/repo","dependencyGraph":{}}'
 ```
 
 Then fetch status:
 
 ```bash
-curl -sS "http://localhost:4000/scan/<scanId>"
+curl -sS "http://localhost:4000/scan/<scanId>" \
+  -H "Authorization: Bearer rs_your_api_key_here"
 ```
 
 Stream events (SSE):
 
 ```bash
-curl -iN --http1.1 "http://localhost:4000/scan/<scanId>/events"
+curl -iN --http1.1 "http://localhost:4000/scan/<scanId>/events" \
+  -H "Authorization: Bearer rs_your_api_key_here"
+```
+
+Public endpoints (no auth required):
+
+```bash
+curl -sS "http://localhost:4000/health"
+curl -sS "http://localhost:4000/openapi.json"
 ```
 
 ---
