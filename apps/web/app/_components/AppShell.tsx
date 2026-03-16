@@ -1,5 +1,6 @@
 import Link from "next/link";
 import styles from "./AppShell.module.css";
+import { Footer } from "./Footer";
 
 export function AppShell({
   title,
@@ -52,6 +53,8 @@ export function AppShell({
         </div>
         {children}
       </main>
+
+      <Footer />
     </div>
   );
 }

@@ -23,7 +23,21 @@ function getOpenApiSpec() {
       title: "RepoSentinel API",
       version: "v1",
       description:
-        "Dependency risk intelligence API for scans, org views, policies, alerts, benchmarking, and simulations.",
+        "Dependency risk intelligence API for scans, org views, policies, alerts, benchmarking, and simulations.\n\n" +
+        "**Important**: This API is provided 'as is' without warranty. Not a substitute for security audits. " +
+        "Validate all outputs before use. See [Terms](https://github.com/[your-org]/reposentinel/blob/main/TERMS.md), " +
+        "[API Terms](https://github.com/[your-org]/reposentinel/blob/main/API-TERMS.md), and " +
+        "[Privacy Policy](https://github.com/[your-org]/reposentinel/blob/main/PRIVACY.md).",
+      contact: {
+        name: "RepoSentinel Support",
+        url: "https://github.com/[your-org]/reposentinel",
+        email: "legal@reposentinel.com",
+      },
+      license: {
+        name: "Apache 2.0",
+        url: "https://github.com/[your-org]/reposentinel/blob/main/LICENSE",
+      },
+      termsOfService: "https://github.com/[your-org]/reposentinel/blob/main/API-TERMS.md",
     },
     servers: [{ url: "http://localhost:4000" }],
     tags: [

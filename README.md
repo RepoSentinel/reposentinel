@@ -6,12 +6,45 @@ This repository is an **early, working end-to-end system** (web + API + worker +
 
 **Note**: This public repository contains the platform components (API, web, CLI) and an open-source reference engine implementation. The production worker and proprietary analysis engine are maintained in a private package: `@reposentinel/engine-private`.
 
-### License and disclaimer
+---
 
-RepoSentinel is licensed under **Apache-2.0** (see `LICENSE`).
+## ⚠️ Important Legal & Disclaimer
 
-This software is provided **“as is”**, without warranty of any kind. You are responsible for validating outputs before acting on them.
-No security guarantees are provided; do not rely on this as your sole security control.
+### License
+
+RepoSentinel is licensed under **Apache License 2.0** (see [LICENSE](./LICENSE)).
+
+### "AS IS" Disclaimer
+
+**THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.** 
+
+🔴 **Critical: You MUST understand these limitations before using RepoSentinel:**
+
+- **NOT a substitute for security audits**: RepoSentinel is an informational tool, not a comprehensive security solution
+- **Validate all outputs**: You are solely responsible for validating all recommendations, risk scores, and analysis before acting on them
+- **No security guarantees**: Do not rely on this as your sole security control or assume it will detect all vulnerabilities
+- **Algorithmic limitations**: Risk scores are generated algorithmically and may not reflect current threat landscapes
+- **Data accuracy**: Third-party data sources (OSV, npm, GitHub) may be incomplete, outdated, or inaccurate
+- **Your responsibility**: Always perform your own security assessments and follow industry best practices
+
+### Legal Documents
+
+Before using RepoSentinel, please review:
+
+- **[Terms of Service](./TERMS.md)** - Usage rules, liability disclaimers, termination rights
+- **[Privacy Policy](./PRIVACY.md)** - Data collection, usage, and GDPR/CCPA compliance
+- **[API Terms](./API-TERMS.md)** - API usage limits, rate limits, access revocation rights
+- **[Contact Information](./CONTACT.md)** - Legal inquiries, support, security issues
+
+### License Coverage (Private Repository)
+
+If you operate a private fork or proprietary version:
+
+- Ensure the Apache 2.0 LICENSE file is copied to any private repositories
+- Comply with all Apache 2.0 attribution requirements
+- Update legal documents to reflect your deployment
+
+---
 
 ### Demo (local)
 
@@ -232,7 +265,7 @@ When configured and installed, RepoSentinel will **analyze PR lockfile changes**
 
 - dependency delta summary (direct + lockfile packages)
 - risk score delta and top signal deltas
-- “Why this is risky” reasons derived from explainable signals
+- "Why this is risky" reasons derived from explainable signals
 
 
 **Important**: To enable PR comments, set `FREE_PR_COMMENTS_ENABLED=1` in your worker environment configuration. Without this setting, scans will complete successfully but PR comments will not be posted.
@@ -353,5 +386,5 @@ Explainability is exposed in scan results via:
 
 - `signals[]`: the raw set of risk signals (each with `scoreImpact` and optional `evidence`)
 - `contributions[]`: per-signal contribution list for simple UIs
-- `explain.reasons[]`: a short “Why this is risky” list derived from the highest-impact signals
-- `graphInsights`: dependency graph intelligence (deepest packages, hotspots, and vulnerable transitive packages with “via” paths when lockfile parsing is available)
+- `explain.reasons[]`: a short "Why this is risky" list derived from the highest-impact signals
+- `graphInsights`: dependency graph intelligence (deepest packages, hotspots, and vulnerable transitive packages with "via" paths when lockfile parsing is available)
