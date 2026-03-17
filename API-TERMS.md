@@ -2,7 +2,7 @@
 
 **Effective Date:** March 16, 2026
 
-These API Terms supplement the main Terms of Service (TERMS.md) and govern your use of the RepoSentinel API.
+These API Terms supplement the main Terms of Service (TERMS.md) and govern your use of the MergeSignal API.
 
 ## 1. API Access and Authentication
 
@@ -132,9 +132,9 @@ You agree to:
 
 When displaying results from the API:
 
-- Clearly indicate that analysis is provided by RepoSentinel
+- Clearly indicate that analysis is provided by MergeSignal
 - Include disclaimers that results are informational and should be validated
-- Link back to the official RepoSentinel documentation or website (optional but appreciated)
+- Link back to the official MergeSignal documentation or website (optional but appreciated)
 
 ### 4.3 Error Handling
 
@@ -183,7 +183,7 @@ When submitting data to the API:
 
 - You represent that you have the right to submit such data
 - You retain ownership of your data
-- You grant RepoSentinel a license to process and store data as described in the Privacy Policy
+- You grant MergeSignal a license to process and store data as described in the Privacy Policy
 - Sensitive data (secrets, credentials, PII) should not be included in API requests
 
 ### 6.2 Data Retention
@@ -303,7 +303,7 @@ Failure to pay may result in:
 
 ### 10.1 API License
 
-The API is licensed under Apache 2.0 for open-source components. Proprietary components remain the intellectual property of RepoSentinel.
+The API is licensed under Apache 2.0 for open-source components. Proprietary components remain the intellectual property of MergeSignal.
 
 ### 10.2 Your Applications
 
@@ -311,7 +311,7 @@ You retain all rights to applications built using the API, provided they comply 
 
 ### 10.3 Trademarks
 
-The RepoSentinel name and logo are trademarks. You may not:
+The MergeSignal name and logo are trademarks. You may not:
 
 - Use our trademarks without permission
 - Imply endorsement or affiliation without authorization
@@ -342,7 +342,7 @@ See the main Terms of Service for full liability disclaimers.
 
 ## 12. Indemnification
 
-You agree to indemnify RepoSentinel from claims arising from:
+You agree to indemnify MergeSignal from claims arising from:
 
 - Your use of the API
 - Violations of these API Terms
@@ -374,4 +374,4 @@ For API-related inquiries, contact us at:
 
 **Last Updated:** March 16, 2026
 
-**By using the RepoSentinel API, you acknowledge that you have read, understood, and agree to be bound by these API Terms and the main Terms of Service.**
+**By using the MergeSignal API, you acknowledge that you have read, understood, and agree to be bound by these API Terms and the main Terms of Service.**

@@ -7,7 +7,7 @@ import type {
   ScanResult,
   ScoreContribution,
   ScoreLayer,
-} from "@reposentinel/shared";
+} from "@mergesignal/shared";
 import { graphFromPnpmLockfile } from "./pnpmLock.js";
 import { graphFromPackageLock } from "./npmLock.js";
 import { graphFromYarnLock } from "./yarnLock.js";

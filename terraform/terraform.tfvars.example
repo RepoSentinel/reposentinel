@@ -4,7 +4,7 @@
 
 aws_region   = "us-east-1"
 environment  = "production"
-project_name = "reposentinel"
+project_name = "mergesignal"
 
 # VPC Configuration
 vpc_cidr           = "10.0.0.0/16"
@@ -12,8 +12,8 @@ availability_zones = ["us-east-1a", "us-east-1b"]
 
 # Database Configuration
 db_instance_class = "db.t3.micro"
-db_name           = "reposentinel"
-db_username       = "reposentinel"
+db_name           = "mergesignal"
+db_username       = "mergesignal"
 db_password       = "CHANGE_ME_STRONG_PASSWORD_HERE"
 
 # Redis Configuration

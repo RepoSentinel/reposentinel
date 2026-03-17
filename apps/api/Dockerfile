@@ -18,7 +18,7 @@ COPY packages/engine-stub/package.json ./packages/engine-stub/
 COPY packages/typescript-config/package.json ./packages/typescript-config/
 
 # Install dependencies
-RUN pnpm install --frozen-lockfile --filter @reposentinel/api...
+RUN pnpm install --frozen-lockfile --filter @mergesignal/api...
 
 # Copy source code
 COPY apps/api ./apps/api
@@ -28,10 +28,10 @@ COPY packages/engine-stub ./packages/engine-stub
 COPY packages/typescript-config ./packages/typescript-config
 
 # Build packages
-RUN pnpm --filter @reposentinel/shared build
-RUN pnpm --filter @reposentinel/engine build
-RUN pnpm --filter @reposentinel/engine-stub build
-RUN pnpm --filter @reposentinel/api build
+RUN pnpm --filter @mergesignal/shared build
+RUN pnpm --filter @mergesignal/engine build
+RUN pnpm --filter @mergesignal/engine-stub build
+RUN pnpm --filter @mergesignal/api build
 
 # Production stage
 FROM node:22-alpine
@@ -53,7 +53,7 @@ COPY packages/engine-stub/package.json ./packages/engine-stub/
 COPY packages/typescript-config/package.json ./packages/typescript-config/
 
 # Install production dependencies only
-RUN pnpm install --frozen-lockfile --prod --filter @reposentinel/api...
+RUN pnpm install --frozen-lockfile --prod --filter @mergesignal/api...
 
 # Copy built artifacts from builder
 COPY --from=builder /app/apps/api/dist ./apps/api/dist

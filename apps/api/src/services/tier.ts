@@ -16,10 +16,10 @@ export function getOwnerFromRepoId(repoId: string) {
 }
 
 export function getTierForOwner(owner: string): Tier {
-  const map = parseOwnerTiers(process.env.REPOSENTINEL_OWNER_TIERS ?? "");
+  const map = parseOwnerTiers(process.env.MERGESIGNAL_OWNER_TIERS ?? "");
   const explicit = map.get(owner);
   if (explicit) return explicit;
-  const def = String(process.env.REPOSENTINEL_DEFAULT_TIER ?? "free").toLowerCase();
+  const def = String(process.env.MERGESIGNAL_DEFAULT_TIER ?? "free").toLowerCase();
   return def === "paid" ? "paid" : "free";
 }
 

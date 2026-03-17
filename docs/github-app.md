@@ -1,6 +1,6 @@
-# GitHub App setup (RepoSentinel)
+# GitHub App setup (MergeSignal)
 
-RepoSentinel can ingest GitHub events and automatically enqueue scans when a lockfile changes.
+MergeSignal can ingest GitHub events and automatically enqueue scans when a lockfile changes.
 
 ## Create a GitHub App
 
@@ -29,6 +29,6 @@ Set these env vars for `apps/api`:
 
 ## What happens on events
 
-- On `pull_request` (`opened`, `reopened`, `synchronize`), if a lockfile changed, RepoSentinel fetches the lockfile from the PR head SHA and enqueues a scan. After the scan completes, it posts/updates a PR comment with a risk delta (pnpm only for now).
-- On `push`, if a lockfile changed, RepoSentinel fetches the lockfile at the pushed SHA and enqueues a scan.
+- On `pull_request` (`opened`, `reopened`, `synchronize`), if a lockfile changed, MergeSignal fetches the lockfile from the PR head SHA and enqueues a scan. After the scan completes, it posts/updates a PR comment with a risk delta (pnpm only for now).
+- On `push`, if a lockfile changed, MergeSignal fetches the lockfile at the pushed SHA and enqueues a scan.
 

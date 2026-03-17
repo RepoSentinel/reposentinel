@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: postgres-pvc
-  namespace: reposentinel
+  namespace: mergesignal
 spec:
   accessModes:
     - ReadWriteOnce
@@ -15,7 +15,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: postgres
-  namespace: reposentinel
+  namespace: mergesignal
 spec:
   serviceName: postgres-service
   replicas: 1
@@ -35,14 +35,14 @@ spec:
           name: postgres
         env:
         - name: POSTGRES_USER
-          value: "reposentinel"
+          value: "mergesignal"
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
               name: postgres-credentials
               key: password
         - name: POSTGRES_DB
-          value: "reposentinel"
+          value: "mergesignal"
         - name: PGDATA
           value: /var/lib/postgresql/data/pgdata
         volumeMounts:
@@ -64,7 +64,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: postgres-service
-  namespace: reposentinel
+  namespace: mergesignal
 spec:
   type: ClusterIP
   selector:
@@ -78,7 +78,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: postgres-credentials
-  namespace: reposentinel
+  namespace: mergesignal
 type: Opaque
 stringData:
   password: "CHANGE_ME_SECURE_PASSWORD"

@@ -11,7 +11,7 @@ terraform {
   # Recommended: Use remote backend for production
   # backend "s3" {
   #   bucket         = "your-terraform-state-bucket"
-  #   key            = "reposentinel/terraform.tfstate"
+  #   key            = "mergesignal/terraform.tfstate"
   #   region         = "us-east-1"
   #   encrypt        = true
   #   dynamodb_table = "terraform-state-lock"
@@ -23,7 +23,7 @@ provider "aws" {
   
   default_tags {
     tags = {
-      Project     = "RepoSentinel"
+      Project     = "MergeSignal"
       Environment = var.environment
       ManagedBy   = "Terraform"
     }

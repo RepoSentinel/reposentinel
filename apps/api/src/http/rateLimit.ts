@@ -52,7 +52,7 @@ export async function registerRateLimit(app: FastifyInstance) {
     },
     timeWindow: "1 minute",
     redis: redisAvailable ? redis : undefined,
-    nameSpace: "reposentinel:ratelimit:",
+    nameSpace: "mergesignal:ratelimit:",
     keyGenerator: (req) => {
       // Use API key for authenticated requests, IP for public endpoints
       const authHeader = String(req.headers.authorization ?? "");

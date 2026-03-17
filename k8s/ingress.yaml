@@ -1,8 +1,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: reposentinel-ingress
-  namespace: reposentinel
+  name: mergesignal-ingress
+  namespace: mergesignal
   annotations:
     kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: letsencrypt-prod
@@ -13,7 +13,7 @@ spec:
   - hosts:
     - your-domain.com
     - api.your-domain.com
-    secretName: reposentinel-tls
+    secretName: mergesignal-tls
   rules:
   - host: your-domain.com
     http:

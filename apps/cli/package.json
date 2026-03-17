@@ -1,10 +1,10 @@
 {
-  "name": "@reposentinel/cli",
+  "name": "@mergesignal/cli",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "bin": {
-    "reposentinel": "dist/cli.js"
+    "mergesignal": "dist/cli.js"
   },
   "scripts": {
     "dev": "tsx src/cli.ts",
@@ -16,8 +16,8 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@reposentinel/engine": "workspace:^",
-    "@reposentinel/shared": "workspace:^"
+    "@mergesignal/engine": "workspace:^",
+    "@mergesignal/shared": "workspace:^"
   },
   "devDependencies": {
     "@types/node": "^22.15.3",

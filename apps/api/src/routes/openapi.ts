@@ -20,24 +20,24 @@ function getOpenApiSpec() {
   return {
     openapi: "3.0.3",
     info: {
-      title: "RepoSentinel API",
+      title: "MergeSignal API",
       version: "v1",
       description:
         "Dependency risk intelligence API for scans, org views, policies, alerts, benchmarking, and simulations.\n\n" +
         "**Important**: This API is provided 'as is' without warranty. Not a substitute for security audits. " +
-        "Validate all outputs before use. See [Terms](https://github.com/[your-org]/reposentinel/blob/main/TERMS.md), " +
-        "[API Terms](https://github.com/[your-org]/reposentinel/blob/main/API-TERMS.md), and " +
-        "[Privacy Policy](https://github.com/[your-org]/reposentinel/blob/main/PRIVACY.md).",
+        "Validate all outputs before use. See [Terms](https://github.com/[your-org]/mergesignal/blob/main/TERMS.md), " +
+        "[API Terms](https://github.com/[your-org]/mergesignal/blob/main/API-TERMS.md), and " +
+        "[Privacy Policy](https://github.com/[your-org]/mergesignal/blob/main/PRIVACY.md).",
       contact: {
-        name: "RepoSentinel Support",
-        url: "https://github.com/[your-org]/reposentinel",
-        email: "legal@reposentinel.com",
+        name: "MergeSignal Support",
+        url: "https://github.com/[your-org]/mergesignal",
+        email: "legal@mergesignal.com",
       },
       license: {
         name: "Apache 2.0",
-        url: "https://github.com/[your-org]/reposentinel/blob/main/LICENSE",
+        url: "https://github.com/[your-org]/mergesignal/blob/main/LICENSE",
       },
-      termsOfService: "https://github.com/[your-org]/reposentinel/blob/main/API-TERMS.md",
+      termsOfService: "https://github.com/[your-org]/mergesignal/blob/main/API-TERMS.md",
     },
     servers: [{ url: "http://localhost:4000" }],
     tags: [
@@ -292,7 +292,7 @@ function renderDocsHtml() {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>RepoSentinel API Docs</title>
+    <title>MergeSignal API Docs</title>
     <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css" />
     <style>
       body { margin: 0; background: #0b1020; }

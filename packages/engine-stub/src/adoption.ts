@@ -1,4 +1,4 @@
-import type { Finding, Recommendation, RiskSignal } from "@reposentinel/shared";
+import type { Finding, Recommendation, RiskSignal } from "@mergesignal/shared";
 import type { DependencyGraph } from "./pnpmLock.js";
 import { fetchJsonCached } from "./http.js";
 
@@ -16,14 +16,14 @@ export async function adoptionSignalsFromGraph(graph: DependencyGraph): Promise<
   findings: Finding[];
   recommendations: Recommendation[];
 }> {
-  const enable = (process.env.REPOSENTINEL_ENABLE_ADOPTION ?? "1") === "1";
+  const enable = (process.env.MERGESIGNAL_ENABLE_ADOPTION ?? "1") === "1";
   if (!enable) return { signals: [], findings: [], recommendations: [] };
 
-  const maxPackages = clampInt(process.env.REPOSENTINEL_ADOPTION_MAX_PACKAGES, 25);
-  const timeoutMs = clampInt(process.env.REPOSENTINEL_ADOPTION_TIMEOUT_MS, 2500);
-  const ttlMs = clampInt(process.env.REPOSENTINEL_ADOPTION_CACHE_TTL_MS, 24 * 60 * 60 * 1000);
-  const lowThreshold = clampInt(process.env.REPOSENTINEL_ADOPTION_LOW_DOWNLOADS, 5_000);
-  const veryLowThreshold = clampInt(process.env.REPOSENTINEL_ADOPTION_VERY_LOW_DOWNLOADS, 500);
+  const maxPackages = clampInt(process.env.MERGESIGNAL_ADOPTION_MAX_PACKAGES, 25);
+  const timeoutMs = clampInt(process.env.MERGESIGNAL_ADOPTION_TIMEOUT_MS, 2500);
+  const ttlMs = clampInt(process.env.MERGESIGNAL_ADOPTION_CACHE_TTL_MS, 24 * 60 * 60 * 1000);
+  const lowThreshold = clampInt(process.env.MERGESIGNAL_ADOPTION_LOW_DOWNLOADS, 5_000);
+  const veryLowThreshold = clampInt(process.env.MERGESIGNAL_ADOPTION_VERY_LOW_DOWNLOADS, 500);
 
   const candidates = uniqueByName([
     ...Object.keys(graph.directDeps).map((name) => ({ name })),

@@ -1,5 +1,5 @@
-import type { Finding, Recommendation, RiskSignal } from "@reposentinel/shared";
-import type { PackageHealthObservation } from "@reposentinel/shared";
+import type { Finding, Recommendation, RiskSignal } from "@mergesignal/shared";
+import type { PackageHealthObservation } from "@mergesignal/shared";
 import { fetchJsonCached } from "./http.js";
 
 type GithubRepo = {
@@ -19,15 +19,15 @@ export async function githubSignalsFromPackageHealth(observations: PackageHealth
   findings: Finding[];
   recommendations: Recommendation[];
 }> {
-  const enable = (process.env.REPOSENTINEL_ENABLE_GITHUB_SIGNALS ?? "0") === "1";
+  const enable = (process.env.MERGESIGNAL_ENABLE_GITHUB_SIGNALS ?? "0") === "1";
   if (!enable) return { signals: [], findings: [], recommendations: [] };
 
-  const token = (process.env.REPOSENTINEL_GITHUB_TOKEN ?? process.env.GITHUB_TOKEN ?? "").trim();
+  const token = (process.env.MERGESIGNAL_GITHUB_TOKEN ?? process.env.GITHUB_TOKEN ?? "").trim();
   if (!token) return { signals: [], findings: [], recommendations: [] };
 
-  const maxRepos = clampInt(process.env.REPOSENTINEL_GITHUB_MAX_REPOS, 10);
-  const timeoutMs = clampInt(process.env.REPOSENTINEL_GITHUB_TIMEOUT_MS, 2500);
-  const ttlMs = clampInt(process.env.REPOSENTINEL_GITHUB_CACHE_TTL_MS, 6 * 60 * 60 * 1000);
+  const maxRepos = clampInt(process.env.MERGESIGNAL_GITHUB_MAX_REPOS, 10);
+  const timeoutMs = clampInt(process.env.MERGESIGNAL_GITHUB_TIMEOUT_MS, 2500);
+  const ttlMs = clampInt(process.env.MERGESIGNAL_GITHUB_CACHE_TTL_MS, 6 * 60 * 60 * 1000);
 
   const refs = uniqueRepos(
     (observations ?? [])
@@ -59,7 +59,7 @@ export async function githubSignalsFromPackageHealth(observations: PackageHealth
   if (!ok.length) return { signals: [], findings: [], recommendations: [] };
 
   const now = Date.now();
-  const staleDays = clampInt(process.env.REPOSENTINEL_GITHUB_STALE_PUSH_DAYS, 180);
+  const staleDays = clampInt(process.env.MERGESIGNAL_GITHUB_STALE_PUSH_DAYS, 180);
 
   const stale = ok.filter((x) => daysSince(x.data.pushed_at ?? null, now) >= staleDays);
   const archived = ok.filter((x) => Boolean(x.data.archived) || Boolean(x.data.disabled));

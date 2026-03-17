@@ -2,8 +2,8 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
-import { analyze } from "@reposentinel/engine";
-import type { ScanLockfileInput, ScanResult, ScoreLayer } from "@reposentinel/shared";
+import { analyze } from "@mergesignal/engine";
+import type { ScanLockfileInput, ScanResult, ScoreLayer } from "@mergesignal/shared";
 
 type ArgMap = {
   _: string[];
@@ -68,19 +68,19 @@ function getInvocationCwd() {
 function printHelp() {
   process.stdout.write(
     [
-      "RepoSentinel CLI",
+      "MergeSignal CLI",
       "",
       "Usage:",
-      "  reposentinel scan [--repo-id <id>] [--lockfile <path>] [--json] [--out <file>] [--fail-above <n>]",
+      "  mergesignal scan [--repo-id <id>] [--lockfile <path>] [--json] [--out <file>] [--fail-above <n>]",
       "",
       "Examples:",
-      "  reposentinel scan",
-      "  reposentinel scan --repo-id acme/web --json",
-      "  reposentinel scan --lockfile pnpm-lock.yaml --out reposentinel-result.json",
-      "  reposentinel scan --fail-above 20",
+      "  mergesignal scan",
+      "  mergesignal scan --repo-id acme/web --json",
+      "  mergesignal scan --lockfile pnpm-lock.yaml --out mergesignal-result.json",
+      "  mergesignal scan --fail-above 20",
       "",
       "Notes:",
-      "  - This runs analysis locally using @reposentinel/engine-stub.",
+      "  - This runs analysis locally using @mergesignal/engine-stub.",
       "  - Lockfile detection prefers pnpm-lock.yaml, then package-lock.json.",
       "",
     ].join("\n"),
@@ -141,7 +141,7 @@ function printSummary(opts: { repoId: string; lockfile?: ScanLockfileInput; resu
 
   const lines: string[] = [];
   lines.push("");
-  lines.push(`RepoSentinel • ${opts.repoId}`);
+  lines.push(`MergeSignal • ${opts.repoId}`);
   lines.push(`Lockfile: ${lockfileLine}`);
   lines.push(`Method: ${method} • Confidence: ${conf}`);
   lines.push("");
@@ -243,7 +243,7 @@ async function writeJsonFile(p: string, value: unknown) {
 
 main().catch((e: any) => {
   const msg = String(e?.message ?? e);
-  process.stderr.write(`reposentinel: ${msg}\n`);
+  process.stderr.write(`mergesignal: ${msg}\n`);
   process.exit(1);
 });
 

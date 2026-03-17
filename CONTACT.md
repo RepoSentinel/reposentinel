@@ -1,6 +1,6 @@
 # Contact Information
 
-**RepoSentinel** is an open-source dependency risk intelligence platform.
+**MergeSignal** is an open-source dependency risk intelligence platform.
 
 ## Legal Inquiries
 
@@ -15,7 +15,7 @@ For legal matters, including:
 
 Please contact:
 
-**Email:** legal@reposentinel.com
+**Email:** legal@mergesignal.com
 
 *Note: If this project is currently operated by an individual or organization without a dedicated legal email, replace with appropriate contact information or use the GitHub issue system for non-confidential inquiries.*
 
@@ -23,7 +23,7 @@ Please contact:
 
 For GDPR-related inquiries and data subject requests:
 
-**Email:** dpo@reposentinel.com
+**Email:** dpo@mergesignal.com
 
 *Note: Required only if processing EU/EEA user data. Update with actual DPO contact information.*
 
@@ -31,28 +31,28 @@ For GDPR-related inquiries and data subject requests:
 
 For technical support, bug reports, and feature requests:
 
-- **GitHub Issues**: https://github.com/[your-org]/reposentinel/issues
-- **Discussions**: https://github.com/[your-org]/reposentinel/discussions
+- **GitHub Issues**: https://github.com/[your-org]/mergesignal/issues
+- **Discussions**: https://github.com/[your-org]/mergesignal/discussions
 
 ## Security Issues
 
 For security vulnerabilities or confidential security matters:
 
-**Email:** security@reposentinel.com
+**Email:** security@mergesignal.com
 
 Please use responsible disclosure practices. Do not publicly disclose security issues until we have had an opportunity to address them.
 
-Alternatively, use [GitHub Security Advisories](https://github.com/[your-org]/reposentinel/security/advisories) for private vulnerability reporting.
+Alternatively, use [GitHub Security Advisories](https://github.com/[your-org]/mergesignal/security/advisories) for private vulnerability reporting.
 
 ## Business Inquiries
 
 For partnerships, licensing, or commercial inquiries:
 
-**Email:** hello@reposentinel.com
+**Email:** hello@mergesignal.com
 
 ## Mailing Address (if incorporated)
 
-If RepoSentinel is operated by a legal entity, provide a mailing address here for formal legal correspondence:
+If MergeSignal is operated by a legal entity, provide a mailing address here for formal legal correspondence:
 
 ```
 [Legal Entity Name]
@@ -87,7 +87,7 @@ This contact information is current as of **March 16, 2026**. Check this file pe
 
 Before public launch, ensure that:
 
-1. All placeholder email addresses (e.g., `legal@reposentinel.com`) are replaced with real, monitored addresses
+1. All placeholder email addresses (e.g., `legal@mergesignal.com`) are replaced with real, monitored addresses
 2. If operating as an individual, consider using a contact form or creating a business email (e.g., via Google Workspace)
 3. If incorporated, add the legal entity name and mailing address
 4. Set up email forwarding/monitoring to ensure timely responses

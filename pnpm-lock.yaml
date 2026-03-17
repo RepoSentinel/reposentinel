@@ -29,18 +29,18 @@ importers:
       '@fastify/rate-limit':
         specifier: ^10.3.0
         version: 10.3.0
+      '@mergesignal/engine':
+        specifier: workspace:^
+        version: link:../../packages/engine
+      '@mergesignal/shared':
+        specifier: workspace:^
+        version: link:../../packages/shared
       '@octokit/app':
         specifier: ^16.1.2
         version: 16.1.2
       '@prisma/client':
         specifier: ^7.4.1
         version: 7.4.1(prisma@7.4.1(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3))(typescript@5.9.3)
-      '@reposentinel/engine':
-        specifier: workspace:^
-        version: link:../../packages/engine
-      '@reposentinel/shared':
-        specifier: workspace:^
-        version: link:../../packages/shared
       bullmq:
         specifier: ^5.70.1
         version: 5.70.1
@@ -81,10 +81,10 @@ importers:
 
   apps/cli:
     dependencies:
-      '@reposentinel/engine':
+      '@mergesignal/engine':
         specifier: workspace:^
         version: link:../../packages/engine
-      '@reposentinel/shared':
+      '@mergesignal/shared':
         specifier: workspace:^
         version: link:../../packages/shared
     devDependencies:
@@ -138,49 +138,12 @@ importers:
         specifier: 5.9.2
         version: 5.9.2
 
-  apps/worker:
-    dependencies:
-      '@octokit/app':
-        specifier: ^16.1.2
-        version: 16.1.2
-      '@reposentinel/engine':
-        specifier: workspace:^
-        version: link:../../packages/engine
-      '@reposentinel/shared':
-        specifier: workspace:^
-        version: link:../../packages/shared
-      bullmq:
-        specifier: ^5.70.1
-        version: 5.70.1
-      dotenv:
-        specifier: ^17.3.1
-        version: 17.3.1
-      ioredis:
-        specifier: ^5.9.3
-        version: 5.9.3
-      pg:
-        specifier: ^8.19.0
-        version: 8.19.0
-    devDependencies:
-      '@types/node':
-        specifier: ^22.15.3
-        version: 22.15.3
-      '@types/pg':
-        specifier: ^8.16.0
-        version: 8.16.0
-      tsx:
-        specifier: ^4.21.0
-        version: 4.21.0
-      typescript:
-        specifier: ^5.9.3
-        version: 5.9.3
-
   packages/engine:
     dependencies:
-      '@reposentinel/engine-stub':
+      '@mergesignal/engine-stub':
         specifier: workspace:^
         version: link:../engine-stub
-      '@reposentinel/shared':
+      '@mergesignal/shared':
         specifier: workspace:^
         version: link:../shared
     devDependencies:
@@ -193,7 +156,7 @@ importers:
 
   packages/engine-stub:
     dependencies:
-      '@reposentinel/shared':
+      '@mergesignal/shared':
         specifier: workspace:^
         version: link:../shared
       '@yarnpkg/lockfile':

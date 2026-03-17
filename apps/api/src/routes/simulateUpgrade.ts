@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify";
-import type { UpgradeSimulationRequest } from "@reposentinel/shared";
-import { simulateUpgrade } from "@reposentinel/engine";
+import type { UpgradeSimulationRequest } from "@mergesignal/shared";
+import { simulateUpgrade } from "@mergesignal/engine";
 import { sendProblem } from "../problem.js";
 
 export async function simulateUpgradeRoutes(app: FastifyInstance) {

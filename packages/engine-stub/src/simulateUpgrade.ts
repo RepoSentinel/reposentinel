@@ -7,7 +7,7 @@ import type {
   UpgradeSimulationImpact,
   UpgradeSimulationRequest,
   UpgradeSimulationResult,
-} from "@reposentinel/shared";
+} from "@mergesignal/shared";
 import { graphFromPnpmLockfile, type DependencyGraph } from "./pnpmLock.js";
 import { graphFromPackageLock } from "./npmLock.js";
 import { graphFromYarnLock } from "./yarnLock.js";

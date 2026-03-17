@@ -1,5 +1,5 @@
 import { Queue } from "bullmq";
-import type { ScanLockfileInput } from "@reposentinel/shared";
+import type { ScanLockfileInput } from "@mergesignal/shared";
 
 const connection = {
   url: process.env.REDIS_URL!,

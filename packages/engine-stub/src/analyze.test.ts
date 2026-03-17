@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { analyze } from "./analyze.js";
-import type { ScanRequest } from "@reposentinel/shared";
+import type { ScanRequest } from "@mergesignal/shared";
 
 describe("analyze", () => {
   it("should return a scan result with default values for empty input", async () => {

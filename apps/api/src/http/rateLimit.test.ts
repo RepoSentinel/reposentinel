@@ -11,9 +11,9 @@ describe("Rate Limiting", () => {
   let dbAvailable = false;
 
   beforeAll(async () => {
-    process.env.REPOSENTINEL_AUTO_MIGRATE = "0";
+    process.env.MERGESIGNAL_AUTO_MIGRATE = "0";
     process.env.CORS_ORIGINS = "http://localhost:3000";
-    process.env.DATABASE_URL = "postgresql://reposentinel:reposentinel@localhost:5432/reposentinel";
+    process.env.DATABASE_URL = "postgresql://mergesignal:mergesignal@localhost:5432/mergesignal";
     process.env.REDIS_URL = "redis://localhost:6379";
     
     // Set low rate limits for testing

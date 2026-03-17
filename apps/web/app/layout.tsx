@@ -12,7 +12,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "RepoSentinel",
+  title: "MergeSignal",
   description: "Dependency risk intelligence with explainable scoring.",
 };
 

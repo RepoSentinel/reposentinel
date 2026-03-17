@@ -9,7 +9,7 @@ function getSqlDir() {
 }
 
 export async function runMigrationsIfEnabled(log: (msg: string) => void) {
-  const enabled = (process.env.REPOSENTINEL_AUTO_MIGRATE ?? "1") === "1";
+  const enabled = (process.env.MERGESIGNAL_AUTO_MIGRATE ?? "1") === "1";
   if (!enabled) return;
   await runMigrations(log);
 }

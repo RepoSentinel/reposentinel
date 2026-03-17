@@ -1,5 +1,5 @@
 import type { DependencyGraph } from "./pnpmLock.js";
-import type { DependencyGraphInsight, DependencyGraphInsights, RiskSignal } from "@reposentinel/shared";
+import type { DependencyGraphInsight, DependencyGraphInsights, RiskSignal } from "@mergesignal/shared";
 
 type Node = { id: string; name: string; version: string };
 

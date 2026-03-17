@@ -1,10 +1,10 @@
-## RepoSentinel
+## MergeSignal
 
-RepoSentinel is a dependency risk intelligence platform designed to produce **actionable, explainable risk scores** for repositories.
+MergeSignal is a dependency risk intelligence platform designed to produce **actionable, explainable risk scores** for repositories.
 
-This repository is an **early, working end-to-end system** (web + API + worker + Postgres + Redis) with a pluggable analysis engine. The platform calls `@reposentinel/engine` (a stable facade) which loads `@reposentinel/engine-stub` by default and can be swapped for a proprietary engine without changing the surrounding platform (see `REPOSENTINEL_ENGINE_IMPL`).
+This repository is an **early, working end-to-end system** (web + API + worker + Postgres + Redis) with a pluggable analysis engine. The platform calls `@mergesignal/engine` (a stable facade) which loads `@mergesignal/engine-stub` by default and can be swapped for a proprietary engine without changing the surrounding platform (see `MERGESIGNAL_ENGINE_IMPL`).
 
-**Note**: This public repository contains the platform components (API, web, CLI) and an open-source reference engine implementation. The production worker and proprietary analysis engine are maintained in a private package: `@reposentinel/engine-private`.
+**Note**: This public repository contains the platform components (API, web, CLI) and an open-source reference engine implementation. The production worker and proprietary analysis engine are maintained in a private package: `@mergesignal/engine-private`.
 
 ---
 
@@ -12,15 +12,15 @@ This repository is an **early, working end-to-end system** (web + API + worker +
 
 ### License
 
-RepoSentinel is licensed under **Apache License 2.0** (see [LICENSE](./LICENSE)).
+MergeSignal is licensed under **Apache License 2.0** (see [LICENSE](./LICENSE)).
 
 ### "AS IS" Disclaimer
 
 **THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.** 
 
-🔴 **Critical: You MUST understand these limitations before using RepoSentinel:**
+🔴 **Critical: You MUST understand these limitations before using MergeSignal:**
 
-- **NOT a substitute for security audits**: RepoSentinel is an informational tool, not a comprehensive security solution
+- **NOT a substitute for security audits**: MergeSignal is an informational tool, not a comprehensive security solution
 - **Validate all outputs**: You are solely responsible for validating all recommendations, risk scores, and analysis before acting on them
 - **No security guarantees**: Do not rely on this as your sole security control or assume it will detect all vulnerabilities
 - **Algorithmic limitations**: Risk scores are generated algorithmically and may not reflect current threat landscapes
@@ -29,7 +29,7 @@ RepoSentinel is licensed under **Apache License 2.0** (see [LICENSE](./LICENSE))
 
 ### Legal Documents
 
-Before using RepoSentinel, please review:
+Before using MergeSignal, please review:
 
 - **[Terms of Service](./TERMS.md)** - Usage rules, liability disclaimers, termination rights
 - **[Privacy Policy](./PRIVACY.md)** - Data collection, usage, and GDPR/CCPA compliance
@@ -106,7 +106,7 @@ pnpm -C apps/api dev
 pnpm -C apps/web dev
 ```
 
-**Note**: The worker is now part of a private package (`@reposentinel/engine-private`). For production deployment, see the deployment documentation.
+**Note**: The worker is now part of a private package (`@mergesignal/engine-private`). For production deployment, see the deployment documentation.
 
 ---
 
@@ -115,16 +115,16 @@ pnpm -C apps/web dev
 Run from any repo directory:
 
 ```bash
-pnpm rs scan
+pnpm ms scan
 ```
 
 Useful flags:
 
 ```bash
-pnpm rs scan --json
-pnpm rs scan --out reposentinel-result.json
-pnpm rs scan --lockfile pnpm-lock.yaml
-pnpm rs scan --fail-above 20
+pnpm ms scan --json
+pnpm ms scan --out mergesignal-result.json
+pnpm ms scan --lockfile pnpm-lock.yaml
+pnpm ms scan --fail-above 20
 ```
 
 Notes:
@@ -136,12 +136,12 @@ Notes:
 
 ## CI/CD (GitHub Actions)
 
-This repo includes a CI workflow that runs a local RepoSentinel scan on pull requests and pushes to `main`:
+This repo includes a CI workflow that runs a local MergeSignal scan on pull requests and pushes to `main`:
 
-- Workflow: `.github/workflows/reposentinel-scan.yml`
+- Workflow: `.github/workflows/mergesignal-scan.yml`
 - Outputs:
   - GitHub Actions **job summary** (score + top recommendations)
-  - Uploaded artifact: `reposentinel-scan.json`
+  - Uploaded artifact: `mergesignal-scan.json`
 
 ---
 
@@ -169,7 +169,7 @@ Use the key in the `Authorization` header:
 Authorization: Bearer rs_abc123...
 ```
 
-**Note**: The legacy `REPOSENTINEL_API_KEY` environment variable is no longer supported for security reasons (enforces multi-tenant isolation).
+**Note**: The legacy `MERGESIGNAL_API_KEY` environment variable is no longer supported for security reasons (enforces multi-tenant isolation).
 
 ---
 
@@ -213,7 +213,7 @@ curl -sS "http://localhost:4000/openapi.json"
 
 - **`apps/web`**: Next.js UI (App Router)
 - **`apps/api`**: Fastify API, CORS, SSE, webhooks, quotas/caps
-- **Worker**: BullMQ worker (private package: `@reposentinel/engine-private`)
+- **Worker**: BullMQ worker (private package: `@mergesignal/engine-private`)
 - **Postgres**: scan persistence + derived views (alerts, policies, benchmarks)
 - **Redis**: job queue (BullMQ)
 - **`packages/shared`**: TypeScript contracts
@@ -261,7 +261,7 @@ curl -sS "http://localhost:4000/openapi.json"
 
 See setup doc: `docs/github-app.md`.
 
-When configured and installed, RepoSentinel will **analyze PR lockfile changes** and post/refresh a PR comment containing:
+When configured and installed, MergeSignal will **analyze PR lockfile changes** and post/refresh a PR comment containing:
 
 - dependency delta summary (direct + lockfile packages)
 - risk score delta and top signal deltas
@@ -282,8 +282,8 @@ Supported lockfiles:
 
 The API can auto-apply SQL migrations on startup.
 
-- **Enabled by default**: `REPOSENTINEL_AUTO_MIGRATE=1`
-- **Disable**: set `REPOSENTINEL_AUTO_MIGRATE=0`
+- **Enabled by default**: `MERGESIGNAL_AUTO_MIGRATE=1`
+- **Disable**: set `MERGESIGNAL_AUTO_MIGRATE=0`
 
 Manual migration command:
 
@@ -305,37 +305,37 @@ CORS_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
 
 ### Engine (proprietary swap)
 
-The platform calls `@reposentinel/engine`, which loads a concrete engine implementation at runtime:
+The platform calls `@mergesignal/engine`, which loads a concrete engine implementation at runtime:
 
-- **Default**: uses `@reposentinel/engine-stub`
-- **Override**: set `REPOSENTINEL_ENGINE_IMPL` to a module specifier (for example a private package) that exports `analyze` and `simulateUpgrade`
-- **Strict mode**: set `REPOSENTINEL_ENGINE_STRICT=1` to fail startup if the proprietary engine cannot be loaded
+- **Default**: uses `@mergesignal/engine-stub`
+- **Override**: set `MERGESIGNAL_ENGINE_IMPL` to a module specifier (for example a private package) that exports `analyze` and `simulateUpgrade`
+- **Strict mode**: set `MERGESIGNAL_ENGINE_STRICT=1` to fail startup if the proprietary engine cannot be loaded
 
 ### Risk engine enrichment (optional network signals)
 
 The local engine can optionally call public APIs to enrich risk signals. These are **capped** and **cached** by default.
 
 - **OSV vulnerabilities (CVEs/advisories)**:
-  - Enable: `REPOSENTINEL_ENABLE_OSV=1` (default)
-  - Tunables: `REPOSENTINEL_OSV_MAX_PACKAGES`, `REPOSENTINEL_OSV_TIMEOUT_MS`, `REPOSENTINEL_OSV_CACHE_TTL_MS`
+  - Enable: `MERGESIGNAL_ENABLE_OSV=1` (default)
+  - Tunables: `MERGESIGNAL_OSV_MAX_PACKAGES`, `MERGESIGNAL_OSV_TIMEOUT_MS`, `MERGESIGNAL_OSV_CACHE_TTL_MS`
 - **npm adoption (downloads)**:
-  - Enable: `REPOSENTINEL_ENABLE_ADOPTION=1` (default)
-  - Tunables: `REPOSENTINEL_ADOPTION_MAX_PACKAGES`, `REPOSENTINEL_ADOPTION_TIMEOUT_MS`, `REPOSENTINEL_ADOPTION_CACHE_TTL_MS`,
-    `REPOSENTINEL_ADOPTION_LOW_DOWNLOADS`, `REPOSENTINEL_ADOPTION_VERY_LOW_DOWNLOADS`
+  - Enable: `MERGESIGNAL_ENABLE_ADOPTION=1` (default)
+  - Tunables: `MERGESIGNAL_ADOPTION_MAX_PACKAGES`, `MERGESIGNAL_ADOPTION_TIMEOUT_MS`, `MERGESIGNAL_ADOPTION_CACHE_TTL_MS`,
+    `MERGESIGNAL_ADOPTION_LOW_DOWNLOADS`, `MERGESIGNAL_ADOPTION_VERY_LOW_DOWNLOADS`
 - **GitHub repo signals (maintainer activity / open issues)**:
-  - Disabled by default (requires token): `REPOSENTINEL_ENABLE_GITHUB_SIGNALS=1`
-  - Provide a token: `REPOSENTINEL_GITHUB_TOKEN` (or `GITHUB_TOKEN`)
-  - Tunables: `REPOSENTINEL_GITHUB_MAX_REPOS`, `REPOSENTINEL_GITHUB_TIMEOUT_MS`, `REPOSENTINEL_GITHUB_CACHE_TTL_MS`,
-    `REPOSENTINEL_GITHUB_STALE_PUSH_DAYS`
+  - Disabled by default (requires token): `MERGESIGNAL_ENABLE_GITHUB_SIGNALS=1`
+  - Provide a token: `MERGESIGNAL_GITHUB_TOKEN` (or `GITHUB_TOKEN`)
+  - Tunables: `MERGESIGNAL_GITHUB_MAX_REPOS`, `MERGESIGNAL_GITHUB_TIMEOUT_MS`, `MERGESIGNAL_GITHUB_CACHE_TTL_MS`,
+    `MERGESIGNAL_GITHUB_STALE_PUSH_DAYS`
 
 ### Tier caps (cost control)
 
-RepoSentinel supports a basic free/paid tier model for expensive operations.
+MergeSignal supports a basic free/paid tier model for expensive operations.
 
 Environment variables include:
 
-- `REPOSENTINEL_DEFAULT_TIER` (`free` | `paid`)
-- `REPOSENTINEL_OWNER_TIERS` (e.g. `acme=paid,other=free`)
+- `MERGESIGNAL_DEFAULT_TIER` (`free` | `paid`)
+- `MERGESIGNAL_OWNER_TIERS` (e.g. `acme=paid,other=free`)
 - `FREE_*` and `PAID_*` limits for scans / PR comments / alerts
 
 ---
@@ -349,7 +349,7 @@ The worker component is distributed as a private npm package via GitHub Packages
 1. Create a `.npmrc` file in your project root (already included):
 
 ```
-@reposentinel:registry=https://npm.pkg.github.com
+@mergesignal:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
 ```
 
@@ -363,15 +363,15 @@ pnpm install
 
 ### Deploying the Worker
 
-The worker is available as `@reposentinel/engine-private`. To run it in production:
+The worker is available as `@mergesignal/engine-private`. To run it in production:
 
 ```bash
 # Install dependencies (with GITHUB_TOKEN set)
-pnpm add @reposentinel/engine-private
+pnpm add @mergesignal/engine-private
 
 # Set up environment variables (DATABASE_URL, REDIS_URL, etc.)
 # Run the worker
-node node_modules/@reposentinel/engine-private/dist/worker.js
+node node_modules/@mergesignal/engine-private/dist/worker.js
 ```
 
 For containerized deployments, see the deployment documentation in `DEPLOYMENT.md`.

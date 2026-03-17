@@ -9,11 +9,11 @@ Successfully migrated the worker to a private package and updated the main repos
 ## Changes Made to Main Repo
 
 ### 1. ✅ Deleted `apps/worker` Directory
-All worker code has been moved to the private package `@reposentinel/engine-private`.
+All worker code has been moved to the private package `@mergesignal/engine-private`.
 
 ### 2. ✅ Created `.npmrc` for GitHub Packages Access
 ```
-@reposentinel:registry=https://npm.pkg.github.com
+@mergesignal:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
 ```
 
@@ -48,7 +48,7 @@ Changes:
 
 ### Step 1: Review Changes
 ```bash
-cd /Users/yaronshafir/ventures/reposentinel
+cd /Users/yaronshafir/ventures/mergesignal
 
 # Review what changed
 git diff README.md
@@ -76,7 +76,7 @@ pnpm -C apps/web build
 
 ### Step 3: Commit Changes
 ```bash
-cd /Users/yaronshafir/ventures/reposentinel
+cd /Users/yaronshafir/ventures/mergesignal
 
 # Stage all changes
 git add -A
@@ -84,7 +84,7 @@ git add -A
 # Commit
 git commit -m "Migrate worker to private package
 
-- Move apps/worker to @reposentinel/engine-private
+- Move apps/worker to @mergesignal/engine-private
 - Add GitHub Packages configuration (.npmrc)
 - Update documentation to reflect new architecture
 - Worker now distributed as private npm package"
@@ -99,7 +99,7 @@ git push origin main
 
 ### Before:
 ```
-reposentinel/ (public repo)
+mergesignal/ (public repo)
 ├── apps/
 │   ├── api/          ✅ Public
 │   ├── web/          ✅ Public
@@ -113,7 +113,7 @@ reposentinel/ (public repo)
 
 ### After:
 ```
-reposentinel/ (public repo)
+mergesignal/ (public repo)
 ├── .npmrc                    # NEW: GitHub Packages config
 ├── apps/
 │   ├── api/                  ✅ Public
@@ -124,8 +124,8 @@ reposentinel/ (public repo)
     ├── engine/               ✅ Public
     └── engine-stub/          ✅ Public
 
-reposentinel-engine/ (private repo)
-├── package.json              # @reposentinel/engine-private
+mergesignal-engine/ (private repo)
+├── package.json              # @mergesignal/engine-private
 ├── src/
 │   ├── worker.ts             # BullMQ worker
 │   ├── dataset.ts
@@ -141,7 +141,7 @@ reposentinel-engine/ (private repo)
 ### Development (for contributors with access)
 ```bash
 # Clone public repo
-git clone https://github.com/RepoSentinel/reposentinel.git
+git clone https://github.com/MergeSignal/mergesignal.git
 
 # Set up GitHub token for private package
 export GITHUB_TOKEN=your_token_here
@@ -162,7 +162,7 @@ pnpm install
 pnpm -C apps/api start
 
 # Run worker (from private package)
-node node_modules/@reposentinel/engine-private/dist/worker.js
+node node_modules/@mergesignal/engine-private/dist/worker.js
 
 # Run web
 pnpm -C apps/web start
@@ -181,7 +181,7 @@ pnpm -C apps/web start
 
 ## What's Public vs Private
 
-### Public (reposentinel repo):
+### Public (mergesignal repo):
 - API server (Fastify, routes, auth, webhooks)
 - Web UI (Next.js frontend)
 - CLI tool (local scanning)
@@ -190,7 +190,7 @@ pnpm -C apps/web start
 - Reference engine implementation (engine-stub)
 - Documentation
 
-### Private (@reposentinel/engine-private package):
+### Private (@mergesignal/engine-private package):
 - BullMQ worker
 - Scan processing logic
 - GitHub PR comment generation
@@ -204,7 +204,7 @@ pnpm -C apps/web start
 
 ## Troubleshooting
 
-### Error: Cannot find module '@reposentinel/engine-private'
+### Error: Cannot find module '@mergesignal/engine-private'
 You need to:
 1. Set `GITHUB_TOKEN` environment variable
 2. Have access to the private repo
@@ -213,12 +213,12 @@ You need to:
 ### 404 when installing private package
 Make sure:
 - Your GitHub token has `read:packages` permission
-- You have access to `RepoSentinel/reposentinel-engine` repo
+- You have access to `MergeSignal/mergesignal-engine` repo
 - The package has been published to GitHub Packages
 
 ### Build errors after migration
 The public repo should build fine without the private package. If you see errors:
-- Make sure you're not trying to import from `@reposentinel/worker`
+- Make sure you're not trying to import from `@mergesignal/worker`
 - The API and web don't depend on the worker directly
 
 ---

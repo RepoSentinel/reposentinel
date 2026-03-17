@@ -4,9 +4,9 @@
 
 ## 1. Introduction
 
-This Privacy Policy describes how RepoSentinel ("we", "our", or "the Service") collects, uses, stores, and protects information when you use our dependency risk intelligence platform.
+This Privacy Policy describes how MergeSignal ("we", "our", or "the Service") collects, uses, stores, and protects information when you use our dependency risk intelligence platform.
 
-By using RepoSentinel, you consent to the data practices described in this policy.
+By using MergeSignal, you consent to the data practices described in this policy.
 
 ## 2. Information We Collect
 
@@ -199,13 +199,13 @@ We do **not** use:
 
 ## 13. Open Source Considerations
 
-RepoSentinel is partially open source (Apache 2.0 license). When using the open-source components:
+MergeSignal is partially open source (Apache 2.0 license). When using the open-source components:
 
 - You are responsible for data handling in your own deployment
 - Self-hosted instances are not covered by this Privacy Policy
 - You must create your own privacy policy if offering the Service to others
 
-This Privacy Policy applies to the official hosted instance of RepoSentinel.
+This Privacy Policy applies to the official hosted instance of MergeSignal.
 
 ## 14. Changes to This Policy
 

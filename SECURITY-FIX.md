@@ -2,12 +2,12 @@
 
 ## Overview
 
-This fix addresses critical security vulnerabilities in the RepoSentinel API authorization layer.
+This fix addresses critical security vulnerabilities in the MergeSignal API authorization layer.
 
 ## Issues Fixed
 
 ### 1. ✅ Org-Scoped API Keys
-- **Before**: Single shared API key (`REPOSENTINEL_API_KEY`) with no tenant scoping
+- **Before**: Single shared API key (`MERGESIGNAL_API_KEY`) with no tenant scoping
 - **After**: Database-backed API keys with org-level scoping via `api_keys` table
 - Each API key is associated with a specific GitHub organization/user (`owner`)
 - Keys are stored as SHA-256 hashes, not plaintext
@@ -40,7 +40,7 @@ This fix addresses critical security vulnerabilities in the RepoSentinel API aut
   - `GET /benchmark/repo?repoId=...`
 
 ### 5. ✅ Fail-Secure Authentication
-- **Before**: When `REPOSENTINEL_API_KEY` was unset, API was completely unauthenticated. Legacy API key set `req.authenticatedOwner = undefined`, bypassing all multi-tenant checks.
+- **Before**: When `MERGESIGNAL_API_KEY` was unset, API was completely unauthenticated. Legacy API key set `req.authenticatedOwner = undefined`, bypassing all multi-tenant checks.
 - **After**: Auth hook always runs and validates API keys from database. Legacy key support **removed** to enforce multi-tenant isolation.
 - **Security Impact**: All authorization checks now properly enforce tenant boundaries. No path to bypass ownership verification.
 
@@ -83,7 +83,7 @@ This will:
 1. **Immediate**: Deploy the fix (legacy key support removed for security)
 2. **Generate org-scoped keys**: Run `generate-api-key` for each organization
 3. **Distribute keys**: Provide each org with their specific API key
-4. **Update environment**: Remove `REPOSENTINEL_API_KEY` from environment (no longer used)
+4. **Update environment**: Remove `MERGESIGNAL_API_KEY` from environment (no longer used)
 
 ## Security Testing
 
@@ -95,7 +95,7 @@ npm run generate-api-key -- octocat
 
 # Try to access acme's data with octocat's key (should fail with 403)
 curl -H "Authorization: Bearer <octocat-key>" \
-  https://api.reposentinel.dev/org/acme/policies
+  https://api.mergesignal.dev/org/acme/policies
 ```
 
 Expected: `403 Forbidden - Access denied to this organization`
@@ -106,13 +106,13 @@ Expected: `403 Forbidden - Access denied to this organization`
 POLICY_ID=$(curl -X POST -H "Authorization: Bearer <acme-key>" \
   -H "Content-Type: application/json" \
   -d '{"name":"Test","rules":[{"type":"no_deprecated"}]}' \
-  https://api.reposentinel.dev/org/acme/policies | jq -r .id)
+  https://api.mergesignal.dev/org/acme/policies | jq -r .id)
 
 # Try to update with octocat's key (should fail with 403)
 curl -X PATCH -H "Authorization: Bearer <octocat-key>" \
   -H "Content-Type: application/json" \
   -d '{"name":"Hacked"}' \
-  https://api.reposentinel.dev/policies/$POLICY_ID
+  https://api.mergesignal.dev/policies/$POLICY_ID
 ```
 
 Expected: `403 Forbidden - Access denied to this policy`
@@ -120,13 +120,13 @@ Expected: `403 Forbidden - Access denied to this policy`
 ### Test 3: Invalid Key Rejection
 ```bash
 curl -H "Authorization: Bearer invalid_key_12345" \
-  https://api.reposentinel.dev/org/acme/policies
+  https://api.mergesignal.dev/org/acme/policies
 ```
 
 Expected: `401 Unauthorized - Missing or invalid API key`
 
 ## Backward Compatibility
 
-- **BREAKING CHANGE**: Legacy `REPOSENTINEL_API_KEY` environment variable is **no longer supported**
+- **BREAKING CHANGE**: Legacy `MERGESIGNAL_API_KEY` environment variable is **no longer supported**
 - All API clients must use org-scoped API keys from the `api_keys` table
 - Recommended: Generate org-scoped keys before deploying this security fix

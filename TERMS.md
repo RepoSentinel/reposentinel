@@ -4,11 +4,11 @@
 
 ## 1. Acceptance of Terms
 
-By accessing or using RepoSentinel (the "Service"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, do not use the Service.
+By accessing or using MergeSignal (the "Service"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, do not use the Service.
 
 ## 2. Description of Service
 
-RepoSentinel is a dependency risk intelligence platform that provides risk scoring and analysis for software repositories. The Service includes:
+MergeSignal is a dependency risk intelligence platform that provides risk scoring and analysis for software repositories. The Service includes:
 
 - Web-based user interface
 - RESTful API
@@ -21,7 +21,7 @@ THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTY OF ANY KIND,
 
 **You acknowledge and agree that:**
 
-- RepoSentinel is **not a substitute for professional security audits** or security expertise
+- MergeSignal is **not a substitute for professional security audits** or security expertise
 - All recommendations, risk scores, and analysis provided by the Service are **informational only**
 - You are **solely responsible** for validating all outputs before acting on them
 - The Service may contain errors, inaccuracies, or incomplete information
@@ -29,7 +29,7 @@ THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTY OF ANY KIND,
 
 ## 4. Limitation of Liability
 
-TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL REPOSENTINEL, ITS OPERATORS, CONTRIBUTORS, OR LICENSORS BE LIABLE FOR ANY:
+TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL MERGESIGNAL, ITS OPERATORS, CONTRIBUTORS, OR LICENSORS BE LIABLE FOR ANY:
 
 - Direct, indirect, incidental, special, consequential, or punitive damages
 - Loss of profits, revenue, data, use, goodwill, or other intangible losses
@@ -78,11 +78,11 @@ Excessive or abusive API usage may result in throttling or access suspension wit
 When you submit code, dependency information, or other data to the Service:
 
 - You retain all ownership rights to your content
-- You grant RepoSentinel a license to process, analyze, and display your content to provide the Service
+- You grant MergeSignal a license to process, analyze, and display your content to provide the Service
 - You represent that you have the right to submit such content
 - You are responsible for ensuring compliance with applicable data protection laws
 
-RepoSentinel may store scan results, risk scores, and metadata. See the Privacy Policy for details on data handling.
+MergeSignal may store scan results, risk scores, and metadata. See the Privacy Policy for details on data handling.
 
 ## 8. Intellectual Property
 
@@ -90,7 +90,7 @@ The Service, including its source code, documentation, and branding, is licensed
 
 - You may use, modify, and distribute the software as permitted by the Apache 2.0 license
 - Certain components may be proprietary and not included in the open-source distribution
-- The RepoSentinel name and logo are trademarks and may not be used without permission
+- The MergeSignal name and logo are trademarks and may not be used without permission
 
 ## 9. Termination
 
@@ -129,7 +129,7 @@ Your use of these third-party services is subject to their respective terms and 
 
 ## 12. Indemnification
 
-You agree to indemnify, defend, and hold harmless RepoSentinel, its operators, and contributors from any claims, damages, losses, liabilities, and expenses (including legal fees) arising from:
+You agree to indemnify, defend, and hold harmless MergeSignal, its operators, and contributors from any claims, damages, losses, liabilities, and expenses (including legal fees) arising from:
 
 - Your use of the Service
 - Your violation of these Terms
@@ -149,7 +149,7 @@ Risk scores, vulnerability information, and recommendations provided by the Serv
 
 ## 14. Governing Law and Dispute Resolution
 
-These Terms are governed by the laws of the jurisdiction where RepoSentinel is operated, without regard to conflict of law provisions.
+These Terms are governed by the laws of the jurisdiction where MergeSignal is operated, without regard to conflict of law provisions.
 
 Any disputes arising from these Terms or the Service will be resolved through:
 - Good faith negotiations
@@ -162,7 +162,7 @@ If any provision of these Terms is found to be unenforceable or invalid, that pr
 
 ## 16. Entire Agreement
 
-These Terms, together with the Privacy Policy and API Terms, constitute the entire agreement between you and RepoSentinel regarding the Service and supersede any prior agreements.
+These Terms, together with the Privacy Policy and API Terms, constitute the entire agreement between you and MergeSignal regarding the Service and supersede any prior agreements.
 
 ## 17. Contact
 
@@ -172,4 +172,4 @@ For legal inquiries regarding these Terms, please see CONTACT.md or open an issu
 
 **Last Updated:** March 16, 2026
 
-**By using RepoSentinel, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.**
+**By using MergeSignal, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.**

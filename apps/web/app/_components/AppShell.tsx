@@ -18,7 +18,7 @@ export function AppShell({
       <header className={styles.header}>
         <div className={styles.headerLeft}>
           <Link href="/" className={styles.brand}>
-            RepoSentinel
+            MergeSignal
           </Link>
           {owner ? <span className={styles.owner}>/ {owner}</span> : null}
         </div>

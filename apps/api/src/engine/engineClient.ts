@@ -1,4 +1,4 @@
-import type { ScanRequest, ScanResult } from "@reposentinel/shared";
+import type { ScanRequest, ScanResult } from "@mergesignal/shared";
 
 export async function analyze(request: ScanRequest): Promise<ScanResult> {
   // TODO: add the real engine

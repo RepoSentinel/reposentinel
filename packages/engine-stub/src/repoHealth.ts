@@ -1,4 +1,4 @@
-import type { Finding, PackageHealthObservation, Recommendation, RiskSignal, ScoreLayer } from "@reposentinel/shared";
+import type { Finding, PackageHealthObservation, Recommendation, RiskSignal, ScoreLayer } from "@mergesignal/shared";
 import type { DependencyGraph } from "./pnpmLock.js";
 import { fetchJsonCached } from "./http.js";
 
@@ -26,14 +26,14 @@ export async function repoHealthFromGraph(graph: DependencyGraph): Promise<{
   recommendations: Recommendation[];
   dataset: { packageHealth: PackageHealthObservation[] };
 }> {
-  const enable = (process.env.REPOSENTINEL_ENABLE_REPO_HEALTH ?? "1") === "1";
+  const enable = (process.env.MERGESIGNAL_ENABLE_REPO_HEALTH ?? "1") === "1";
   if (!enable) return { signals: [], findings: [], recommendations: [], dataset: { packageHealth: [] } };
 
-  const maxPackages = clampInt(process.env.REPOSENTINEL_HEALTH_MAX_PACKAGES, 25);
-  const timeoutMs = clampInt(process.env.REPOSENTINEL_HEALTH_TIMEOUT_MS, 2500);
-  const ttlMs = clampInt(process.env.REPOSENTINEL_HEALTH_CACHE_TTL_MS, 6 * 60 * 60 * 1000);
-  const staleDays = clampInt(process.env.REPOSENTINEL_HEALTH_STALE_DAYS, 365);
-  const veryStaleDays = clampInt(process.env.REPOSENTINEL_HEALTH_VERY_STALE_DAYS, 730);
+  const maxPackages = clampInt(process.env.MERGESIGNAL_HEALTH_MAX_PACKAGES, 25);
+  const timeoutMs = clampInt(process.env.MERGESIGNAL_HEALTH_TIMEOUT_MS, 2500);
+  const ttlMs = clampInt(process.env.MERGESIGNAL_HEALTH_CACHE_TTL_MS, 6 * 60 * 60 * 1000);
+  const staleDays = clampInt(process.env.MERGESIGNAL_HEALTH_STALE_DAYS, 365);
+  const veryStaleDays = clampInt(process.env.MERGESIGNAL_HEALTH_VERY_STALE_DAYS, 730);
 
   const candidates = uniqueByName([
     ...Object.keys(graph.directDeps).map((name) => ({ name })),

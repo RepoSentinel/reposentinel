@@ -1,6 +1,6 @@
 # Production Deployment Guide
 
-This guide covers deploying RepoSentinel to production using Docker, Kubernetes, and AWS infrastructure.
+This guide covers deploying MergeSignal to production using Docker, Kubernetes, and AWS infrastructure.
 
 ## Table of Contents
 
@@ -18,7 +18,7 @@ This guide covers deploying RepoSentinel to production using Docker, Kubernetes,
 
 ## Overview
 
-RepoSentinel is deployed as a microservices architecture on Kubernetes, with the following components:
+MergeSignal is deployed as a microservices architecture on Kubernetes, with the following components:
 
 - **API Service**: Fastify API server handling HTTP requests
 - **Worker Service**: BullMQ worker processing scan jobs
@@ -108,8 +108,8 @@ Required variables in `terraform.tfvars`:
 ```hcl
 aws_region     = "us-east-1"
 environment    = "production"
-project_name   = "reposentinel"
-db_username    = "reposentinel"
+project_name   = "mergesignal"
+db_username    = "mergesignal"
 db_password    = "STRONG_PASSWORD_HERE"
 ```
 
@@ -139,7 +139,7 @@ This creates:
 ### Step 3: Configure kubectl
 
 ```bash
-aws eks update-kubeconfig --region us-east-1 --name reposentinel
+aws eks update-kubeconfig --region us-east-1 --name mergesignal
 
 # Verify connection
 kubectl get nodes
@@ -190,7 +190,7 @@ Update `k8s/secret.yaml` with production values:
 
 ```yaml
 stringData:
-  DATABASE_URL: "postgresql://reposentinel:PASSWORD@RDS_ENDPOINT/reposentinel?schema=public"
+  DATABASE_URL: "postgresql://mergesignal:PASSWORD@RDS_ENDPOINT/mergesignal?schema=public"
   REDIS_URL: "redis://REDIS_ENDPOINT:6379"
 ```
 
@@ -218,17 +218,17 @@ Edit deployment files to use your ECR URLs:
 
 `k8s/api-deployment.yaml`:
 ```yaml
-image: YOUR_ECR_REGISTRY/reposentinel/api:latest
+image: YOUR_ECR_REGISTRY/mergesignal/api:latest
 ```
 
 `k8s/worker-deployment.yaml`:
 ```yaml
-image: YOUR_ECR_REGISTRY/reposentinel/worker:latest
+image: YOUR_ECR_REGISTRY/mergesignal/worker:latest
 ```
 
 `k8s/web-deployment.yaml`:
 ```yaml
-image: YOUR_ECR_REGISTRY/reposentinel/web:latest
+image: YOUR_ECR_REGISTRY/mergesignal/web:latest
 ```
 
 ### Step 5: Update Ingress Configuration
@@ -259,7 +259,7 @@ kubectl apply -f k8s/postgres.yaml
 kubectl apply -f k8s/redis.yaml
 
 # Wait for database to be ready
-kubectl wait --for=condition=ready pod -l app=postgres -n reposentinel --timeout=300s
+kubectl wait --for=condition=ready pod -l app=postgres -n mergesignal --timeout=300s
 
 # Deploy applications
 kubectl apply -f k8s/api-deployment.yaml
@@ -272,16 +272,16 @@ kubectl apply -f k8s/ingress.yaml
 
 ```bash
 # Check pod status
-kubectl get pods -n reposentinel
+kubectl get pods -n mergesignal
 
 # Check services
-kubectl get services -n reposentinel
+kubectl get services -n mergesignal
 
 # Check ingress
-kubectl get ingress -n reposentinel
+kubectl get ingress -n mergesignal
 
 # View logs
-kubectl logs -f deployment/api -n reposentinel
+kubectl logs -f deployment/api -n mergesignal
 ```
 
 ## CI/CD Pipeline
@@ -329,7 +329,7 @@ aws iam create-open-id-connect-provider \
       "Condition": {
         "StringEquals": {
           "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
-          "token.actions.githubusercontent.com:sub": "repo:your-org/reposentinel:ref:refs/heads/main"
+          "token.actions.githubusercontent.com:sub": "repo:your-org/mergesignal:ref:refs/heads/main"
         }
       }
     }
@@ -381,7 +381,7 @@ Example with AWS Secrets Manager:
 ```bash
 # Store database password
 aws secretsmanager create-secret \
-  --name reposentinel/db-password \
+  --name mergesignal/db-password \
   --secret-string "YOUR_STRONG_PASSWORD"
 
 # Reference in Kubernetes using External Secrets
@@ -420,15 +420,15 @@ RDS automated backups are enabled by default (7-day retention).
 **Manual backup**:
 ```bash
 aws rds create-db-snapshot \
-  --db-instance-identifier reposentinel-postgres \
-  --db-snapshot-identifier reposentinel-manual-backup-$(date +%Y%m%d)
+  --db-instance-identifier mergesignal-postgres \
+  --db-snapshot-identifier mergesignal-manual-backup-$(date +%Y%m%d)
 ```
 
 **Restore from snapshot**:
 ```bash
 aws rds restore-db-instance-from-db-snapshot \
-  --db-instance-identifier reposentinel-postgres-restored \
-  --db-snapshot-identifier reposentinel-manual-backup-20260316
+  --db-instance-identifier mergesignal-postgres-restored \
+  --db-snapshot-identifier mergesignal-manual-backup-20260316
 ```
 
 ### Application State
@@ -483,8 +483,8 @@ aws rds restore-db-instance-from-db-snapshot \
 #### Pods Not Starting
 
 ```bash
-kubectl describe pod POD_NAME -n reposentinel
-kubectl logs POD_NAME -n reposentinel
+kubectl describe pod POD_NAME -n mergesignal
+kubectl logs POD_NAME -n mergesignal
 ```
 
 Common causes:
@@ -496,8 +496,8 @@ Common causes:
 
 ```bash
 # Test database connectivity from a pod
-kubectl run -it --rm debug --image=postgres:16 --restart=Never -n reposentinel -- \
-  psql postgresql://reposentinel:PASSWORD@postgres-service:5432/reposentinel
+kubectl run -it --rm debug --image=postgres:16 --restart=Never -n mergesignal -- \
+  psql postgresql://mergesignal:PASSWORD@postgres-service:5432/mergesignal
 ```
 
 Common causes:
@@ -509,10 +509,10 @@ Common causes:
 
 ```bash
 # Check worker logs
-kubectl logs -f deployment/worker -n reposentinel
+kubectl logs -f deployment/worker -n mergesignal
 
 # Check Redis connectivity
-kubectl run -it --rm redis-test --image=redis:7 --restart=Never -n reposentinel -- \
+kubectl run -it --rm redis-test --image=redis:7 --restart=Never -n mergesignal -- \
   redis-cli -h redis-service ping
 ```
 
@@ -525,7 +525,7 @@ Common causes:
 
 ```bash
 # Check ingress status
-kubectl describe ingress reposentinel-ingress -n reposentinel
+kubectl describe ingress mergesignal-ingress -n mergesignal
 
 # Check ingress controller logs
 kubectl logs -n ingress-nginx deployment/ingress-nginx-controller
@@ -538,9 +538,9 @@ Common causes:
 
 ### Getting Help
 
-1. Check pod logs: `kubectl logs POD_NAME -n reposentinel`
-2. Check events: `kubectl get events -n reposentinel --sort-by='.lastTimestamp'`
-3. Check resource usage: `kubectl top pods -n reposentinel`
+1. Check pod logs: `kubectl logs POD_NAME -n mergesignal`
+2. Check events: `kubectl get events -n mergesignal --sort-by='.lastTimestamp'`
+3. Check resource usage: `kubectl top pods -n mergesignal`
 4. Review application logs in CloudWatch
 5. Contact DevOps team or open an issue
 
@@ -581,18 +581,18 @@ docker build -t $ECR_API:v1.1.0 -f apps/api/Dockerfile .
 docker push $ECR_API:v1.1.0
 
 # Update deployment
-kubectl set image deployment/api api=$ECR_API:v1.1.0 -n reposentinel
+kubectl set image deployment/api api=$ECR_API:v1.1.0 -n mergesignal
 
 # Watch rollout
-kubectl rollout status deployment/api -n reposentinel
+kubectl rollout status deployment/api -n mergesignal
 ```
 
 ### Scaling
 
 ```bash
 # Scale deployments
-kubectl scale deployment api --replicas=3 -n reposentinel
-kubectl scale deployment worker --replicas=4 -n reposentinel
+kubectl scale deployment api --replicas=3 -n mergesignal
+kubectl scale deployment worker --replicas=4 -n mergesignal
 
 # Scale EKS nodes (via Terraform)
 terraform apply -var="eks_desired_size=3"

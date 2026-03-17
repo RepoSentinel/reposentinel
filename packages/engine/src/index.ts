@@ -1,4 +1,4 @@
-import type { ScanRequest, ScanResult, UpgradeSimulationRequest, UpgradeSimulationResult } from "@reposentinel/shared";
+import type { ScanRequest, ScanResult, UpgradeSimulationRequest, UpgradeSimulationResult } from "@mergesignal/shared";
 
 type EngineImpl = {
   analyze: (req: ScanRequest) => Promise<ScanResult>;
@@ -8,8 +8,8 @@ type EngineImpl = {
 let cached: Promise<EngineImpl> | null = null;
 
 async function loadImpl(): Promise<EngineImpl> {
-  const spec = String(process.env.REPOSENTINEL_ENGINE_IMPL ?? "").trim();
-  const strict = (process.env.REPOSENTINEL_ENGINE_STRICT ?? "0") === "1";
+  const spec = String(process.env.MERGESIGNAL_ENGINE_IMPL ?? "").trim();
+  const strict = (process.env.MERGESIGNAL_ENGINE_STRICT ?? "0") === "1";
 
   if (spec) {
     try {
@@ -24,7 +24,7 @@ async function loadImpl(): Promise<EngineImpl> {
     }
   }
 
-  const stub = (await import("@reposentinel/engine-stub")) as any;
+  const stub = (await import("@mergesignal/engine-stub")) as any;
   return { analyze: stub.analyze, simulateUpgrade: stub.simulateUpgrade };
 }
 

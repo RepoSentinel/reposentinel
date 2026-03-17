@@ -1,5 +1,5 @@
 {
-  "name": "@reposentinel/engine",
+  "name": "@mergesignal/engine",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -11,8 +11,8 @@
   },
   "license": "ISC",
   "dependencies": {
-    "@reposentinel/engine-stub": "workspace:^",
-    "@reposentinel/shared": "workspace:^"
+    "@mergesignal/engine-stub": "workspace:^",
+    "@mergesignal/shared": "workspace:^"
   },
   "devDependencies": {
     "@types/node": "^22.15.3",

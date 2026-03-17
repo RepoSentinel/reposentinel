@@ -1,5 +1,5 @@
 {
-  "name": "reposentinel",
+  "name": "mergesignal",
   "private": true,
   "description": "Security analysis platform for npm dependencies",
   "version": "0.1.0",
@@ -10,8 +10,8 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
     "test": "turbo run test",
-    "reposentinel": "pnpm -C apps/cli exec -- tsx src/cli.ts",
-    "rs": "pnpm -C apps/cli exec -- tsx src/cli.ts"
+    "mergesignal": "pnpm -C apps/cli exec -- tsx src/cli.ts",
+    "ms": "pnpm -C apps/cli exec -- tsx src/cli.ts"
   },
   "devDependencies": {
     "npm-run-all2": "^8.0.4",

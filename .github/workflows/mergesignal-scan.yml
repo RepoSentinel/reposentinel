@@ -1,4 +1,4 @@
-name: RepoSentinel scan
+name: MergeSignal scan
 
 on:
   pull_request:
@@ -15,7 +15,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: reposentinel-scan-${{ github.workflow }}-${{ github.ref }}
+  group: mergesignal-scan-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -64,13 +64,13 @@ jobs:
           pnpm -C packages/engine build
           pnpm -C apps/cli build
 
-      - name: Run RepoSentinel scan
+      - name: Run MergeSignal scan
         env:
           FAIL_ABOVE: ${{ inputs.fail_above }}
         run: |
           set -euo pipefail
           echo "Running local scan for $GITHUB_REPOSITORY"
-          node apps/cli/dist/cli.js scan --repo-id "$GITHUB_REPOSITORY" --out reposentinel-scan.json --json > reposentinel-scan.pretty.json
+          node apps/cli/dist/cli.js scan --repo-id "$GITHUB_REPOSITORY" --out mergesignal-scan.json --json > mergesignal-scan.pretty.json
           if [ -n "${FAIL_ABOVE:-}" ]; then
             node apps/cli/dist/cli.js scan --repo-id "$GITHUB_REPOSITORY" --fail-above "${FAIL_ABOVE}"
           fi
@@ -79,7 +79,7 @@ jobs:
         run: |
           node -e '
           const fs = require("fs");
-          const r = JSON.parse(fs.readFileSync("reposentinel-scan.json","utf8"));
+          const r = JSON.parse(fs.readFileSync("mergesignal-scan.json","utf8"));
           const total = r.totalScore ?? null;
           const layers = r.layerScores ?? {};
           const recs = Array.isArray(r.recommendations) ? r.recommendations : [];
@@ -112,7 +112,7 @@ jobs:
           const lines = [];
           
           // TIER 1: Score + Status (3-second scan)
-          lines.push(`# RepoSentinel Scan: Score ${total ?? "—"}/100`);
+          lines.push(`# MergeSignal Scan: Score ${total ?? "—"}/100`);
           lines.push(`${status.emoji} **${status.label}**${recs.length === 0 ? " — No critical issues" : ""}`);
           lines.push("");
           
@@ -164,9 +164,9 @@ jobs:
       - name: Upload results
         uses: actions/upload-artifact@v4
         with:
-          name: reposentinel-scan
+          name: mergesignal-scan
           path: |
-            reposentinel-scan.json
-            reposentinel-scan.pretty.json
+            mergesignal-scan.json
+            mergesignal-scan.pretty.json
           if-no-files-found: error
 

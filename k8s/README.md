@@ -1,10 +1,10 @@
-# Kubernetes Manifests for RepoSentinel
+# Kubernetes Manifests for MergeSignal
 
-This directory contains Kubernetes manifests for deploying RepoSentinel to a production Kubernetes cluster.
+This directory contains Kubernetes manifests for deploying MergeSignal to a production Kubernetes cluster.
 
 ## Files
 
-- `namespace.yaml` - Creates the reposentinel namespace
+- `namespace.yaml` - Creates the mergesignal namespace
 - `configmap.yaml` - Application configuration
 - `secret.yaml` - Sensitive configuration (DATABASE_URL, REDIS_URL, etc.)
 - `postgres.yaml` - PostgreSQL StatefulSet and Service
@@ -47,22 +47,22 @@ Before deploying, update the following files with your production values:
 
 ```bash
 # Build images
-docker build -t your-registry/reposentinel-api:latest -f apps/api/Dockerfile .
-docker build -t your-registry/reposentinel-worker:latest -f apps/worker/Dockerfile .
-docker build -t your-registry/reposentinel-web:latest -f apps/web/Dockerfile .
+docker build -t your-registry/mergesignal-api:latest -f apps/api/Dockerfile .
+docker build -t your-registry/mergesignal-worker:latest -f apps/worker/Dockerfile .
+docker build -t your-registry/mergesignal-web:latest -f apps/web/Dockerfile .
 
 # Push to registry
-docker push your-registry/reposentinel-api:latest
-docker push your-registry/reposentinel-worker:latest
-docker push your-registry/reposentinel-web:latest
+docker push your-registry/mergesignal-api:latest
+docker push your-registry/mergesignal-worker:latest
+docker push your-registry/mergesignal-web:latest
 ```
 
 ### 3. Update Image References
 
 Update the image references in the deployment files:
-- `api-deployment.yaml`: `image: your-registry/reposentinel-api:latest`
-- `worker-deployment.yaml`: `image: your-registry/reposentinel-worker:latest`
-- `web-deployment.yaml`: `image: your-registry/reposentinel-web:latest`
+- `api-deployment.yaml`: `image: your-registry/mergesignal-api:latest`
+- `worker-deployment.yaml`: `image: your-registry/mergesignal-worker:latest`
+- `web-deployment.yaml`: `image: your-registry/mergesignal-web:latest`
 
 ### 4. Deploy to Kubernetes
 
@@ -75,7 +75,7 @@ kubectl apply -f k8s/postgres.yaml
 kubectl apply -f k8s/redis.yaml
 
 # Wait for database to be ready
-kubectl wait --for=condition=ready pod -l app=postgres -n reposentinel --timeout=300s
+kubectl wait --for=condition=ready pod -l app=postgres -n mergesignal --timeout=300s
 
 # Deploy application services
 kubectl apply -f k8s/api-deployment.yaml
@@ -88,39 +88,39 @@ kubectl apply -f k8s/ingress.yaml
 
 ```bash
 # Check pod status
-kubectl get pods -n reposentinel
+kubectl get pods -n mergesignal
 
 # Check services
-kubectl get services -n reposentinel
+kubectl get services -n mergesignal
 
 # Check ingress
-kubectl get ingress -n reposentinel
+kubectl get ingress -n mergesignal
 
 # View logs
-kubectl logs -f deployment/api -n reposentinel
-kubectl logs -f deployment/worker -n reposentinel
-kubectl logs -f deployment/web -n reposentinel
+kubectl logs -f deployment/api -n mergesignal
+kubectl logs -f deployment/worker -n mergesignal
+kubectl logs -f deployment/web -n mergesignal
 ```
 
 ## Scaling
 
 ### Scale API replicas
 ```bash
-kubectl scale deployment api --replicas=3 -n reposentinel
+kubectl scale deployment api --replicas=3 -n mergesignal
 ```
 
 ### Scale Worker replicas
 ```bash
-kubectl scale deployment worker --replicas=4 -n reposentinel
+kubectl scale deployment worker --replicas=4 -n mergesignal
 ```
 
 ## Database Migrations
 
-The API service will automatically run migrations on startup when `REPOSENTINEL_AUTO_MIGRATE=1` is set.
+The API service will automatically run migrations on startup when `MERGESIGNAL_AUTO_MIGRATE=1` is set.
 
 To run migrations manually:
 ```bash
-kubectl exec -it deployment/api -n reposentinel -- node apps/api/dist/migrateCli.js
+kubectl exec -it deployment/api -n mergesignal -- node apps/api/dist/migrateCli.js
 ```
 
 ## Monitoring
@@ -129,13 +129,13 @@ Monitor your deployment:
 
 ```bash
 # Watch pod status
-kubectl get pods -n reposentinel -w
+kubectl get pods -n mergesignal -w
 
 # View resource usage
-kubectl top pods -n reposentinel
+kubectl top pods -n mergesignal
 
 # Check events
-kubectl get events -n reposentinel --sort-by='.lastTimestamp'
+kubectl get events -n mergesignal --sort-by='.lastTimestamp'
 ```
 
 ## Production Considerations

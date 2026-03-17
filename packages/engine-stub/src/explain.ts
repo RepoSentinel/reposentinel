@@ -1,4 +1,4 @@
-import type { ExplainReason, RiskSignal, ScoreLayer } from "@reposentinel/shared";
+import type { ExplainReason, RiskSignal, ScoreLayer } from "@mergesignal/shared";
 
 const DEFAULT_MAX = 6;
 

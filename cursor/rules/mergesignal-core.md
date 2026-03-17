@@ -1,4 +1,4 @@
-RepoSentinel global rules:
+MergeSignal global rules:
 
 - This is a production full-stack system. Prefer scalability, maintainability, performance, and clear boundaries.
 - Before any non-trivial change, inspect existing code first.

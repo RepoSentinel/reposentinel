@@ -10,9 +10,9 @@ describe("API Integration Tests", () => {
   const testOwner = "test-org";
 
   beforeAll(async () => {
-    process.env.REPOSENTINEL_AUTO_MIGRATE = "0";
+    process.env.MERGESIGNAL_AUTO_MIGRATE = "0";
     process.env.CORS_ORIGINS = "http://localhost:3000";
-    process.env.DATABASE_URL = "postgresql://reposentinel:reposentinel@localhost:5432/reposentinel";
+    process.env.DATABASE_URL = "postgresql://mergesignal:mergesignal@localhost:5432/mergesignal";
     
     app = await createApp();
 
@@ -70,7 +70,7 @@ describe("API Integration Tests", () => {
       const body = JSON.parse(response.body);
       expect(body.openapi).toBeDefined();
       expect(body.info).toBeDefined();
-      expect(body.info.title).toBe("RepoSentinel API");
+      expect(body.info.title).toBe("MergeSignal API");
     });
   });
 

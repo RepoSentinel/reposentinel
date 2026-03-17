@@ -1,5 +1,5 @@
 {
-  "name": "@reposentinel/shared",
+  "name": "@mergesignal/shared",
   "version": "0.1.0",
   "description": "",
   "main": "dist/index.js",

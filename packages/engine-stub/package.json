@@ -1,5 +1,5 @@
 {
-  "name": "@reposentinel/engine-stub",
+  "name": "@mergesignal/engine-stub",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -14,7 +14,7 @@
   },
   "license": "ISC",
   "dependencies": {
-    "@reposentinel/shared": "workspace:^",
+    "@mergesignal/shared": "workspace:^",
     "@yarnpkg/lockfile": "^1.1.0",
     "yaml": "^2.8.2"
   },

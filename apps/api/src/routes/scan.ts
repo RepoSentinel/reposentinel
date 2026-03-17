@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { db, queries } from "../db.js";
-import type { ScanRequest } from "@reposentinel/shared";
+import type { ScanRequest } from "@mergesignal/shared";
 import { createScanAndEnqueue } from "../services/scanService.js";
 import { sendProblem } from "../problem.js";
 

@@ -1,6 +1,6 @@
-# Terraform Infrastructure for RepoSentinel
+# Terraform Infrastructure for MergeSignal
 
-This directory contains Terraform configuration for deploying RepoSentinel infrastructure on AWS.
+This directory contains Terraform configuration for deploying MergeSignal infrastructure on AWS.
 
 ## Architecture
 
@@ -27,10 +27,10 @@ The Terraform configuration creates:
 ```hcl
 aws_region     = "us-east-1"
 environment    = "production"
-project_name   = "reposentinel"
+project_name   = "mergesignal"
 
 # Database credentials (use strong passwords!)
-db_username = "reposentinel"
+db_username = "mergesignal"
 db_password = "CHANGE_ME_STRONG_PASSWORD"
 
 # EKS configuration
@@ -74,7 +74,7 @@ Type `yes` to confirm and create the infrastructure.
 After the EKS cluster is created, configure kubectl:
 
 ```bash
-aws eks update-kubeconfig --region us-east-1 --name reposentinel
+aws eks update-kubeconfig --region us-east-1 --name mergesignal
 ```
 
 Verify access:
@@ -110,7 +110,7 @@ terraform output ecr_repository_web
 Update `k8s/secret.yaml` with the actual values from Terraform outputs:
 
 ```yaml
-DATABASE_URL: "postgresql://reposentinel:PASSWORD@RDS_ENDPOINT/reposentinel?schema=public"
+DATABASE_URL: "postgresql://mergesignal:PASSWORD@RDS_ENDPOINT/mergesignal?schema=public"
 REDIS_URL: "redis://REDIS_ENDPOINT:6379"
 ```
 
@@ -217,7 +217,7 @@ terraform destroy
 ### EKS Cluster Not Accessible
 
 ```bash
-aws eks update-kubeconfig --region us-east-1 --name reposentinel
+aws eks update-kubeconfig --region us-east-1 --name mergesignal
 ```
 
 ### RDS Connection Issues

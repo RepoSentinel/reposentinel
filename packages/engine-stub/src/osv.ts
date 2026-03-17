@@ -1,4 +1,4 @@
-import type { Finding, Recommendation, RiskSignal } from "@reposentinel/shared";
+import type { Finding, Recommendation, RiskSignal } from "@mergesignal/shared";
 import type { DependencyGraph } from "./pnpmLock.js";
 import { postJsonCached } from "./http.js";
 
@@ -22,12 +22,12 @@ export async function osvVulnerabilitiesFromGraph(graph: DependencyGraph): Promi
   findings: Finding[];
   recommendations: Recommendation[];
 }> {
-  const enable = (process.env.REPOSENTINEL_ENABLE_OSV ?? "1") === "1";
+  const enable = (process.env.MERGESIGNAL_ENABLE_OSV ?? "1") === "1";
   if (!enable) return { signals: [], findings: [], recommendations: [] };
 
-  const maxPackages = clampInt(process.env.REPOSENTINEL_OSV_MAX_PACKAGES, 25);
-  const timeoutMs = clampInt(process.env.REPOSENTINEL_OSV_TIMEOUT_MS, 3000);
-  const ttlMs = clampInt(process.env.REPOSENTINEL_OSV_CACHE_TTL_MS, 24 * 60 * 60 * 1000);
+  const maxPackages = clampInt(process.env.MERGESIGNAL_OSV_MAX_PACKAGES, 25);
+  const timeoutMs = clampInt(process.env.MERGESIGNAL_OSV_TIMEOUT_MS, 3000);
+  const ttlMs = clampInt(process.env.MERGESIGNAL_OSV_CACHE_TTL_MS, 24 * 60 * 60 * 1000);
 
   const candidates = uniqueCandidates([
     ...Object.entries(graph.directDeps).map(([name, version]) => ({ name, version })),
