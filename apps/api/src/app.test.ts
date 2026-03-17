@@ -17,7 +17,7 @@ describe("API Integration Tests", () => {
     app = await createApp();
 
     // Create a test org-scoped API key
-    testApiKey = `rs_${randomBytes(32).toString("hex")}`;
+    testApiKey = `ms_${randomBytes(32).toString("hex")}`;
     const keyHash = createHash("sha256").update(testApiKey).digest("hex");
     const id = randomUUID();
 

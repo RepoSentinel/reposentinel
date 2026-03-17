@@ -9,7 +9,7 @@ async function generateApiKey(owner: string, description?: string) {
     process.exit(1);
   }
 
-  const apiKey = `rs_${randomBytes(32).toString("hex")}`;
+  const apiKey = `ms_${randomBytes(32).toString("hex")}`;
   const keyHash = createHash("sha256").update(apiKey).digest("hex");
   const id = randomUUID();
 

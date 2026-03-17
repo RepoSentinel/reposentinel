@@ -73,7 +73,7 @@ npm run generate-api-key -- acme "Production key for Acme Corp"
 ```
 
 This will:
-1. Generate a cryptographically secure random key (prefix: `rs_`)
+1. Generate a cryptographically secure random key (prefix: `ms_`)
 2. Hash it with SHA-256
 3. Store the hash in the database
 4. Display the plaintext key once (save it securely!)

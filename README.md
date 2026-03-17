@@ -161,12 +161,12 @@ Example:
 pnpm generate-api-key acme "Production API key for Acme Corp"
 ```
 
-This will output a key like `rs_abc123...`. Save it securely - it won't be shown again.
+This will output a key like `ms_abc123...`. Save it securely - it won't be shown again.
 
 Use the key in the `Authorization` header:
 
 ```bash
-Authorization: Bearer rs_abc123...
+Authorization: Bearer ms_abc123...
 ```
 
 **Note**: The legacy `MERGESIGNAL_API_KEY` environment variable is no longer supported for security reasons (enforces multi-tenant isolation).
@@ -180,7 +180,7 @@ Create a scan (requires authentication):
 ```bash
 curl -sS -X POST "http://localhost:4000/scan" \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer rs_your_api_key_here" \
+  -H "Authorization: Bearer ms_your_api_key_here" \
   -d '{"repoId":"demo/repo","dependencyGraph":{}}'
 ```
 
@@ -188,14 +188,14 @@ Then fetch status:
 
 ```bash
 curl -sS "http://localhost:4000/scan/<scanId>" \
-  -H "Authorization: Bearer rs_your_api_key_here"
+  -H "Authorization: Bearer ms_your_api_key_here"
 ```
 
 Stream events (SSE):
 
 ```bash
 curl -iN --http1.1 "http://localhost:4000/scan/<scanId>/events" \
-  -H "Authorization: Bearer rs_your_api_key_here"
+  -H "Authorization: Bearer ms_your_api_key_here"
 ```
 
 Public endpoints (no auth required):

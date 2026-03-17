@@ -23,7 +23,7 @@ describe("Rate Limiting", () => {
     app = await createApp();
 
     // Create a test org-scoped API key
-    testApiKey = `rs_${randomBytes(32).toString("hex")}`;
+    testApiKey = `ms_${randomBytes(32).toString("hex")}`;
     const keyHash = createHash("sha256").update(testApiKey).digest("hex");
     const id = randomUUID();
 
@@ -125,7 +125,7 @@ describe("Rate Limiting", () => {
 
     it.skipIf(!dbAvailable)("should enforce separate rate limits per API key", async () => {
       // Create a second test API key
-      const testApiKey2 = `rs_${randomBytes(32).toString("hex")}`;
+      const testApiKey2 = `ms_${randomBytes(32).toString("hex")}`;
       const keyHash2 = createHash("sha256").update(testApiKey2).digest("hex");
       const id2 = randomUUID();
 

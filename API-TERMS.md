@@ -19,7 +19,7 @@ These API Terms supplement the main Terms of Service (TERMS.md) and govern your 
 All authenticated API requests must include:
 
 ```
-Authorization: Bearer rs_<your_api_key>
+Authorization: Bearer ms_<your_api_key>
 ```
 
 Requests without proper authentication will receive a `401 Unauthorized` response.
