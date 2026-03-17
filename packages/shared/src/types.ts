@@ -179,3 +179,53 @@ export type UpgradeSimulationResult = {
   impact?: UpgradeSimulationImpact;
   generatedAt: string;
 };
+
+export type BreakingChangeSource = "semver" | "changelog" | "manual";
+
+export type BreakingChangeSeverity = "low" | "medium" | "high";
+
+export type BreakingChange = {
+  source: BreakingChangeSource;
+  severity: BreakingChangeSeverity;
+  description: string;
+  affectedAPIs?: string[];
+};
+
+export type UsageReport = {
+  filesUsingPackage: string[];
+  importedSymbols: string[];
+  criticalPaths: string[];
+  usageCount: number;
+};
+
+export type CriticalPathScore = {
+  isCritical: boolean;
+  score: number;
+  reasons: string[];
+};
+
+export type ImpactInsightType = 
+  | "breaking_change_used"
+  | "breaking_change_unused"
+  | "critical_path_affected"
+  | "safe_upgrade";
+
+export type ImpactInsightSeverity = "low" | "medium" | "high";
+
+export type ImpactInsight = {
+  type: ImpactInsightType;
+  severity: ImpactInsightSeverity;
+  message: string;
+  affectedFiles?: string[];
+};
+
+export type PRDecision = "safe" | "needs_review" | "risky";
+
+export type PRAnalysisResult = {
+  decision: PRDecision;
+  breakingChanges: BreakingChange[];
+  usageImpact: UsageReport[];
+  criticalPath?: CriticalPathScore;
+  insights: ImpactInsight[];
+  generatedAt: string;
+};
