@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { PRInsight, PRDecision } from "@mergesignal/shared";
 import styles from "./ScanClient.module.css";
 import layoutStyles from "./ScanClientLayout.module.css";
 import { Card, cardStyles } from "../../_components/ui/Card";
@@ -12,34 +13,6 @@ type ScanRow = {
   status: "queued" | "running" | "done" | "failed";
   result?: ScanResult;
   error?: string | null;
-};
-
-type PRInsightType =
-  | "used_breaking_changes"
-  | "critical_path_impact"
-  | "security_concern"
-  | "major_version_bump"
-  | "deprecation_warning";
-
-type PRInsightPriority = "critical" | "high" | "medium" | "low";
-
-type PRInsight = {
-  type: PRInsightType;
-  priority: PRInsightPriority;
-  message: string;
-  files?: string[];
-  action: string;
-  details?: Record<string, unknown>;
-};
-
-type PRDecisionRecommendation = "safe" | "needs_review" | "risky";
-
-type PRDecisionConfidence = "low" | "medium" | "high";
-
-type PRDecision = {
-  recommendation: PRDecisionRecommendation;
-  confidence: PRDecisionConfidence;
-  reasoning: string[];
 };
 
 type ScanResult = {
