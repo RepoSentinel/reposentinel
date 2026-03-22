@@ -8,7 +8,6 @@ RUN corepack enable && corepack prepare pnpm@9.0.0 --activate
 
 # Copy workspace configuration
 COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
-COPY .npmrc ./
 
 # Copy all package.json files for workspace resolution
 COPY apps/api/package.json ./apps/api/
@@ -43,7 +42,6 @@ RUN corepack enable && corepack prepare pnpm@9.0.0 --activate
 
 # Copy workspace configuration
 COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
-COPY .npmrc ./
 
 # Copy package.json files
 COPY apps/api/package.json ./apps/api/
@@ -61,8 +59,8 @@ COPY --from=builder /app/packages/shared/dist ./packages/shared/dist
 COPY --from=builder /app/packages/engine/dist ./packages/engine/dist
 COPY --from=builder /app/packages/engine-stub/dist ./packages/engine-stub/dist
 
-# Copy migrations (needed for runtime)
-COPY apps/api/src/migrations ./apps/api/src/migrations
+# Copy migrations (needed for runtime at dist/sql for migration code)
+COPY apps/api/sql ./apps/api/dist/sql
 
 # Set environment variables
 ENV NODE_ENV=production
@@ -71,4 +69,4 @@ ENV PORT=4000
 EXPOSE 4000
 
 # Run the application
-CMD ["node", "--enable-source-maps", "apps/api/dist/server.js"]
+CMD ["node", "--enable-source-maps", "apps/api/dist/src/server.js"]
