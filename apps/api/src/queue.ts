@@ -15,6 +15,7 @@ export type ScanJob = {
   lockfile?: ScanLockfileInput;
   baseLockfile?: ScanLockfileInput;
   repoSource?: RepoSource;
+  changedFiles?: string[];
   github?: {
     owner: string;
     repo: string;

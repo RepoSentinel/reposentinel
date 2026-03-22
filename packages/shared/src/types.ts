@@ -38,6 +38,7 @@ export type ScanRequest = {
   lockfile?: ScanLockfileInput;
   repoSource?: RepoSource;
   changedPackages?: string[];
+  changedFiles?: string[];
 };
 
 export type ScoreLayer = keyof LayerScores;

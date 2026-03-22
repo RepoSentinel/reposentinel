@@ -3,6 +3,7 @@ import { App } from "@octokit/app";
 import { createHmac, timingSafeEqual } from "crypto";
 import { createScanAndEnqueue } from "../services/scanService.js";
 import { upsertGithubRepoSource } from "../services/repoSourceService.js";
+import { filterRelevantSourceFiles } from "../services/githubFileService.js";
 import { sendProblem } from "../problem.js";
 import { db } from "../db.js";
 
@@ -147,6 +148,8 @@ async function handlePullRequest(app: App, payload: PullRequestEvent, delivery: 
   const match = pickLockfilePath(changed);
   if (!match) return { ignored: true, reason: "no_lockfile_change" };
 
+  const changedFiles = filterRelevantSourceFiles(changed);
+
   const contents = await octokit.request("GET /repos/{owner}/{repo}/contents/{path}", {
     owner,
     repo,
@@ -182,6 +185,7 @@ async function handlePullRequest(app: App, payload: PullRequestEvent, delivery: 
       baseLockfile: baseLockfileContent
         ? { manager: match.manager, content: baseLockfileContent, path: match.path }
         : undefined,
+      changedFiles,
       github: {
         owner,
         repo,

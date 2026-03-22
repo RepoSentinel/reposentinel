@@ -10,6 +10,7 @@ export async function createScanAndEnqueue({
   dependencyGraph,
   lockfile,
   baseLockfile,
+  changedFiles,
   github,
   source,
 }: {
@@ -18,6 +19,7 @@ export async function createScanAndEnqueue({
   dependencyGraph: unknown;
   lockfile?: ScanLockfileInput;
   baseLockfile?: ScanLockfileInput;
+  changedFiles?: string[];
   github?: {
     owner: string;
     repo: string;
@@ -106,7 +108,7 @@ export async function createScanAndEnqueue({
   try {
     await scanQueue.add(
       "scan",
-      { scanId: id, repoId, dependencyGraph, lockfile, baseLockfile, repoSource, github },
+      { scanId: id, repoId, dependencyGraph, lockfile, baseLockfile, repoSource, changedFiles, github },
       {
         jobId: id,
         attempts: 3,
