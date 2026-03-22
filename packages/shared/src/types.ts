@@ -32,6 +32,13 @@ export type RepoSource = {
   installationId: number;
 };
 
+export type CodeAnalysisMetrics = {
+  fromCache: boolean;
+  analysisTimeMs?: number;
+  timedOut?: boolean;
+  filesAnalyzed: number;
+};
+
 export type ScanRequest = {
   repoId: string;
   dependencyGraph: unknown;
@@ -39,6 +46,7 @@ export type ScanRequest = {
   repoSource?: RepoSource;
   changedPackages?: string[];
   changedFiles?: string[];
+  codeAnalysisMetrics?: CodeAnalysisMetrics;
 };
 
 export type ScoreLayer = keyof LayerScores;
@@ -168,6 +176,7 @@ export type ScanResult = {
   generatedAt: string;
   insights?: PRInsight[];
   decision?: PRDecision;
+  codeAnalysisMetrics?: CodeAnalysisMetrics;
 };
 
 export type UpgradeTarget = {
