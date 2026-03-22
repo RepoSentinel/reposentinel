@@ -14,6 +14,34 @@ type ScanRow = {
   error?: string | null;
 };
 
+type PRInsightType =
+  | "used_breaking_changes"
+  | "critical_path_impact"
+  | "security_concern"
+  | "major_version_bump"
+  | "deprecation_warning";
+
+type PRInsightPriority = "critical" | "high" | "medium" | "low";
+
+type PRInsight = {
+  type: PRInsightType;
+  priority: PRInsightPriority;
+  message: string;
+  files?: string[];
+  action: string;
+  details?: Record<string, unknown>;
+};
+
+type PRDecisionRecommendation = "safe" | "needs_review" | "risky";
+
+type PRDecisionConfidence = "low" | "medium" | "high";
+
+type PRDecision = {
+  recommendation: PRDecisionRecommendation;
+  confidence: PRDecisionConfidence;
+  reasoning: string[];
+};
+
 type ScanResult = {
   totalScore?: number;
   layerScores?: {
@@ -36,6 +64,8 @@ type ScanResult = {
       via?: string[];
     }>;
   };
+  insights?: PRInsight[];
+  decision?: PRDecision;
 };
 
 export default function ScanClient({ id }: { id: string }) {
@@ -80,6 +110,8 @@ export default function ScanClient({ id }: { id: string }) {
   const reasons = Array.isArray(data.result?.explain?.reasons) ? data.result.explain.reasons : [];
   const graphInsights = data.result?.graphInsights;
   const deepest = Array.isArray(graphInsights?.deepest) ? graphInsights.deepest : [];
+  const insights = Array.isArray(data.result?.insights) ? data.result.insights : [];
+  const decision = data.result?.decision;
   const dotClass =
     data.status === "queued"
       ? styles.dotQueued
@@ -103,6 +135,26 @@ export default function ScanClient({ id }: { id: string }) {
         {data.status === "running" || data.status === "queued" ? (
           <div className={cardStyles.note}>This page updates automatically.</div>
         ) : null}
+        {decision && data.status === "done" && (
+          <div style={{ marginTop: 12 }}>
+            <span
+              className={styles.decisionBadge}
+              data-recommendation={decision.recommendation}
+              title={`Confidence: ${decision.confidence}`}
+            >
+              {decision.recommendation === "safe" && "✓ Safe to merge"}
+              {decision.recommendation === "needs_review" && "⚠ Needs review"}
+              {decision.recommendation === "risky" && "⚠ Risky"}
+            </span>
+            {decision.reasoning && decision.reasoning.length > 0 && (
+              <ul className={styles.decisionReasoning}>
+                {decision.reasoning.map((reason, idx) => (
+                  <li key={idx}>{reason}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
       </Card>
 
       <Card title="Risk score">
@@ -139,6 +191,36 @@ export default function ScanClient({ id }: { id: string }) {
               Findings: <b>{findings.length}</b>
             </div>
           ) : null}
+        </Card>
+      )}
+
+      {data.status === "done" && insights.length > 0 && (
+        <Card title="AI Insights" subtitle={<span className={cardStyles.muted}>Key findings and recommendations</span>}>
+          <ul className={styles.list}>
+            {insights.map((insight, idx) => (
+              <li key={idx}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <span className={styles.insightPriorityBadge} data-priority={insight.priority}>
+                    {insight.priority}
+                  </span>
+                  <span className={cardStyles.muted} style={{ textTransform: "capitalize" }}>
+                    {insight.type.replace(/_/g, " ")}
+                  </span>
+                </div>
+                <div style={{ marginTop: 4 }}>
+                  <b>{insight.message}</b>
+                </div>
+                <div className={cardStyles.note} style={{ marginTop: 4 }}>
+                  Action: {insight.action}
+                </div>
+                {insight.files && insight.files.length > 0 && (
+                  <div className={cardStyles.muted} style={{ marginTop: 4, fontSize: "0.9em" }}>
+                    Files: {insight.files.join(", ")}
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
         </Card>
       )}
 

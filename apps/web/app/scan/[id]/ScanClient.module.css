@@ -78,3 +78,79 @@
   padding: 12px;
 }
 
+.decisionBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: var(--rs-radius-md);
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid;
+}
+
+.decisionBadge[data-recommendation="safe"] {
+  background: color-mix(in oklab, var(--rs-color-success) 15%, var(--rs-color-surface));
+  border-color: color-mix(in oklab, var(--rs-color-success) 40%, var(--rs-color-border));
+  color: var(--rs-color-success);
+}
+
+.decisionBadge[data-recommendation="needs_review"] {
+  background: color-mix(in oklab, var(--rs-color-warning) 15%, var(--rs-color-surface));
+  border-color: color-mix(in oklab, var(--rs-color-warning) 40%, var(--rs-color-border));
+  color: var(--rs-color-warning);
+}
+
+.decisionBadge[data-recommendation="risky"] {
+  background: color-mix(in oklab, var(--rs-color-danger) 15%, var(--rs-color-surface));
+  border-color: color-mix(in oklab, var(--rs-color-danger) 40%, var(--rs-color-border));
+  color: var(--rs-color-danger);
+}
+
+.decisionReasoning {
+  margin-top: 12px;
+  padding-left: 20px;
+  font-size: 13px;
+  color: var(--rs-color-text);
+}
+
+.decisionReasoning li {
+  margin-top: 6px;
+}
+
+.insightPriorityBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--rs-radius-sm);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  border: 1px solid;
+}
+
+.insightPriorityBadge[data-priority="critical"] {
+  background: color-mix(in oklab, var(--rs-color-danger) 20%, var(--rs-color-surface));
+  border-color: var(--rs-color-danger);
+  color: var(--rs-color-danger);
+}
+
+.insightPriorityBadge[data-priority="high"] {
+  background: color-mix(in oklab, var(--rs-color-warning) 20%, var(--rs-color-surface));
+  border-color: var(--rs-color-warning);
+  color: var(--rs-color-warning);
+}
+
+.insightPriorityBadge[data-priority="medium"] {
+  background: color-mix(in oklab, var(--rs-color-accent) 20%, var(--rs-color-surface));
+  border-color: var(--rs-color-accent);
+  color: var(--rs-color-accent);
+}
+
+.insightPriorityBadge[data-priority="low"] {
+  background: color-mix(in oklab, var(--rs-color-text-muted) 20%, var(--rs-color-surface));
+  border-color: var(--rs-color-text-muted);
+  color: var(--rs-color-text-muted);
+}
+
