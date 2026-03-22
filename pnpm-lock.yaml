@@ -8,6 +8,9 @@ importers:
 
   .:
     devDependencies:
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.6.1
       npm-run-all2:
         specifier: ^8.0.4
         version: 8.0.4
