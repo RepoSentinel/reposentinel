@@ -258,6 +258,7 @@ export type ImpactInsightType =
   | "breaking_change_used"
   | "breaking_change_unused"
   | "critical_path_affected"
+  | "high_usage_detected"
   | "safe_upgrade";
 
 export type ImpactInsightSeverity = "low" | "medium" | "high";
@@ -267,6 +268,8 @@ export type ImpactInsight = {
   severity: ImpactInsightSeverity;
   message: string;
   affectedFiles?: string[];
+  affectedSymbols?: string[];
+  breakingChange?: BreakingChange;
 };
 
 export type PRAnalysisResult = {
