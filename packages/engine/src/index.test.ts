@@ -109,66 +109,74 @@ importers:
     it("should simulate package upgrade", async () => {
       const request: UpgradeSimulationRequest = {
         repoId: "test/repo",
-        dependencyGraph: {
-          nodes: [
-            { id: "express@4.17.0", name: "express", version: "4.17.0" },
-            { id: "lodash@4.17.20", name: "lodash", version: "4.17.20" },
-          ],
+        currentLockfile: {
+          manager: "pnpm",
+          content: `lockfileVersion: '6.0'\ndependencies:\n  express:\n    specifier: ^4.17.0\n    version: 4.17.0`,
         },
-        upgradeTarget: {
+        proposedLockfile: {
+          manager: "pnpm",
+          content: `lockfileVersion: '6.0'\ndependencies:\n  express:\n    specifier: ^4.18.0\n    version: 4.18.0`,
+        },
+        target: {
           packageName: "express",
-          fromVersion: "4.17.0",
-          toVersion: "4.18.0",
+          targetVersion: "4.18.0",
         },
       };
 
       const result = await simulateUpgrade(request);
 
       expect(result).toBeDefined();
-      expect(result.packageName).toBe("express");
-      expect(result.fromVersion).toBe("4.17.0");
-      expect(result.toVersion).toBe("4.18.0");
-      expect(result.risk).toBeDefined();
-      expect(["low", "medium", "high"]).toContain(result.risk);
+      expect(result.before).toBeDefined();
+      expect(result.after).toBeDefined();
+      expect(result.delta).toBeDefined();
+      expect(result.generatedAt).toBeDefined();
     });
 
-    it("should include breaking changes analysis", async () => {
+    it("should include delta analysis", async () => {
       const request: UpgradeSimulationRequest = {
         repoId: "test/repo",
-        dependencyGraph: {
-          nodes: [{ id: "pkg@1.0.0", name: "pkg", version: "1.0.0" }],
+        currentLockfile: {
+          manager: "pnpm",
+          content: `lockfileVersion: '6.0'\ndependencies:\n  pkg:\n    specifier: ^1.0.0\n    version: 1.0.0`,
         },
-        upgradeTarget: {
+        proposedLockfile: {
+          manager: "pnpm",
+          content: `lockfileVersion: '6.0'\ndependencies:\n  pkg:\n    specifier: ^2.0.0\n    version: 2.0.0`,
+        },
+        target: {
           packageName: "pkg",
-          fromVersion: "1.0.0",
-          toVersion: "2.0.0",
+          targetVersion: "2.0.0",
         },
       };
 
       const result = await simulateUpgrade(request);
 
       expect(result).toBeDefined();
-      expect(result.breakingChanges).toBeDefined();
-      expect(Array.isArray(result.breakingChanges)).toBe(true);
+      expect(result.delta).toBeDefined();
     });
 
-    it("should include recommendation", async () => {
+    it("should include before and after scan results", async () => {
       const request: UpgradeSimulationRequest = {
         repoId: "test/repo",
-        dependencyGraph: {
-          nodes: [{ id: "pkg@1.0.0", name: "pkg", version: "1.0.0" }],
+        currentLockfile: {
+          manager: "pnpm",
+          content: `lockfileVersion: '6.0'\ndependencies:\n  pkg:\n    specifier: ^1.0.0\n    version: 1.0.0`,
         },
-        upgradeTarget: {
+        proposedLockfile: {
+          manager: "pnpm",
+          content: `lockfileVersion: '6.0'\ndependencies:\n  pkg:\n    specifier: ^1.1.0\n    version: 1.1.0`,
+        },
+        target: {
           packageName: "pkg",
-          fromVersion: "1.0.0",
-          toVersion: "1.1.0",
+          targetVersion: "1.1.0",
         },
       };
 
       const result = await simulateUpgrade(request);
 
-      expect(result.recommendation).toBeDefined();
-      expect(["safe", "caution", "risky"]).toContain(result.recommendation);
+      expect(result.before).toBeDefined();
+      expect(result.before.totalScore).toBeDefined();
+      expect(typeof result.before.totalScore).toBe("number");
     });
   });
 
