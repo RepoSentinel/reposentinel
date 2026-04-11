@@ -39,7 +39,7 @@ describe("scan routes", () => {
     app = Fastify();
     
     // Mock authentication decorator
-    app.decorateRequest("authenticatedOwner", null);
+    app.decorateRequest("authenticatedOwner", undefined);
     
     await scanRoutes(app);
     await app.ready();
@@ -208,8 +208,25 @@ describe("scan routes", () => {
       const mockScan = {
         id: "scan_123",
         repo_id: "owner/repo",
-        status: "done",
-        created_at: new Date().toISOString(),
+        status: "done" as const,
+        source: "github_pr",
+        attempt: 1,
+        worker_id: null,
+        started_at: null,
+        finished_at: null,
+        heartbeat_at: null,
+        total_score: null,
+        layer_security: null,
+        layer_maintainability: null,
+        layer_ecosystem: null,
+        layer_upgrade_impact: null,
+        methodology_version: null,
+        result_generated_at: null,
+        result: null,
+        decision: null,
+        error: null,
+        created_at: new Date(),
+        updated_at: new Date(),
       };
       vi.mocked(queries.scans.findById).mockResolvedValue(mockScan);
 
@@ -240,8 +257,25 @@ describe("scan routes", () => {
       const mockScan = {
         id: "scan_123",
         repo_id: "org2/repo",
-        status: "done",
-        created_at: new Date().toISOString(),
+        status: "done" as const,
+        source: "github_pr",
+        attempt: 1,
+        worker_id: null,
+        started_at: null,
+        finished_at: null,
+        heartbeat_at: null,
+        total_score: null,
+        layer_security: null,
+        layer_maintainability: null,
+        layer_ecosystem: null,
+        layer_upgrade_impact: null,
+        methodology_version: null,
+        result_generated_at: null,
+        result: null,
+        decision: null,
+        error: null,
+        created_at: new Date(),
+        updated_at: new Date(),
       };
       vi.mocked(queries.scans.findById).mockResolvedValue(mockScan);
 
@@ -263,9 +297,29 @@ describe("scan routes", () => {
 
   describe("GET /scans", () => {
     it("should return scans for a repository", async () => {
+      const baseScan = {
+        source: "github_pr",
+        attempt: 1,
+        worker_id: null,
+        started_at: null,
+        finished_at: null,
+        heartbeat_at: null,
+        total_score: null,
+        layer_security: null,
+        layer_maintainability: null,
+        layer_ecosystem: null,
+        layer_upgrade_impact: null,
+        methodology_version: null,
+        result_generated_at: null,
+        result: null,
+        decision: null,
+        error: null,
+        created_at: new Date(),
+        updated_at: new Date(),
+      };
       const mockScans = [
-        { id: "scan_1", repo_id: "owner/repo", status: "done" },
-        { id: "scan_2", repo_id: "owner/repo", status: "queued" },
+        { ...baseScan, id: "scan_1", repo_id: "owner/repo", status: "done" as const },
+        { ...baseScan, id: "scan_2", repo_id: "owner/repo", status: "queued" as const },
       ];
       vi.mocked(queries.scans.findByRepoId).mockResolvedValue(mockScans);
 

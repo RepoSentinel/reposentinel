@@ -192,7 +192,7 @@ describe("GitHub Webhook Tests", () => {
 
     it("should accept valid pull_request webhook", async () => {
       const { db } = await import("../db.js");
-      vi.mocked(db.query).mockResolvedValue({ rowCount: 1, rows: [], command: "", oid: 0, fields: [] });
+      (vi.mocked(db.query) as any).mockResolvedValue({ rowCount: 1, rows: [], command: "", oid: 0, fields: [] });
 
       const payload = JSON.stringify({
         action: "opened",
@@ -220,7 +220,7 @@ describe("GitHub Webhook Tests", () => {
 
     it("should accept valid push webhook", async () => {
       const { db } = await import("../db.js");
-      vi.mocked(db.query).mockResolvedValue({ rowCount: 1, rows: [], command: "", oid: 0, fields: [] });
+      (vi.mocked(db.query) as any).mockResolvedValue({ rowCount: 1, rows: [], command: "", oid: 0, fields: [] });
 
       const payload = JSON.stringify({
         installation: { id: 12345 },
@@ -248,7 +248,7 @@ describe("GitHub Webhook Tests", () => {
 
     it("should ignore unsupported webhook events", async () => {
       const { db } = await import("../db.js");
-      vi.mocked(db.query).mockResolvedValue({ rowCount: 1, rows: [], command: "", oid: 0, fields: [] });
+      (vi.mocked(db.query) as any).mockResolvedValue({ rowCount: 1, rows: [], command: "", oid: 0, fields: [] });
 
       const payload = JSON.stringify({ action: "created" });
 
@@ -271,8 +271,8 @@ describe("GitHub Webhook Tests", () => {
     it("should detect and ignore duplicate deliveries", async () => {
       const { db } = await import("../db.js");
       // First call returns 1 row (new), second returns 0 (duplicate)
-      vi.mocked(db.query).mockResolvedValueOnce({ rowCount: 1, rows: [], command: "", oid: 0, fields: [] });
-      vi.mocked(db.query).mockResolvedValueOnce({ rowCount: 0, rows: [], command: "", oid: 0, fields: [] });
+      (vi.mocked(db.query) as any).mockResolvedValueOnce({ rowCount: 1, rows: [], command: "", oid: 0, fields: [] });
+      (vi.mocked(db.query) as any).mockResolvedValueOnce({ rowCount: 0, rows: [], command: "", oid: 0, fields: [] });
 
       const payload = JSON.stringify({ action: "opened" });
       const deliveryId = "test-delivery-duplicate";
