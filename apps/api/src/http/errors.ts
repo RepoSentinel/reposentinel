@@ -29,7 +29,8 @@ export function registerErrorHandling(app: FastifyInstance) {
                     ? "Internal Server Error"
                     : "Error";
 
-    const detail = status >= 500 ? "Unexpected error" : String(err.message ?? "Error");
+    const detail =
+      status >= 500 ? "Unexpected error" : String(err.message ?? "Error");
     const validation = err.validation;
 
     return sendProblem(reply, req, {
@@ -40,4 +41,3 @@ export function registerErrorHandling(app: FastifyInstance) {
     });
   });
 }
-

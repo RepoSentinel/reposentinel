@@ -31,7 +31,10 @@ async function generateApiKey(owner: string, description?: string) {
     console.log(`Authorization: Bearer ${apiKey}`);
     console.log();
   } catch (err: unknown) {
-    console.error("Error generating API key:", err instanceof Error ? err.message : String(err));
+    console.error(
+      "Error generating API key:",
+      err instanceof Error ? err.message : String(err),
+    );
     process.exit(1);
   } finally {
     process.exit(0);

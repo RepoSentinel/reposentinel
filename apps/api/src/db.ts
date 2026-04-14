@@ -17,7 +17,9 @@ export const queries = {
       return rows[0] ?? null;
     },
 
-    async create(data: Pick<ApiKey, "id" | "key_hash" | "owner" | "description">): Promise<ApiKey> {
+    async create(
+      data: Pick<ApiKey, "id" | "key_hash" | "owner" | "description">,
+    ): Promise<ApiKey> {
       const { rows } = await db.query<ApiKey>(
         "INSERT INTO api_keys (id, key_hash, owner, description, created_at) VALUES ($1, $2, $3, $4, NOW()) RETURNING *",
         [data.id, data.key_hash, data.owner, data.description ?? null],
@@ -26,7 +28,10 @@ export const queries = {
     },
 
     async updateLastUsed(keyHash: string): Promise<void> {
-      await db.query("UPDATE api_keys SET last_used_at=NOW() WHERE key_hash=$1", [keyHash]);
+      await db.query(
+        "UPDATE api_keys SET last_used_at=NOW() WHERE key_hash=$1",
+        [keyHash],
+      );
     },
   },
 
@@ -48,10 +53,18 @@ export const queries = {
       return rows[0] ?? null;
     },
 
-    async create(data: Pick<Policy, "id" | "owner" | "name" | "enabled" | "rules">): Promise<Policy> {
+    async create(
+      data: Pick<Policy, "id" | "owner" | "name" | "enabled" | "rules">,
+    ): Promise<Policy> {
       const { rows } = await db.query<Policy>(
         "INSERT INTO policies (id, owner, name, enabled, rules, created_at, updated_at) VALUES ($1,$2,$3,$4,$5::jsonb,NOW(),NOW()) RETURNING *",
-        [data.id, data.owner, data.name, data.enabled, JSON.stringify(data.rules)],
+        [
+          data.id,
+          data.owner,
+          data.name,
+          data.enabled,
+          JSON.stringify(data.rules),
+        ],
       );
       return rows[0];
     },
@@ -89,10 +102,9 @@ export const queries = {
   // Scans
   scans: {
     async findById(id: string): Promise<Scan | null> {
-      const { rows } = await db.query<Scan>(
-        "SELECT * FROM scans WHERE id=$1",
-        [id],
-      );
+      const { rows } = await db.query<Scan>("SELECT * FROM scans WHERE id=$1", [
+        id,
+      ]);
       return rows[0] ?? null;
     },
 
@@ -104,7 +116,9 @@ export const queries = {
       return rows;
     },
 
-    async create(data: Pick<Scan, "id" | "repo_id" | "status" | "source">): Promise<void> {
+    async create(
+      data: Pick<Scan, "id" | "repo_id" | "status" | "source">,
+    ): Promise<void> {
       await db.query(
         "INSERT INTO scans (id, repo_id, status, source) VALUES ($1, $2, $3, $4) ON CONFLICT (id) DO NOTHING",
         [data.id, data.repo_id, data.status, data.source],

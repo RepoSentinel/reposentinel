@@ -17,7 +17,7 @@ Please contact:
 
 **Email:** legal@mergesignal.com
 
-*Note: If this project is currently operated by an individual or organization without a dedicated legal email, replace with appropriate contact information or use the GitHub issue system for non-confidential inquiries.*
+_Note: If this project is currently operated by an individual or organization without a dedicated legal email, replace with appropriate contact information or use the GitHub issue system for non-confidential inquiries._
 
 ## Data Protection Officer (GDPR)
 
@@ -25,7 +25,7 @@ For GDPR-related inquiries and data subject requests:
 
 **Email:** dpo@mergesignal.com
 
-*Note: Required only if processing EU/EEA user data. Update with actual DPO contact information.*
+_Note: Required only if processing EU/EEA user data. Update with actual DPO contact information._
 
 ## General Support
 
@@ -61,7 +61,7 @@ If MergeSignal is operated by a legal entity, provide a mailing address here for
 [Country]
 ```
 
-*Note: Update with actual entity information if incorporated.*
+_Note: Update with actual entity information if incorporated._
 
 ## Response Time
 
@@ -83,7 +83,7 @@ This contact information is current as of **March 16, 2026**. Check this file pe
 
 ---
 
-**Note to maintainers**: 
+**Note to maintainers**:
 
 Before public launch, ensure that:
 

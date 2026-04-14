@@ -155,6 +155,7 @@ The default configuration includes:
 **Total estimated cost: ~$225-250/month**
 
 To reduce costs:
+
 - Use smaller instance types
 - Reduce EKS node count
 - Use single availability zone (not recommended for production)

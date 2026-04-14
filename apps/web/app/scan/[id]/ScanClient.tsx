@@ -23,7 +23,11 @@ type ScanResult = {
     ecosystem: number;
     upgradeImpact: number;
   };
-  recommendations?: Array<{ id?: string; title?: string; priorityScore?: number }>;
+  recommendations?: Array<{
+    id?: string;
+    title?: string;
+    priorityScore?: number;
+  }>;
   findings?: unknown[];
   explain?: {
     reasons?: Array<{ id?: string; title?: string; scoreImpact?: number }>;
@@ -60,7 +64,8 @@ export default function ScanClient({ id }: { id: string }) {
     es.addEventListener("status", (e) => {
       try {
         const next = JSON.parse((e as MessageEvent).data) as ScanRow;
-        terminalRef.current = next.status === "done" || next.status === "failed";
+        terminalRef.current =
+          next.status === "done" || next.status === "failed";
         setErr(null);
         setData(next);
         if (terminalRef.current) {
@@ -84,12 +89,22 @@ export default function ScanClient({ id }: { id: string }) {
 
   const score = data.result?.totalScore;
   const layers = data.result?.layerScores;
-  const recs = Array.isArray(data.result?.recommendations) ? data.result.recommendations : [];
-  const findings = Array.isArray(data.result?.findings) ? data.result.findings : [];
-  const reasons = Array.isArray(data.result?.explain?.reasons) ? data.result.explain.reasons : [];
+  const recs = Array.isArray(data.result?.recommendations)
+    ? data.result.recommendations
+    : [];
+  const findings = Array.isArray(data.result?.findings)
+    ? data.result.findings
+    : [];
+  const reasons = Array.isArray(data.result?.explain?.reasons)
+    ? data.result.explain.reasons
+    : [];
   const graphInsights = data.result?.graphInsights;
-  const deepest = Array.isArray(graphInsights?.deepest) ? graphInsights.deepest : [];
-  const insights = Array.isArray(data.result?.insights) ? data.result.insights : [];
+  const deepest = Array.isArray(graphInsights?.deepest)
+    ? graphInsights.deepest
+    : [];
+  const insights = Array.isArray(data.result?.insights)
+    ? data.result.insights
+    : [];
   const decision = data.result?.decision;
   const dotClass =
     data.status === "queued"
@@ -112,7 +127,9 @@ export default function ScanClient({ id }: { id: string }) {
         }
       >
         {data.status === "running" || data.status === "queued" ? (
-          <div className={cardStyles.note}>This page updates automatically.</div>
+          <div className={cardStyles.note}>
+            This page updates automatically.
+          </div>
         ) : null}
         {decision && data.status === "done" && (
           <div style={{ marginTop: 12 }}>
@@ -138,13 +155,17 @@ export default function ScanClient({ id }: { id: string }) {
 
       <Card title="Risk score">
         <div className={styles.score}>
-          <div className={styles.scoreValue}>{typeof score === "number" ? score : "n/a"}</div>
+          <div className={styles.scoreValue}>
+            {typeof score === "number" ? score : "n/a"}
+          </div>
           <div className={styles.scoreMeta}>0 is best • 100 is worst</div>
         </div>
         {layers ? (
           <div className={cardStyles.note}>
-            security: <b>{layers.security}</b> • maintainability: <b>{layers.maintainability}</b> • ecosystem:{" "}
-            <b>{layers.ecosystem}</b> • upgradeImpact: <b>{layers.upgradeImpact}</b>
+            security: <b>{layers.security}</b> • maintainability:{" "}
+            <b>{layers.maintainability}</b> • ecosystem:{" "}
+            <b>{layers.ecosystem}</b> • upgradeImpact:{" "}
+            <b>{layers.upgradeImpact}</b>
           </div>
         ) : (
           <div className={cardStyles.muted}>No layer breakdown yet.</div>
@@ -160,7 +181,9 @@ export default function ScanClient({ id }: { id: string }) {
               {recs.slice(0, 5).map((r) => (
                 <li key={String(r.id ?? r.title)}>
                   <b>{String(r.title ?? "Untitled")}</b>{" "}
-                  <span className={cardStyles.muted}>({Number(r.priorityScore ?? 0)})</span>
+                  <span className={cardStyles.muted}>
+                    ({Number(r.priorityScore ?? 0)})
+                  </span>
                 </li>
               ))}
             </ol>
@@ -174,15 +197,31 @@ export default function ScanClient({ id }: { id: string }) {
       )}
 
       {data.status === "done" && insights.length > 0 && (
-        <Card title="Critical Insights" subtitle={<span className={cardStyles.muted}>Key findings from code analysis</span>}>
+        <Card
+          title="Critical Insights"
+          subtitle={
+            <span className={cardStyles.muted}>
+              Key findings from code analysis
+            </span>
+          }
+        >
           <div className={styles.insightsList}>
             {insights.map((insight, idx) => (
-              <div key={idx} className={styles.insight} data-priority={insight.priority}>
+              <div
+                key={idx}
+                className={styles.insight}
+                data-priority={insight.priority}
+              >
                 <div className={styles.insightHeader}>
-                  <span className={styles.priorityBadge} data-priority={insight.priority}>
+                  <span
+                    className={styles.priorityBadge}
+                    data-priority={insight.priority}
+                  >
                     {insight.priority}
                   </span>
-                  <span className={styles.insightType}>{insight.type.replace(/_/g, " ")}</span>
+                  <span className={styles.insightType}>
+                    {insight.type.replace(/_/g, " ")}
+                  </span>
                 </div>
                 <p className={styles.insightMessage}>{insight.message}</p>
                 <p className={styles.insightAction}>
@@ -197,7 +236,9 @@ export default function ScanClient({ id }: { id: string }) {
                           <code>{file}</code>
                         </li>
                       ))}
-                      {insight.files.length > 10 && <li>...and {insight.files.length - 10} more</li>}
+                      {insight.files.length > 10 && (
+                        <li>...and {insight.files.length - 10} more</li>
+                      )}
                     </ul>
                   </details>
                 )}
@@ -208,9 +249,15 @@ export default function ScanClient({ id }: { id: string }) {
       )}
 
       {data.status === "done" && data.result?.codeAnalysisMetrics && (
-        <Card title="Code Analysis" subtitle={<span className={cardStyles.muted}>Repository source analysis</span>}>
+        <Card
+          title="Code Analysis"
+          subtitle={
+            <span className={cardStyles.muted}>Repository source analysis</span>
+          }
+        >
           <div className={cardStyles.note}>
-            Analyzed <b>{data.result.codeAnalysisMetrics.filesAnalyzed}</b> files
+            Analyzed <b>{data.result.codeAnalysisMetrics.filesAnalyzed}</b>{" "}
+            files
             {data.result.codeAnalysisMetrics.fromCache && " (from cache)"}
             {data.result.codeAnalysisMetrics.analysisTimeMs &&
               ` in ${(data.result.codeAnalysisMetrics.analysisTimeMs / 1000).toFixed(1)}s`}
@@ -224,7 +271,12 @@ export default function ScanClient({ id }: { id: string }) {
       )}
 
       {data.status === "done" && (
-        <Card title="Why this is risky" subtitle={<span className={cardStyles.muted}>Top contributing signals</span>}>
+        <Card
+          title="Why this is risky"
+          subtitle={
+            <span className={cardStyles.muted}>Top contributing signals</span>
+          }
+        >
           {reasons.length === 0 ? (
             <div className={cardStyles.muted}>No explainability data yet.</div>
           ) : (
@@ -232,7 +284,9 @@ export default function ScanClient({ id }: { id: string }) {
               {reasons.slice(0, 6).map((r) => (
                 <li key={String(r.id ?? r.title)}>
                   <b>{String(r.title ?? "Reason")}</b>{" "}
-                  <span className={cardStyles.muted}>(+{Number(r.scoreImpact ?? 0)})</span>
+                  <span className={cardStyles.muted}>
+                    (+{Number(r.scoreImpact ?? 0)})
+                  </span>
                 </li>
               ))}
             </ul>
@@ -243,7 +297,11 @@ export default function ScanClient({ id }: { id: string }) {
       {data.status === "done" && (
         <Card
           title="Dependency graph intelligence"
-          subtitle={<span className={cardStyles.muted}>Transitive context and nesting depth</span>}
+          subtitle={
+            <span className={cardStyles.muted}>
+              Transitive context and nesting depth
+            </span>
+          }
         >
           {deepest.length === 0 ? (
             <div className={cardStyles.muted}>No graph insights yet.</div>
@@ -253,7 +311,8 @@ export default function ScanClient({ id }: { id: string }) {
                 <li key={String(x.packageName ?? x.version ?? Math.random())}>
                   <b>{String(x.packageName ?? "package")}</b>{" "}
                   <span className={cardStyles.muted}>
-                    {x.direct ? "direct" : "transitive"} • depth {Number(x.depth ?? 0)}
+                    {x.direct ? "direct" : "transitive"} • depth{" "}
+                    {Number(x.depth ?? 0)}
                   </span>
                   {Array.isArray(x.via) && x.via.length ? (
                     <div className={cardStyles.note} style={{ marginTop: 6 }}>
@@ -279,7 +338,11 @@ export default function ScanClient({ id }: { id: string }) {
             {showRaw ? "Hide" : "Show"} raw JSON
           </Button>
         </Row>
-        {showRaw ? <pre className={styles.detailsPre}>{JSON.stringify(data, null, 2)}</pre> : null}
+        {showRaw ? (
+          <pre className={styles.detailsPre}>
+            {JSON.stringify(data, null, 2)}
+          </pre>
+        ) : null}
       </Card>
     </div>
   );

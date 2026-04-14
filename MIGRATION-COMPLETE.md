@@ -9,9 +9,11 @@ Successfully migrated the worker to a private package and updated the main repos
 ## Changes Made to Main Repo
 
 ### 1. ✅ Deleted `apps/worker` Directory
+
 All worker code has been moved to the private package `@mergesignal/engine-private`.
 
 ### 2. ✅ Created `.npmrc` for GitHub Packages Access
+
 ```
 @mergesignal:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
@@ -20,12 +22,14 @@ All worker code has been moved to the private package `@mergesignal/engine-priva
 This allows the repo to access private packages from GitHub Packages.
 
 ### 3. ✅ Updated `README.md`
+
 - Removed references to `apps/worker` from dev server instructions
 - Updated architecture section to mention private worker package
 - Added "Production Deployment" section with instructions
 - Updated PR comments configuration note
 
 ### 4. ✅ Workspace Configuration
+
 - `pnpm-workspace.yaml` unchanged (workspace glob patterns still work)
 - `turbo.json` unchanged (no worker-specific tasks existed)
 
@@ -47,6 +51,7 @@ Changes:
 ## Next Steps
 
 ### Step 1: Review Changes
+
 ```bash
 cd /Users/yaronshafir/ventures/mergesignal
 
@@ -59,6 +64,7 @@ git status
 ```
 
 ### Step 2: Test Locally (Optional)
+
 Before committing, you can test that the repo still builds:
 
 ```bash
@@ -75,6 +81,7 @@ pnpm -C apps/web build
 ```
 
 ### Step 3: Commit Changes
+
 ```bash
 cd /Users/yaronshafir/ventures/mergesignal
 
@@ -98,6 +105,7 @@ git push origin main
 ## Repository Architecture (Before vs After)
 
 ### Before:
+
 ```
 mergesignal/ (public repo)
 ├── apps/
@@ -112,6 +120,7 @@ mergesignal/ (public repo)
 ```
 
 ### After:
+
 ```
 mergesignal/ (public repo)
 ├── .npmrc                    # NEW: GitHub Packages config
@@ -139,6 +148,7 @@ mergesignal-engine/ (private repo)
 ## How It Works Now
 
 ### Development (for contributors with access)
+
 ```bash
 # Clone public repo
 git clone https://github.com/MergeSignal/mergesignal.git
@@ -151,6 +161,7 @@ pnpm install
 ```
 
 ### Production Deployment
+
 ```bash
 # Set GITHUB_TOKEN in environment
 export GITHUB_TOKEN=your_token_here
@@ -182,6 +193,7 @@ pnpm -C apps/web start
 ## What's Public vs Private
 
 ### Public (mergesignal repo):
+
 - API server (Fastify, routes, auth, webhooks)
 - Web UI (Next.js frontend)
 - CLI tool (local scanning)
@@ -191,6 +203,7 @@ pnpm -C apps/web start
 - Documentation
 
 ### Private (@mergesignal/engine-private package):
+
 - BullMQ worker
 - Scan processing logic
 - GitHub PR comment generation
@@ -205,19 +218,25 @@ pnpm -C apps/web start
 ## Troubleshooting
 
 ### Error: Cannot find module '@mergesignal/engine-private'
+
 You need to:
+
 1. Set `GITHUB_TOKEN` environment variable
 2. Have access to the private repo
 3. Run `pnpm install`
 
 ### 404 when installing private package
+
 Make sure:
+
 - Your GitHub token has `read:packages` permission
 - You have access to `MergeSignal/mergesignal-engine` repo
 - The package has been published to GitHub Packages
 
 ### Build errors after migration
+
 The public repo should build fine without the private package. If you see errors:
+
 - Make sure you're not trying to import from `@mergesignal/worker`
 - The API and web don't depend on the worker directly
 
@@ -226,6 +245,7 @@ The public repo should build fine without the private package. If you see errors
 ## Next Steps After Commit
 
 ### Publish Shared Packages to GitHub Packages
+
 For production deployment, you may want to publish the shared packages:
 
 ```bash
@@ -241,7 +261,9 @@ npm publish --registry=https://npm.pkg.github.com
 Then update the private package to use published versions instead of workspace references.
 
 ### Set Up CI/CD
+
 Update GitHub Actions workflows to:
+
 1. Set `GITHUB_TOKEN` for package access
 2. Build and deploy API and web
 3. Deploy worker from private package

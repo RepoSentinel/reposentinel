@@ -49,4 +49,3 @@ export async function registerRoutes(app: FastifyInstance) {
     { prefix: "/v1" },
   );
 }
-

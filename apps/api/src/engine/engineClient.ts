@@ -16,7 +16,8 @@ export async function analyze(request: ScanRequest): Promise<ScanResult> {
       {
         id: "stub-finding",
         title: "Engine stub finding",
-        description: "This is a placeholder result produced by the engine stub.",
+        description:
+          "This is a placeholder result produced by the engine stub.",
         severity: "medium",
         packageName: "example-package",
         recommendation: "Replace this stub with real analysis logic.",
@@ -28,7 +29,8 @@ export async function analyze(request: ScanRequest): Promise<ScanResult> {
 
 function hashToScore(input: string): number {
   let h = 0;
-  for (let i = 0; i < input.length; i++) h = (h * 31 + input.charCodeAt(i)) >>> 0;
+  for (let i = 0; i < input.length; i++)
+    h = (h * 31 + input.charCodeAt(i)) >>> 0;
   return (h % 61) + 20; // 20..80
 }
 

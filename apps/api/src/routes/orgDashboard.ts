@@ -26,11 +26,20 @@ type RepoRow = {
 export async function orgDashboardRoutes(app: FastifyInstance) {
   app.get("/org/:owner/dashboard", async (req, reply) => {
     const owner = String((req.params as { owner: string }).owner ?? "").trim();
-    if (!owner) return sendProblem(reply, req, { status: 400, title: "Bad Request", detail: "owner is required" });
+    if (!owner)
+      return sendProblem(reply, req, {
+        status: 400,
+        title: "Bad Request",
+        detail: "owner is required",
+      });
 
     // Authorization check: ensure authenticated owner matches requested owner
     if (req.authenticatedOwner && req.authenticatedOwner !== owner) {
-      return sendProblem(reply, req, { status: 403, title: "Forbidden", detail: "Access denied to this organization" });
+      return sendProblem(reply, req, {
+        status: 403,
+        title: "Forbidden",
+        detail: "Access denied to this organization",
+      });
     }
 
     const limitRaw = (req.query as { limit?: string })?.limit;
@@ -112,13 +121,18 @@ export async function orgDashboardRoutes(app: FastifyInstance) {
       deltaTotalScore: r.delta_total_score,
     }));
 
-    const scored = repos.filter((x) => typeof x.latest.totalScore === "number") as Array<
+    const scored = repos.filter(
+      (x) => typeof x.latest.totalScore === "number",
+    ) as Array<
       RepoRow & { latest: RepoRow["latest"] & { totalScore: number } }
     >;
     const avgScore =
       scored.length === 0
         ? null
-        : Math.round(scored.reduce((sum, r) => sum + r.latest.totalScore, 0) / scored.length);
+        : Math.round(
+            scored.reduce((sum, r) => sum + r.latest.totalScore, 0) /
+              scored.length,
+          );
 
     const worst = [...scored]
       .sort((a, b) => a.latest.totalScore - b.latest.totalScore)
@@ -137,4 +151,3 @@ export async function orgDashboardRoutes(app: FastifyInstance) {
     };
   });
 }
-

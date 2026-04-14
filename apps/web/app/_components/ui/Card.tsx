@@ -15,7 +15,11 @@ export function Card({
 }) {
   const Tag = as;
   return (
-    <Tag className={[styles.card, padding ? "" : styles.noPadding].filter(Boolean).join(" ")}>
+    <Tag
+      className={[styles.card, padding ? "" : styles.noPadding]
+        .filter(Boolean)
+        .join(" ")}
+    >
       {title ? <h2 className={styles.title}>{title}</h2> : null}
       {subtitle ? <p className={styles.muted}>{subtitle}</p> : null}
       {children}
@@ -24,4 +28,3 @@ export function Card({
 }
 
 export { styles as cardStyles };
-

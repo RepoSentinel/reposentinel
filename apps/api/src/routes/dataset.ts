@@ -44,7 +44,12 @@ export async function datasetRoutes(app: FastifyInstance) {
 
   app.get("/dataset/package/:name", async (req, reply) => {
     const name = String((req.params as { name: string })?.name ?? "").trim();
-    if (!name) return sendProblem(reply, req, { status: 400, title: "Bad Request", detail: "name is required" });
+    if (!name)
+      return sendProblem(reply, req, {
+        status: 400,
+        title: "Bad Request",
+        detail: "name is required",
+      });
 
     const days = clampInt((req.query as { days?: string })?.days, 30, 1, 365);
 
@@ -81,4 +86,3 @@ export async function datasetRoutes(app: FastifyInstance) {
     return { package: row, history: history.rows };
   });
 }
-

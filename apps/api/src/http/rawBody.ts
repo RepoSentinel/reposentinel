@@ -9,4 +9,3 @@ export async function registerRawBody(app: FastifyInstance) {
     runFirst: true,
   });
 }
-

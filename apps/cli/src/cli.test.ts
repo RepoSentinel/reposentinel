@@ -30,7 +30,11 @@ describe("CLI Argument Parsing", () => {
         continue;
       }
 
-      const takesValue = a === "--out" || a === "--repo-id" || a === "--lockfile" || a === "--fail-above";
+      const takesValue =
+        a === "--out" ||
+        a === "--repo-id" ||
+        a === "--lockfile" ||
+        a === "--fail-above";
       if (takesValue) {
         const v = argv[i + 1];
         if (!v || v.startsWith("--")) throw new Error(`${a} expects a value`);
@@ -85,7 +89,14 @@ describe("CLI Argument Parsing", () => {
   });
 
   it("should parse multiple flags", () => {
-    const result = parseArgs(["scan", "--json", "--out", "result.json", "--repo-id", "test/repo"]);
+    const result = parseArgs([
+      "scan",
+      "--json",
+      "--out",
+      "result.json",
+      "--repo-id",
+      "test/repo",
+    ]);
     expect(result._).toEqual(["scan"]);
     expect(result["--json"]).toBe(true);
     expect(result["--out"]).toBe("result.json");
@@ -93,7 +104,9 @@ describe("CLI Argument Parsing", () => {
   });
 
   it("should throw on unknown flag", () => {
-    expect(() => parseArgs(["scan", "--unknown"])).toThrow("Unknown flag: --unknown");
+    expect(() => parseArgs(["scan", "--unknown"])).toThrow(
+      "Unknown flag: --unknown",
+    );
   });
 
   it("should throw when flag expects value but none provided", () => {
@@ -101,7 +114,9 @@ describe("CLI Argument Parsing", () => {
   });
 
   it("should throw when flag expects value but gets another flag", () => {
-    expect(() => parseArgs(["scan", "--out", "--json"])).toThrow("--out expects a value");
+    expect(() => parseArgs(["scan", "--out", "--json"])).toThrow(
+      "--out expects a value",
+    );
   });
 });
 
@@ -121,7 +136,9 @@ describe("inferManagerFromFilename", () => {
 
   it("should detect npm lockfile", () => {
     expect(inferManagerFromFilename("package-lock.json")).toBe("npm");
-    expect(inferManagerFromFilename("/some/path/package-lock.json")).toBe("npm");
+    expect(inferManagerFromFilename("/some/path/package-lock.json")).toBe(
+      "npm",
+    );
   });
 
   it("should detect yarn lockfile", () => {

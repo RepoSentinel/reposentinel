@@ -39,9 +39,12 @@ export default async function Page({
 
   let data: Dashboard;
   try {
-    data = await apiGet<Dashboard>(`/org/${encodeURIComponent(owner)}/dashboard?limit=${limit}`);
+    data = await apiGet<Dashboard>(
+      `/org/${encodeURIComponent(owner)}/dashboard?limit=${limit}`,
+    );
   } catch (err: unknown) {
-    const errorText = err instanceof ApiError ? err.body ?? err.message : String(err);
+    const errorText =
+      err instanceof ApiError ? (err.body ?? err.message) : String(err);
     return (
       <AppShell title="Org dashboard" subtitle={owner} owner={owner}>
         <pre style={{ whiteSpace: "pre-wrap" }}>{errorText}</pre>
@@ -53,16 +56,15 @@ export default async function Page({
   const hasRepos = data.repos.length > 0;
 
   return (
-    <AppShell
-      title="Org dashboard"
-      subtitle={owner}
-      owner={owner}
-    >
+    <AppShell title="Org dashboard" subtitle={owner} owner={owner}>
       {/* 5. Highlight worst repos - moved to top */}
       {data.summary.worst.length > 0 && (
         <Card as="div" title="⚠️ High Risk Repositories" padding={true}>
           <div className={styles.warningCard}>
-            <p className={cardStyles.muted}>These repositories have the highest risk scores and require immediate attention:</p>
+            <p className={cardStyles.muted}>
+              These repositories have the highest risk scores and require
+              immediate attention:
+            </p>
             <div className={styles.worstReposList}>
               {data.summary.worst.map((w) => (
                 <div key={w.repoId} className={styles.worstRepoItem}>
@@ -81,17 +83,21 @@ export default async function Page({
           <div className={styles.metricValue}>{data.summary.repoCount}</div>
         </Card>
         <Card as="div" title="Scored Repos">
-          <div className={styles.metricValue}>{data.summary.scoredRepoCount}</div>
+          <div className={styles.metricValue}>
+            {data.summary.scoredRepoCount}
+          </div>
         </Card>
         <Card as="div" title="Avg Score">
           <div className={styles.metricValue}>
-            {data.summary.avgScore !== null ? Math.round(data.summary.avgScore) : "n/a"}
+            {data.summary.avgScore !== null
+              ? Math.round(data.summary.avgScore)
+              : "n/a"}
           </div>
           {/* 8. Score distribution visualization */}
           {data.summary.avgScore !== null && (
             <div className={styles.scoreBar}>
-              <div 
-                className={styles.scoreBarFill} 
+              <div
+                className={styles.scoreBarFill}
                 style={{ width: `${data.summary.avgScore}%` }}
               />
             </div>
@@ -117,10 +123,12 @@ export default async function Page({
           <DataTable
             headers={["Repo", "Score", "Δ", "Status", "Last scan", ""]}
             rows={data.repos.map((r) => (
-              <tr 
+              <tr
                 key={r.repoId}
                 className={styles.tableRow}
-                onClick={() => window.location.href = `/scan/${r.latest.scanId}`}
+                onClick={() =>
+                  (window.location.href = `/scan/${r.latest.scanId}`)
+                }
               >
                 <TD>
                   <code>{r.repoId}</code>
@@ -136,7 +144,10 @@ export default async function Page({
                 </TD>
                 <TD>{new Date(r.latest.createdAt).toLocaleString()}</TD>
                 <TD>
-                  <Link href={`/scan/${r.latest.scanId}`} className={styles.openLink}>
+                  <Link
+                    href={`/scan/${r.latest.scanId}`}
+                    className={styles.openLink}
+                  >
                     Open
                   </Link>
                 </TD>
@@ -163,7 +174,9 @@ function ScoreBadge({ score }: { score: number | null }) {
 
   return (
     <span className={styles.scoreCell}>
-      <span className={`${styles.scoreBadge} ${badgeClass}`}>{Math.round(score)}</span>
+      <span className={`${styles.scoreBadge} ${badgeClass}`}>
+        {Math.round(score)}
+      </span>
     </span>
   );
 }
@@ -222,4 +235,3 @@ function StatusBadge({ status }: { status: string }) {
     </span>
   );
 }
-

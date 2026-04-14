@@ -35,7 +35,9 @@ export async function createScanAndEnqueue({
   const owner = getOwnerFromRepoId(repoId);
   const limits = getLimitsForOwner(owner);
 
-  const lockfileBytes = lockfile?.content ? Buffer.byteLength(lockfile.content, "utf8") : 0;
+  const lockfileBytes = lockfile?.content
+    ? Buffer.byteLength(lockfile.content, "utf8")
+    : 0;
   if (lockfileBytes > limits.scanMaxLockfileBytes) {
     throw Object.assign(new Error("lockfile too large"), { statusCode: 413 });
   }
@@ -57,7 +59,10 @@ export async function createScanAndEnqueue({
         );
     const c = Number(rows?.[0]?.c ?? 0);
     if (c >= limit) {
-      throw Object.assign(new Error("scan quota exceeded"), { statusCode: 429, expose: true });
+      throw Object.assign(new Error("scan quota exceeded"), {
+        statusCode: 429,
+        expose: true,
+      });
     }
   }
 
@@ -66,7 +71,10 @@ export async function createScanAndEnqueue({
     await client.query("BEGIN");
 
     if (scanId) {
-      const existing = await client.query("SELECT id, status FROM scans WHERE id = $1", [scanId]);
+      const existing = await client.query(
+        "SELECT id, status FROM scans WHERE id = $1",
+        [scanId],
+      );
       if (existing.rowCount && existing.rowCount > 0) {
         const status = existing.rows[0].status;
         await client.query("ROLLBACK");
@@ -103,7 +111,16 @@ export async function createScanAndEnqueue({
   try {
     await scanQueue.add(
       "scan",
-      { scanId: id, repoId, dependencyGraph, lockfile, baseLockfile, repoSource, changedFiles, github },
+      {
+        scanId: id,
+        repoId,
+        dependencyGraph,
+        lockfile,
+        baseLockfile,
+        repoSource,
+        changedFiles,
+        github,
+      },
       {
         jobId: id,
         attempts: 3,
@@ -126,4 +143,3 @@ export async function createScanAndEnqueue({
 
   return { scanId: id };
 }
-

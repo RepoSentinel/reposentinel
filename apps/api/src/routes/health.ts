@@ -4,7 +4,10 @@ import { scanQueue } from "../queue.js";
 
 export async function healthRoutes(app: FastifyInstance) {
   app.get("/health", async (req, reply) => {
-    const checks: Record<string, { ok: boolean; error?: string; latencyMs?: number }> = {};
+    const checks: Record<
+      string,
+      { ok: boolean; error?: string; latencyMs?: number }
+    > = {};
     let allOk = true;
 
     // Database connectivity check
@@ -13,9 +16,15 @@ export async function healthRoutes(app: FastifyInstance) {
       await db.query("SELECT 1");
       checks.database = { ok: true, latencyMs: Date.now() - dbStart };
     } catch (err: unknown) {
-      checks.database = { ok: false, error: err instanceof Error ? err.message : String(err) };
+      checks.database = {
+        ok: false,
+        error: err instanceof Error ? err.message : String(err),
+      };
       allOk = false;
-      app.log.error({ err, check: "database" }, "Health check failed for database");
+      app.log.error(
+        { err, check: "database" },
+        "Health check failed for database",
+      );
     }
 
     // Redis connectivity check (via BullMQ queue)
@@ -25,7 +34,10 @@ export async function healthRoutes(app: FastifyInstance) {
       await client.ping();
       checks.redis = { ok: true, latencyMs: Date.now() - redisStart };
     } catch (err: unknown) {
-      checks.redis = { ok: false, error: err instanceof Error ? err.message : String(err) };
+      checks.redis = {
+        ok: false,
+        error: err instanceof Error ? err.message : String(err),
+      };
       allOk = false;
       app.log.error({ err, check: "redis" }, "Health check failed for redis");
     }

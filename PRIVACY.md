@@ -193,6 +193,7 @@ The Service uses minimal tracking technologies:
 - **Logs**: IP addresses and request headers for security and debugging
 
 We do **not** use:
+
 - Third-party advertising or analytics cookies
 - Cross-site tracking or behavioral profiling
 - Persistent identifiers beyond what is necessary for Service operation

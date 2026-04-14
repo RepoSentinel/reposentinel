@@ -12,9 +12,15 @@ export async function scanRoutes(app: FastifyInstance) {
 
     // Authorization check: if using org-scoped API key, ensure repoId matches owner
     if (req.authenticatedOwner) {
-      const repoOwner = body.repoId.includes("/") ? body.repoId.split("/")[0] : body.repoId;
+      const repoOwner = body.repoId.includes("/")
+        ? body.repoId.split("/")[0]
+        : body.repoId;
       if (repoOwner !== req.authenticatedOwner) {
-        return sendProblem(reply, req, { status: 403, title: "Forbidden", detail: "Access denied to this repository" });
+        return sendProblem(reply, req, {
+          status: 403,
+          title: "Forbidden",
+          detail: "Access denied to this repository",
+        });
       }
     }
 
@@ -30,10 +36,18 @@ export async function scanRoutes(app: FastifyInstance) {
     } catch (e: unknown) {
       const code = Number((e as { statusCode?: number })?.statusCode ?? 500);
       if (code === 413) {
-        return sendProblem(reply, req, { status: 413, title: "Payload Too Large", detail: "lockfile too large" });
+        return sendProblem(reply, req, {
+          status: 413,
+          title: "Payload Too Large",
+          detail: "lockfile too large",
+        });
       }
       if (code === 429) {
-        return sendProblem(reply, req, { status: 429, title: "Too Many Requests", detail: "scan quota exceeded" });
+        return sendProblem(reply, req, {
+          status: 429,
+          title: "Too Many Requests",
+          detail: "scan quota exceeded",
+        });
       }
       throw e;
     }
@@ -44,14 +58,24 @@ export async function scanRoutes(app: FastifyInstance) {
 
     const scan = await queries.scans.findById(id);
     if (!scan) {
-      return sendProblem(reply, req, { status: 404, title: "Not Found", detail: "scan not found" });
+      return sendProblem(reply, req, {
+        status: 404,
+        title: "Not Found",
+        detail: "scan not found",
+      });
     }
 
     // Authorization check: if using org-scoped API key, ensure scan belongs to owner
     if (req.authenticatedOwner) {
-      const repoOwner = scan.repo_id.includes("/") ? scan.repo_id.split("/")[0] : scan.repo_id;
+      const repoOwner = scan.repo_id.includes("/")
+        ? scan.repo_id.split("/")[0]
+        : scan.repo_id;
       if (repoOwner !== req.authenticatedOwner) {
-        return sendProblem(reply, req, { status: 403, title: "Forbidden", detail: "Access denied to this scan" });
+        return sendProblem(reply, req, {
+          status: 403,
+          title: "Forbidden",
+          detail: "Access denied to this scan",
+        });
       }
     }
 
@@ -61,14 +85,22 @@ export async function scanRoutes(app: FastifyInstance) {
   app.get("/scans", async (req, reply) => {
     const { repoId, limit } = req.query as { repoId?: string; limit?: string };
     if (!repoId || typeof repoId !== "string") {
-      return sendProblem(reply, req, { status: 400, title: "Bad Request", detail: "repoId is required" });
+      return sendProblem(reply, req, {
+        status: 400,
+        title: "Bad Request",
+        detail: "repoId is required",
+      });
     }
 
     // Authorization check: if using org-scoped API key, ensure repoId belongs to owner
     if (req.authenticatedOwner) {
       const repoOwner = repoId.includes("/") ? repoId.split("/")[0] : repoId;
       if (repoOwner !== req.authenticatedOwner) {
-        return sendProblem(reply, req, { status: 403, title: "Forbidden", detail: "Access denied to this repository" });
+        return sendProblem(reply, req, {
+          status: 403,
+          title: "Forbidden",
+          detail: "Access denied to this repository",
+        });
       }
     }
 

@@ -39,7 +39,11 @@ export async function apiGet<T>(path: string): Promise<T> {
 
   if (!res.ok) {
     const text = await res.text();
-    throw new ApiError(`API request failed: ${res.status} ${res.statusText}`, res.status, text);
+    throw new ApiError(
+      `API request failed: ${res.status} ${res.statusText}`,
+      res.status,
+      text,
+    );
   }
 
   return res.json();

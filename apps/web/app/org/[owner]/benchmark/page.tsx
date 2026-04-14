@@ -19,7 +19,11 @@ type Summary = {
   best: Array<{ repoId: string; totalScore: number; createdAt: string }>;
 };
 
-export default async function Page({ params }: { params: Promise<{ owner: string }> }) {
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ owner: string }>;
+}) {
   const { owner } = await params;
 
   let global: Summary;
@@ -30,7 +34,8 @@ export default async function Page({ params }: { params: Promise<{ owner: string
       apiGet<Summary>(`/benchmark/org/${encodeURIComponent(owner)}`),
     ]);
   } catch (err: unknown) {
-    const errorText = err instanceof ApiError ? err.body ?? err.message : String(err);
+    const errorText =
+      err instanceof ApiError ? (err.body ?? err.message) : String(err);
     return (
       <AppShell title="Benchmark" subtitle={owner} owner={owner}>
         <pre style={{ whiteSpace: "pre-wrap" }}>{errorText}</pre>
@@ -73,7 +78,12 @@ function SummaryCards({ s }: { s: Summary }) {
   return (
     <div className={styles.grid}>
       {items.map(([k, v]) => (
-        <Card key={k} as="div" title={k} subtitle={<b className={styles.metricValue}>{v}</b>}>
+        <Card
+          key={k}
+          as="div"
+          title={k}
+          subtitle={<b className={styles.metricValue}>{v}</b>}
+        >
           <div />
         </Card>
       ))}
@@ -81,8 +91,13 @@ function SummaryCards({ s }: { s: Summary }) {
   );
 }
 
-function RepoList({ rows }: { rows: Array<{ repoId: string; totalScore: number; createdAt: string }> }) {
-  if (!rows.length) return <div className={cardStyles.muted}>No scored repos yet.</div>;
+function RepoList({
+  rows,
+}: {
+  rows: Array<{ repoId: string; totalScore: number; createdAt: string }>;
+}) {
+  if (!rows.length)
+    return <div className={cardStyles.muted}>No scored repos yet.</div>;
   return (
     <DataTable
       headers={["Repo", "Score", "Last scan"]}
@@ -100,4 +115,3 @@ function RepoList({ rows }: { rows: Array<{ repoId: string; totalScore: number; 
     />
   );
 }
-

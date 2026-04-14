@@ -1,5 +1,9 @@
 import type { RepoSource } from "@mergesignal/shared";
-import { CodeAnalysisCache, type CacheKey, type CachedAnalysis } from "./codeAnalysisCache.js";
+import {
+  CodeAnalysisCache,
+  type CacheKey,
+  type CachedAnalysis,
+} from "./codeAnalysisCache.js";
 
 export type AnalysisResult = {
   imports: Record<string, string[]>;
@@ -46,7 +50,7 @@ export async function analyzeSourceFiles(
   }
 
   const startTime = Date.now();
-  
+
   try {
     const result = await Promise.race([
       performAnalysis(repoSource, changedFiles),
@@ -95,7 +99,11 @@ export async function analyzeSourceFiles(
 async function performAnalysis(
   repoSource: RepoSource,
   changedFiles: string[],
-): Promise<{ imports: Record<string, string[]>; analyzedFiles: string[]; timedOut: false }> {
+): Promise<{
+  imports: Record<string, string[]>;
+  analyzedFiles: string[];
+  timedOut: false;
+}> {
   return {
     imports: {},
     analyzedFiles: changedFiles,
@@ -103,7 +111,11 @@ async function performAnalysis(
   };
 }
 
-async function createTimeout(ms: number): Promise<{ imports: Record<string, string[]>; analyzedFiles: string[]; timedOut: true }> {
+async function createTimeout(ms: number): Promise<{
+  imports: Record<string, string[]>;
+  analyzedFiles: string[];
+  timedOut: true;
+}> {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve({

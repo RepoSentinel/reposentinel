@@ -34,7 +34,10 @@ export async function createApp() {
     disableRequestLogging: false,
   });
 
-  app.log.info({ version: appConfig.version, env: process.env.NODE_ENV ?? "development" }, "Starting API server");
+  app.log.info(
+    { version: appConfig.version, env: process.env.NODE_ENV ?? "development" },
+    "Starting API server",
+  );
 
   await runMigrationsIfEnabled((msg) => app.log.info(msg));
 
@@ -50,4 +53,3 @@ export async function createApp() {
 
   return app;
 }
-

@@ -27,11 +27,13 @@ Requests without proper authentication will receive a `401 Unauthorized` respons
 ### 1.3 Key Management
 
 You may:
+
 - Generate multiple API keys per organization
 - Revoke keys at any time using the provided CLI tools
 - Rotate keys for security best practices
 
 We reserve the right to:
+
 - Revoke API keys for violations of these Terms
 - Invalidate compromised or leaked keys without notice
 - Require key rotation for security reasons
@@ -47,6 +49,7 @@ The API enforces rate limits to ensure fair usage and system stability:
 - **Endpoint-specific limits**: May vary by endpoint and operation
 
 When rate limits are exceeded:
+
 - You will receive a `429 Too Many Requests` response
 - The `Retry-After` header indicates when to retry
 - Repeated violations may result in temporary or permanent suspension
@@ -56,13 +59,14 @@ When rate limits are exceeded:
 API usage is subject to tier-based quotas:
 
 | Tier | Scans/Month | PR Comments | Alerts | Policies |
-|------|-------------|-------------|--------|----------|
+| ---- | ----------- | ----------- | ------ | -------- |
 | Free | 1,000       | Opt-in      | 500    | 50       |
-| Paid | Unlimited*  | Enabled     | 10,000 | 500      |
+| Paid | Unlimited\* | Enabled     | 10,000 | 500      |
 
-_*Subject to fair use policy_
+_\*Subject to fair use policy_
 
 When quotas are exceeded:
+
 - Additional requests return `429 Quota Exceeded`
 - Upgrade to a higher tier or wait for quota reset (monthly)
 

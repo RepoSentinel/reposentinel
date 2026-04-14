@@ -40,11 +40,7 @@ describe("githubFileService", () => {
     });
 
     it("should exclude type definition files", () => {
-      const files = [
-        "src/index.ts",
-        "src/types.d.ts",
-        "lib/utils.d.ts",
-      ];
+      const files = ["src/index.ts", "src/types.d.ts", "lib/utils.d.ts"];
       const result = filterRelevantSourceFiles(files);
       expect(result).toEqual(["src/index.ts"]);
     });

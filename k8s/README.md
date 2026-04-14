@@ -29,17 +29,21 @@ This directory contains Kubernetes manifests for deploying MergeSignal to a prod
 Before deploying, update the following files with your production values:
 
 **k8s/secret.yaml:**
+
 - `DATABASE_URL` - Production database connection string
 - `REDIS_URL` - Production Redis connection string
 - GitHub App credentials (if using)
 
 **k8s/postgres.yaml:**
+
 - Update `postgres-credentials` secret with a secure password
 
 **k8s/configmap.yaml:**
+
 - Update `CORS_ORIGINS` with your production domain
 
 **k8s/ingress.yaml:**
+
 - Replace `your-domain.com` with your actual domain
 - Replace `api.your-domain.com` with your API subdomain
 
@@ -60,6 +64,7 @@ docker push your-registry/mergesignal-web:latest
 ### 3. Update Image References
 
 Update the image references in the deployment files:
+
 - `api-deployment.yaml`: `image: your-registry/mergesignal-api:latest`
 - `worker-deployment.yaml`: `image: your-registry/mergesignal-worker:latest`
 - `web-deployment.yaml`: `image: your-registry/mergesignal-web:latest`
@@ -105,11 +110,13 @@ kubectl logs -f deployment/web -n mergesignal
 ## Scaling
 
 ### Scale API replicas
+
 ```bash
 kubectl scale deployment api --replicas=3 -n mergesignal
 ```
 
 ### Scale Worker replicas
+
 ```bash
 kubectl scale deployment worker --replicas=4 -n mergesignal
 ```
@@ -119,6 +126,7 @@ kubectl scale deployment worker --replicas=4 -n mergesignal
 The API service will automatically run migrations on startup when `MERGESIGNAL_AUTO_MIGRATE=1` is set.
 
 To run migrations manually:
+
 ```bash
 kubectl exec -it deployment/api -n mergesignal -- node apps/api/dist/migrateCli.js
 ```

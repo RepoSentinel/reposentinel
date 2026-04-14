@@ -10,7 +10,8 @@ export default function Home() {
     >
       <HomeClient />
       <div className={cardStyles.note}>
-        Tip: use <code>repoId</code> format <code>owner/repo</code> (e.g. <code>acme/repo-a</code>).
+        Tip: use <code>repoId</code> format <code>owner/repo</code> (e.g.{" "}
+        <code>acme/repo-a</code>).
       </div>
     </AppShell>
   );

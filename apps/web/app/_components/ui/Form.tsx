@@ -5,11 +5,18 @@ export function Row({ children }: { children: React.ReactNode }) {
 }
 
 export function TextInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
-  return <input {...props} className={[styles.input, props.className].filter(Boolean).join(" ")} />;
+  return (
+    <input
+      {...props}
+      className={[styles.input, props.className].filter(Boolean).join(" ")}
+    />
+  );
 }
 
 export function Button(
-  props: React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "primary" | "secondary" },
+  props: React.ButtonHTMLAttributes<HTMLButtonElement> & {
+    variant?: "primary" | "secondary";
+  },
 ) {
   const variant = props.variant ?? "primary";
   const cls = [
@@ -23,7 +30,9 @@ export function Button(
 }
 
 export function ButtonLink(
-  props: React.AnchorHTMLAttributes<HTMLAnchorElement> & { variant?: "primary" | "secondary" },
+  props: React.AnchorHTMLAttributes<HTMLAnchorElement> & {
+    variant?: "primary" | "secondary";
+  },
 ) {
   const variant = props.variant ?? "secondary";
   const cls = [
@@ -37,4 +46,3 @@ export function ButtonLink(
 }
 
 export { styles as formStyles };
-

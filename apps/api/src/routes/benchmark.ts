@@ -23,25 +23,45 @@ export async function benchmarkRoutes(app: FastifyInstance) {
 
   app.get("/benchmark/org/:owner", async (req, reply) => {
     const owner = String((req.params as { owner: string }).owner ?? "").trim();
-    if (!owner) return sendProblem(reply, req, { status: 400, title: "Bad Request", detail: "owner is required" });
+    if (!owner)
+      return sendProblem(reply, req, {
+        status: 400,
+        title: "Bad Request",
+        detail: "owner is required",
+      });
 
     // Authorization check: ensure authenticated owner matches requested owner
     if (req.authenticatedOwner && req.authenticatedOwner !== owner) {
-      return sendProblem(reply, req, { status: 403, title: "Forbidden", detail: "Access denied to this organization" });
+      return sendProblem(reply, req, {
+        status: 403,
+        title: "Forbidden",
+        detail: "Access denied to this organization",
+      });
     }
 
     return await getBenchmarkSummary({ scope: "owner", owner });
   });
 
   app.get("/benchmark/repo", async (req, reply) => {
-    const repoId = String((req.query as { repoId?: string })?.repoId ?? "").trim();
-    if (!repoId) return sendProblem(reply, req, { status: 400, title: "Bad Request", detail: "repoId is required" });
+    const repoId = String(
+      (req.query as { repoId?: string })?.repoId ?? "",
+    ).trim();
+    if (!repoId)
+      return sendProblem(reply, req, {
+        status: 400,
+        title: "Bad Request",
+        detail: "repoId is required",
+      });
 
     const owner = repoId.includes("/") ? repoId.split("/")[0] : repoId;
 
     // Authorization check: if using org-scoped API key, ensure repoId belongs to owner
     if (req.authenticatedOwner && req.authenticatedOwner !== owner) {
-      return sendProblem(reply, req, { status: 403, title: "Forbidden", detail: "Access denied to this repository" });
+      return sendProblem(reply, req, {
+        status: 403,
+        title: "Forbidden",
+        detail: "Access denied to this repository",
+      });
     }
 
     const { rows } = await db.query(
@@ -90,7 +110,11 @@ export async function benchmarkRoutes(app: FastifyInstance) {
     );
 
     if (!rows.length) {
-      return sendProblem(reply, req, { status: 404, title: "Not Found", detail: "No scored scans found for repoId" });
+      return sendProblem(reply, req, {
+        status: 404,
+        title: "Not Found",
+        detail: "No scored scans found for repoId",
+      });
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -121,7 +145,9 @@ export async function benchmarkRoutes(app: FastifyInstance) {
   });
 }
 
-async function getBenchmarkSummary(opts: { scope: "global" } | { scope: "owner"; owner: string }): Promise<BenchmarkSummary> {
+async function getBenchmarkSummary(
+  opts: { scope: "global" } | { scope: "owner"; owner: string },
+): Promise<BenchmarkSummary> {
   const params: unknown[] = [];
   let where = "status='done' AND total_score IS NOT NULL";
   if (opts.scope === "owner") {
@@ -218,4 +244,3 @@ function clamp01(v: unknown): number | null {
   if (n === null) return null;
   return Math.max(0, Math.min(1, n));
 }
-

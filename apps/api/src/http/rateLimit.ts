@@ -4,7 +4,7 @@ import { Redis } from "ioredis";
 
 export async function registerRateLimit(app: FastifyInstance) {
   const redisUrl = process.env.REDIS_URL ?? "redis://localhost:6379";
-  
+
   // Create Redis client for rate limiting
   const redis = new Redis(redisUrl, {
     enableOfflineQueue: false,
@@ -22,7 +22,10 @@ export async function registerRateLimit(app: FastifyInstance) {
     redisAvailable = true;
     app.log.info("Rate limiter connected to Redis");
   } catch (err) {
-    app.log.warn({ err }, "Rate limiter cannot connect to Redis, rate limiting will be disabled");
+    app.log.warn(
+      { err },
+      "Rate limiter cannot connect to Redis, rate limiting will be disabled",
+    );
     await redis.disconnect();
   }
 
@@ -36,10 +39,14 @@ export async function registerRateLimit(app: FastifyInstance) {
       const url = String(req.url ?? "");
       const method = String(req.method ?? "GET").toUpperCase();
       const path = url.startsWith("/v1/") ? url.slice("/v1".length) : url;
-      
+
       // Public endpoints have more restrictive limits
       const isPublic =
-        (method === "GET" && (path === "/health" || path === "/openapi.json" || path === "/docs" || path === "/")) ||
+        (method === "GET" &&
+          (path === "/health" ||
+            path === "/openapi.json" ||
+            path === "/docs" ||
+            path === "/")) ||
         (method === "POST" && path === "/github/webhook");
 
       if (isPublic) {

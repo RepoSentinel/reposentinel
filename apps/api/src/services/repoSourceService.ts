@@ -34,7 +34,14 @@ export async function upsertGithubRepoSource(opts: {
       default_branch = COALESCE(EXCLUDED.default_branch, repo_sources.default_branch),
       updated_at = NOW()
     `,
-    [repoId, owner, repo, installationId, lockfilePath, lockfileManager, defaultBranch ?? null],
+    [
+      repoId,
+      owner,
+      repo,
+      installationId,
+      lockfilePath,
+      lockfileManager,
+      defaultBranch ?? null,
+    ],
   );
 }
-

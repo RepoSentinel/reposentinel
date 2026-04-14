@@ -12,11 +12,20 @@ type PolicyRule =
 export async function policiesRoutes(app: FastifyInstance) {
   app.get("/org/:owner/policies", async (req, reply) => {
     const owner = String((req.params as { owner: string }).owner ?? "").trim();
-    if (!owner) return sendProblem(reply, req, { status: 400, title: "Bad Request", detail: "owner is required" });
+    if (!owner)
+      return sendProblem(reply, req, {
+        status: 400,
+        title: "Bad Request",
+        detail: "owner is required",
+      });
 
     // Authorization check: ensure authenticated owner matches requested owner
     if (req.authenticatedOwner && req.authenticatedOwner !== owner) {
-      return sendProblem(reply, req, { status: 403, title: "Forbidden", detail: "Access denied to this organization" });
+      return sendProblem(reply, req, {
+        status: 403,
+        title: "Forbidden",
+        detail: "Access denied to this organization",
+      });
     }
 
     const policies = await queries.policies.findByOwner(owner);
@@ -25,21 +34,39 @@ export async function policiesRoutes(app: FastifyInstance) {
 
   app.post("/org/:owner/policies", async (req, reply) => {
     const owner = String((req.params as { owner: string }).owner ?? "").trim();
-    if (!owner) return sendProblem(reply, req, { status: 400, title: "Bad Request", detail: "owner is required" });
+    if (!owner)
+      return sendProblem(reply, req, {
+        status: 400,
+        title: "Bad Request",
+        detail: "owner is required",
+      });
 
     // Authorization check: ensure authenticated owner matches requested owner
     if (req.authenticatedOwner && req.authenticatedOwner !== owner) {
-      return sendProblem(reply, req, { status: 403, title: "Forbidden", detail: "Access denied to this organization" });
+      return sendProblem(reply, req, {
+        status: 403,
+        title: "Forbidden",
+        detail: "Access denied to this organization",
+      });
     }
 
     const body = (req.body ?? {}) as Record<string, unknown>;
     const name = String(body.name ?? "").trim();
-    if (!name) return sendProblem(reply, req, { status: 400, title: "Bad Request", detail: "name is required" });
+    if (!name)
+      return sendProblem(reply, req, {
+        status: 400,
+        title: "Bad Request",
+        detail: "name is required",
+      });
 
     const enabled = body.enabled === undefined ? true : Boolean(body.enabled);
     const rules = normalizeRules(body.rules);
     if (!rules.length) {
-      return sendProblem(reply, req, { status: 400, title: "Bad Request", detail: "rules must be a non-empty array" });
+      return sendProblem(reply, req, {
+        status: 400,
+        title: "Bad Request",
+        detail: "rules must be a non-empty array",
+      });
     }
 
     const id = randomUUID();
@@ -56,17 +83,30 @@ export async function policiesRoutes(app: FastifyInstance) {
 
   app.patch("/policies/:id", async (req, reply) => {
     const id = String((req.params as { id: string }).id ?? "").trim();
-    if (!id) return sendProblem(reply, req, { status: 400, title: "Bad Request", detail: "id is required" });
+    if (!id)
+      return sendProblem(reply, req, {
+        status: 400,
+        title: "Bad Request",
+        detail: "id is required",
+      });
 
     // First, fetch the policy to check ownership
     const existing = await queries.policies.findById(id);
     if (!existing) {
-      return sendProblem(reply, req, { status: 404, title: "Not Found", detail: "policy not found" });
+      return sendProblem(reply, req, {
+        status: 404,
+        title: "Not Found",
+        detail: "policy not found",
+      });
     }
 
     // Authorization check: ensure authenticated owner matches policy owner
     if (req.authenticatedOwner && req.authenticatedOwner !== existing.owner) {
-      return sendProblem(reply, req, { status: 403, title: "Forbidden", detail: "Access denied to this policy" });
+      return sendProblem(reply, req, {
+        status: 403,
+        title: "Forbidden",
+        detail: "Access denied to this policy",
+      });
     }
 
     const body = (req.body ?? {}) as Record<string, unknown>;
@@ -74,7 +114,12 @@ export async function policiesRoutes(app: FastifyInstance) {
 
     if (body.name !== undefined) {
       const name = String(body.name ?? "").trim();
-      if (!name) return sendProblem(reply, req, { status: 400, title: "Bad Request", detail: "name cannot be empty" });
+      if (!name)
+        return sendProblem(reply, req, {
+          status: 400,
+          title: "Bad Request",
+          detail: "name cannot be empty",
+        });
       updates.name = name;
     }
 
@@ -85,18 +130,30 @@ export async function policiesRoutes(app: FastifyInstance) {
     if (body.rules !== undefined) {
       const rules = normalizeRules(body.rules);
       if (!rules.length) {
-        return sendProblem(reply, req, { status: 400, title: "Bad Request", detail: "rules must be a non-empty array" });
+        return sendProblem(reply, req, {
+          status: 400,
+          title: "Bad Request",
+          detail: "rules must be a non-empty array",
+        });
       }
       updates.rules = rules;
     }
 
     if (Object.keys(updates).length === 0) {
-      return sendProblem(reply, req, { status: 400, title: "Bad Request", detail: "no fields to update" });
+      return sendProblem(reply, req, {
+        status: 400,
+        title: "Bad Request",
+        detail: "no fields to update",
+      });
     }
 
     const policy = await queries.policies.update(id, updates);
     if (!policy) {
-      return sendProblem(reply, req, { status: 404, title: "Not Found", detail: "policy not found" });
+      return sendProblem(reply, req, {
+        status: 404,
+        title: "Not Found",
+        detail: "policy not found",
+      });
     }
 
     return policy;
@@ -104,11 +161,20 @@ export async function policiesRoutes(app: FastifyInstance) {
 
   app.get("/org/:owner/policy/violations", async (req, reply) => {
     const owner = String((req.params as { owner: string }).owner ?? "").trim();
-    if (!owner) return sendProblem(reply, req, { status: 400, title: "Bad Request", detail: "owner is required" });
+    if (!owner)
+      return sendProblem(reply, req, {
+        status: 400,
+        title: "Bad Request",
+        detail: "owner is required",
+      });
 
     // Authorization check: ensure authenticated owner matches requested owner
     if (req.authenticatedOwner && req.authenticatedOwner !== owner) {
-      return sendProblem(reply, req, { status: 403, title: "Forbidden", detail: "Access denied to this organization" });
+      return sendProblem(reply, req, {
+        status: 403,
+        title: "Forbidden",
+        detail: "Access denied to this organization",
+      });
     }
 
     const { repoId, limit } = req.query as { repoId?: string; limit?: string };
@@ -144,12 +210,13 @@ function normalizeRules(input: unknown): PolicyRule[] {
     if (t === "no_deprecated") out.push({ type: "no_deprecated" });
     else if (t === "max_stale_releases_count") {
       const max = Number(rule?.max);
-      if (Number.isFinite(max) && max >= 0) out.push({ type: "max_stale_releases_count", max: Math.floor(max) });
+      if (Number.isFinite(max) && max >= 0)
+        out.push({ type: "max_stale_releases_count", max: Math.floor(max) });
     } else if (t === "max_bus_factor_low_count") {
       const max = Number(rule?.max);
-      if (Number.isFinite(max) && max >= 0) out.push({ type: "max_bus_factor_low_count", max: Math.floor(max) });
+      if (Number.isFinite(max) && max >= 0)
+        out.push({ type: "max_bus_factor_low_count", max: Math.floor(max) });
     }
   }
   return out;
 }
-

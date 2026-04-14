@@ -1,6 +1,9 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { analyze, simulateUpgrade } from "./index.js";
-import type { ScanRequest, UpgradeSimulationRequest } from "@mergesignal/shared";
+import type {
+  ScanRequest,
+  UpgradeSimulationRequest,
+} from "@mergesignal/shared";
 
 describe("engine", () => {
   const originalEnv = process.env;
@@ -69,7 +72,9 @@ describe("engine", () => {
       expect(Array.isArray(result.insights)).toBe(true);
       expect(result.decision).toBeDefined();
       expect(result.decision?.recommendation).toBeDefined();
-      expect(["safe", "needs_review", "risky"]).toContain(result.decision?.recommendation);
+      expect(["safe", "needs_review", "risky"]).toContain(
+        result.decision?.recommendation,
+      );
     });
 
     it("should handle lockfile in request", async () => {

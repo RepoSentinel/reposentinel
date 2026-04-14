@@ -56,7 +56,11 @@ async function recordMigration(filename: string) {
   );
 }
 
-async function applyFile(sqlDir: string, filename: string, log: (msg: string) => void) {
+async function applyFile(
+  sqlDir: string,
+  filename: string,
+  log: (msg: string) => void,
+) {
   const full = path.join(sqlDir, filename);
   const sql = await readFile(full, "utf8");
   const trimmed = sql.trim();

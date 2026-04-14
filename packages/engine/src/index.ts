@@ -1,8 +1,15 @@
-import type { ScanRequest, ScanResult, UpgradeSimulationRequest, UpgradeSimulationResult } from "@mergesignal/shared";
+import type {
+  ScanRequest,
+  ScanResult,
+  UpgradeSimulationRequest,
+  UpgradeSimulationResult,
+} from "@mergesignal/shared";
 
 type EngineImpl = {
   analyze: (req: ScanRequest) => Promise<ScanResult>;
-  simulateUpgrade: (req: UpgradeSimulationRequest) => Promise<UpgradeSimulationResult>;
+  simulateUpgrade: (
+    req: UpgradeSimulationRequest,
+  ) => Promise<UpgradeSimulationResult>;
 };
 
 let cached: Promise<EngineImpl> | null = null;
@@ -14,8 +21,13 @@ async function loadImpl(): Promise<EngineImpl> {
   if (spec) {
     try {
       const mod = (await import(spec)) as any;
-      if (typeof mod?.analyze !== "function" || typeof mod?.simulateUpgrade !== "function") {
-        throw new Error(`Engine module ${spec} does not export analyze/simulateUpgrade`);
+      if (
+        typeof mod?.analyze !== "function" ||
+        typeof mod?.simulateUpgrade !== "function"
+      ) {
+        throw new Error(
+          `Engine module ${spec} does not export analyze/simulateUpgrade`,
+        );
       }
       return { analyze: mod.analyze, simulateUpgrade: mod.simulateUpgrade };
     } catch (e) {
@@ -38,8 +50,9 @@ export async function analyze(req: ScanRequest): Promise<ScanResult> {
   return impl.analyze(req);
 }
 
-export async function simulateUpgrade(req: UpgradeSimulationRequest): Promise<UpgradeSimulationResult> {
+export async function simulateUpgrade(
+  req: UpgradeSimulationRequest,
+): Promise<UpgradeSimulationResult> {
   const impl = await getImpl();
   return impl.simulateUpgrade(req);
 }
-

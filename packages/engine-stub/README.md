@@ -34,7 +34,7 @@ All functions in this package throw errors when called:
 ```typescript
 export async function analyze(req: ScanRequest): Promise<ScanResult> {
   throw new Error(
-    "Analysis engine not available in open-source version. This is a stub implementation."
+    "Analysis engine not available in open-source version. This is a stub implementation.",
   );
 }
 ```

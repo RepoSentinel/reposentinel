@@ -15,7 +15,11 @@ export function registerAuth(app: FastifyInstance) {
     const method = String(req.method ?? "GET").toUpperCase();
     const path = url.startsWith("/v1/") ? url.slice("/v1".length) : url;
     const isPublic =
-      (method === "GET" && (path === "/health" || path === "/openapi.json" || path === "/docs" || path === "/")) ||
+      (method === "GET" &&
+        (path === "/health" ||
+          path === "/openapi.json" ||
+          path === "/docs" ||
+          path === "/")) ||
       (method === "POST" && path === "/github/webhook");
 
     if (isPublic) return;
@@ -64,4 +68,3 @@ export function registerAuth(app: FastifyInstance) {
 function hashApiKey(key: string): string {
   return createHash("sha256").update(key).digest("hex");
 }
-

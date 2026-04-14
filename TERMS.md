@@ -103,6 +103,7 @@ We reserve the right to:
 You may terminate your use of the Service at any time by ceasing all access and use.
 
 Upon termination:
+
 - Your right to access and use the Service immediately ceases
 - We may delete your data, including scan results and API keys
 - Provisions that by their nature should survive termination will continue to apply
@@ -112,6 +113,7 @@ Upon termination:
 We may modify these Terms at any time by posting updated Terms on our website or in the repository. Your continued use of the Service after changes are posted constitutes acceptance of the modified Terms.
 
 Material changes will be notified through:
+
 - Updates to the GitHub repository
 - Notices in the application interface
 - Email notifications (if contact information is available)
@@ -152,6 +154,7 @@ Risk scores, vulnerability information, and recommendations provided by the Serv
 These Terms are governed by the laws of the jurisdiction where MergeSignal is operated, without regard to conflict of law provisions.
 
 Any disputes arising from these Terms or the Service will be resolved through:
+
 - Good faith negotiations
 - Binding arbitration (if required by applicable law)
 - Courts in the jurisdiction specified above

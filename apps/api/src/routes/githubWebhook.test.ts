@@ -24,24 +24,36 @@ vi.mock("../services/githubFileService.js", () => ({
 }));
 
 vi.mock("../problem.js", () => ({
-  sendProblem: vi.fn((reply: { code: (s: number) => { send: (b: unknown) => unknown } }, _req: unknown, problem: { status: number; title: string; detail: string }) => {
-    return reply.code(problem.status).send({
-      status: problem.status,
-      title: problem.title,
-      detail: problem.detail,
-    });
-  }),
+  sendProblem: vi.fn(
+    (
+      reply: { code: (s: number) => { send: (b: unknown) => unknown } },
+      _req: unknown,
+      problem: { status: number; title: string; detail: string },
+    ) => {
+      return reply.code(problem.status).send({
+        status: problem.status,
+        title: problem.title,
+        detail: problem.detail,
+      });
+    },
+  ),
 }));
 
 describe("GitHub Webhook Tests", () => {
   const webhookSecret = "test-webhook-secret";
 
   function signPayload(payload: string): string {
-    const mac = createHmac("sha256", webhookSecret).update(payload, "utf8").digest("hex");
+    const mac = createHmac("sha256", webhookSecret)
+      .update(payload, "utf8")
+      .digest("hex");
     return `sha256=${mac}`;
   }
 
-  function verifySignature(body: string, signatureHeader: string, secret: string) {
+  function verifySignature(
+    body: string,
+    signatureHeader: string,
+    secret: string,
+  ) {
     if (!signatureHeader.startsWith("sha256=")) return false;
     const sig = signatureHeader.slice("sha256=".length);
     const mac = createHmac("sha256", secret).update(body, "utf8").digest("hex");
@@ -65,7 +77,9 @@ describe("GitHub Webhook Tests", () => {
     it("should reject invalid signature", () => {
       const payload = JSON.stringify({ test: "data" });
       const invalidSignature = "sha256=invalid";
-      expect(verifySignature(payload, invalidSignature, webhookSecret)).toBe(false);
+      expect(verifySignature(payload, invalidSignature, webhookSecret)).toBe(
+        false,
+      );
     });
 
     it("should reject signature without sha256 prefix", () => {
@@ -77,7 +91,9 @@ describe("GitHub Webhook Tests", () => {
       const payload = JSON.stringify({ test: "data" });
       const signature = signPayload(payload);
       const tamperedPayload = JSON.stringify({ test: "tampered" });
-      expect(verifySignature(tamperedPayload, signature, webhookSecret)).toBe(false);
+      expect(verifySignature(tamperedPayload, signature, webhookSecret)).toBe(
+        false,
+      );
     });
   });
 
@@ -90,18 +106,24 @@ describe("GitHub Webhook Tests", () => {
       process.env = {
         ...originalEnv,
         GITHUB_APP_ID: "123456",
-        GITHUB_PRIVATE_KEY: "-----BEGIN RSA PRIVATE KEY-----\\ntest\\n-----END RSA PRIVATE KEY-----",
+        GITHUB_PRIVATE_KEY:
+          "-----BEGIN RSA PRIVATE KEY-----\\ntest\\n-----END RSA PRIVATE KEY-----",
         GITHUB_WEBHOOK_SECRET: webhookSecret,
       };
 
       app = Fastify();
-      await app.register(rawBody, { field: "rawBody", global: false, encoding: "utf8", runFirst: true });
-      
+      await app.register(rawBody, {
+        field: "rawBody",
+        global: false,
+        encoding: "utf8",
+        runFirst: true,
+      });
+
       // Import and register routes after env is set
       const { githubWebhookRoutes } = await import("./githubWebhook.js");
       await githubWebhookRoutes(app);
       await app.ready();
-      
+
       vi.clearAllMocks();
     });
 
@@ -114,9 +136,14 @@ describe("GitHub Webhook Tests", () => {
       // Close and recreate app without config
       await app.close();
       process.env = { ...originalEnv };
-      
+
       app = Fastify();
-      await app.register(rawBody, { field: "rawBody", global: false, encoding: "utf8", runFirst: true });
+      await app.register(rawBody, {
+        field: "rawBody",
+        global: false,
+        encoding: "utf8",
+        runFirst: true,
+      });
       const { githubWebhookRoutes } = await import("./githubWebhook.js");
       await githubWebhookRoutes(app);
       await app.ready();
@@ -198,13 +225,23 @@ describe("GitHub Webhook Tests", () => {
 
     it("should accept valid pull_request webhook", async () => {
       const { db } = await import("../db.js");
-      vi.mocked(db.query).mockResolvedValue({ rowCount: 1, rows: [], command: "", oid: 0, fields: [] } as never);
+      vi.mocked(db.query).mockResolvedValue({
+        rowCount: 1,
+        rows: [],
+        command: "",
+        oid: 0,
+        fields: [],
+      } as never);
 
       const payload = JSON.stringify({
         action: "opened",
         installation: { id: 12345 },
         repository: { name: "test-repo", owner: { login: "test-owner" } },
-        pull_request: { number: 1, head: { sha: "abc123" }, base: { sha: "def456" } },
+        pull_request: {
+          number: 1,
+          head: { sha: "abc123" },
+          base: { sha: "def456" },
+        },
       });
 
       const response = await app.inject({
@@ -227,7 +264,13 @@ describe("GitHub Webhook Tests", () => {
 
     it("should accept valid push webhook", async () => {
       const { db } = await import("../db.js");
-      vi.mocked(db.query).mockResolvedValue({ rowCount: 1, rows: [], command: "", oid: 0, fields: [] } as never);
+      vi.mocked(db.query).mockResolvedValue({
+        rowCount: 1,
+        rows: [],
+        command: "",
+        oid: 0,
+        fields: [],
+      } as never);
 
       const payload = JSON.stringify({
         installation: { id: 12345 },
@@ -256,7 +299,13 @@ describe("GitHub Webhook Tests", () => {
 
     it("should ignore unsupported webhook events", async () => {
       const { db } = await import("../db.js");
-      vi.mocked(db.query).mockResolvedValue({ rowCount: 1, rows: [], command: "", oid: 0, fields: [] } as never);
+      vi.mocked(db.query).mockResolvedValue({
+        rowCount: 1,
+        rows: [],
+        command: "",
+        oid: 0,
+        fields: [],
+      } as never);
 
       const payload = JSON.stringify({ action: "created" });
 
@@ -280,8 +329,20 @@ describe("GitHub Webhook Tests", () => {
     it("should detect and ignore duplicate deliveries", async () => {
       const { db } = await import("../db.js");
       // First call returns 1 row (new), second returns 0 (duplicate)
-      vi.mocked(db.query).mockResolvedValueOnce({ rowCount: 1, rows: [], command: "", oid: 0, fields: [] } as never);
-      vi.mocked(db.query).mockResolvedValueOnce({ rowCount: 0, rows: [], command: "", oid: 0, fields: [] } as never);
+      vi.mocked(db.query).mockResolvedValueOnce({
+        rowCount: 1,
+        rows: [],
+        command: "",
+        oid: 0,
+        fields: [],
+      } as never);
+      vi.mocked(db.query).mockResolvedValueOnce({
+        rowCount: 0,
+        rows: [],
+        command: "",
+        oid: 0,
+        fields: [],
+      } as never);
 
       const payload = JSON.stringify({ action: "opened" });
       const deliveryId = "test-delivery-duplicate";

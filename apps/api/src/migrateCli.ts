@@ -7,4 +7,3 @@ const app = Fastify({ logger: true });
 await runMigrationsIfEnabled((msg) => app.log.info(msg));
 
 await app.close();
-

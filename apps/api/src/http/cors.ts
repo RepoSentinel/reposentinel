@@ -17,4 +17,3 @@ export async function registerCors(app: FastifyInstance) {
     credentials: false,
   });
 }
-

@@ -37,7 +37,8 @@ function getOpenApiSpec() {
         name: "Apache 2.0",
         url: "https://github.com/[your-org]/mergesignal/blob/main/LICENSE",
       },
-      termsOfService: "https://github.com/[your-org]/mergesignal/blob/main/API-TERMS.md",
+      termsOfService:
+        "https://github.com/[your-org]/mergesignal/blob/main/API-TERMS.md",
     },
     servers: [{ url: "http://localhost:4000" }],
     tags: [
@@ -122,7 +123,14 @@ function getOpenApiSpec() {
           responses: {
             "200": {
               description: "OK",
-              content: { "application/json": { schema: { type: "object", properties: { ok: { type: "boolean" } } } } },
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: { ok: { type: "boolean" } },
+                  },
+                },
+              },
             },
           },
         },
@@ -134,13 +142,19 @@ function getOpenApiSpec() {
           requestBody: {
             required: true,
             content: {
-              "application/json": { schema: { $ref: "#/components/schemas/ScanRequest" } },
+              "application/json": {
+                schema: { $ref: "#/components/schemas/ScanRequest" },
+              },
             },
           },
           responses: {
             "202": {
               description: "Accepted",
-              content: { "application/json": { schema: { $ref: "#/components/schemas/ScanAccepted" } } },
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/ScanAccepted" },
+                },
+              },
             },
             "413": { description: "Lockfile too large" },
             "429": { description: "Quota exceeded" },
@@ -151,7 +165,14 @@ function getOpenApiSpec() {
         get: {
           tags: ["scans"],
           summary: "Get scan by id",
-          parameters: [{ name: "id", in: "path", required: true, schema: { type: "string" } }],
+          parameters: [
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              schema: { type: "string" },
+            },
+          ],
           responses: {
             "200": { description: "Scan row (includes result when done)" },
             "404": {
@@ -169,7 +190,14 @@ function getOpenApiSpec() {
         get: {
           tags: ["scans"],
           summary: "Scan status stream (SSE)",
-          parameters: [{ name: "id", in: "path", required: true, schema: { type: "string" } }],
+          parameters: [
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              schema: { type: "string" },
+            },
+          ],
           responses: {
             "200": {
               description: "text/event-stream",
@@ -190,8 +218,18 @@ function getOpenApiSpec() {
           tags: ["dataset"],
           summary: "List known packages in the ecosystem dataset",
           parameters: [
-            { name: "q", in: "query", required: false, schema: { type: "string" } },
-            { name: "limit", in: "query", required: false, schema: { type: "integer", minimum: 1, maximum: 200 } },
+            {
+              name: "q",
+              in: "query",
+              required: false,
+              schema: { type: "string" },
+            },
+            {
+              name: "limit",
+              in: "query",
+              required: false,
+              schema: { type: "integer", minimum: 1, maximum: 200 },
+            },
           ],
           responses: {
             "200": {
@@ -201,7 +239,10 @@ function getOpenApiSpec() {
                   schema: {
                     type: "object",
                     properties: {
-                      packages: { type: "array", items: { $ref: "#/components/schemas/PackageHealth" } },
+                      packages: {
+                        type: "array",
+                        items: { $ref: "#/components/schemas/PackageHealth" },
+                      },
                     },
                     required: ["packages"],
                   },
@@ -216,8 +257,18 @@ function getOpenApiSpec() {
           tags: ["dataset"],
           summary: "Get current + recent history for a package",
           parameters: [
-            { name: "name", in: "path", required: true, schema: { type: "string" } },
-            { name: "days", in: "query", required: false, schema: { type: "integer", minimum: 1, maximum: 365 } },
+            {
+              name: "name",
+              in: "path",
+              required: true,
+              schema: { type: "string" },
+            },
+            {
+              name: "days",
+              in: "query",
+              required: false,
+              schema: { type: "integer", minimum: 1, maximum: 365 },
+            },
           ],
           responses: {
             "200": { description: "Package detail (current + history)" },
@@ -236,7 +287,14 @@ function getOpenApiSpec() {
         get: {
           tags: ["org"],
           summary: "Organization dashboard (latest scans)",
-          parameters: [{ name: "owner", in: "path", required: true, schema: { type: "string" } }],
+          parameters: [
+            {
+              name: "owner",
+              in: "path",
+              required: true,
+              schema: { type: "string" },
+            },
+          ],
           responses: { "200": { description: "Dashboard data" } },
         },
       },
@@ -244,7 +302,14 @@ function getOpenApiSpec() {
         get: {
           tags: ["alerts"],
           summary: "Organization alerts",
-          parameters: [{ name: "owner", in: "path", required: true, schema: { type: "string" } }],
+          parameters: [
+            {
+              name: "owner",
+              in: "path",
+              required: true,
+              schema: { type: "string" },
+            },
+          ],
           responses: { "200": { description: "Alerts list" } },
         },
       },
@@ -252,24 +317,49 @@ function getOpenApiSpec() {
         get: {
           tags: ["policies"],
           summary: "List policies for an owner",
-          parameters: [{ name: "owner", in: "path", required: true, schema: { type: "string" } }],
+          parameters: [
+            {
+              name: "owner",
+              in: "path",
+              required: true,
+              schema: { type: "string" },
+            },
+          ],
           responses: { "200": { description: "Policies" } },
         },
         post: {
           tags: ["policies"],
           summary: "Create a policy for an owner",
-          parameters: [{ name: "owner", in: "path", required: true, schema: { type: "string" } }],
+          parameters: [
+            {
+              name: "owner",
+              in: "path",
+              required: true,
+              schema: { type: "string" },
+            },
+          ],
           responses: { "201": { description: "Created" } },
         },
       },
       "/benchmark/global": {
-        get: { tags: ["benchmark"], summary: "Global risk score distribution", responses: { "200": { description: "OK" } } },
+        get: {
+          tags: ["benchmark"],
+          summary: "Global risk score distribution",
+          responses: { "200": { description: "OK" } },
+        },
       },
       "/benchmark/org/{owner}": {
         get: {
           tags: ["benchmark"],
           summary: "Org risk score distribution",
-          parameters: [{ name: "owner", in: "path", required: true, schema: { type: "string" } }],
+          parameters: [
+            {
+              name: "owner",
+              in: "path",
+              required: true,
+              schema: { type: "string" },
+            },
+          ],
           responses: { "200": { description: "OK" } },
         },
       },
@@ -278,7 +368,10 @@ function getOpenApiSpec() {
           tags: ["github"],
           summary: "GitHub App webhook endpoint",
           security: [],
-          responses: { "202": { description: "Accepted" }, "401": { description: "Invalid signature" } },
+          responses: {
+            "202": { description: "Accepted" },
+            "401": { description: "Invalid signature" },
+          },
         },
       },
     },
@@ -313,4 +406,3 @@ function renderDocsHtml() {
   </body>
 </html>`;
 }
-

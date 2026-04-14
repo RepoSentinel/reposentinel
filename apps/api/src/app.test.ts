@@ -12,8 +12,9 @@ describe("API Integration Tests", () => {
   beforeAll(async () => {
     process.env.MERGESIGNAL_AUTO_MIGRATE = "0";
     process.env.CORS_ORIGINS = "http://localhost:3000";
-    process.env.DATABASE_URL = "postgresql://mergesignal:mergesignal@localhost:5432/mergesignal";
-    
+    process.env.DATABASE_URL =
+      "postgresql://mergesignal:mergesignal@localhost:5432/mergesignal";
+
     app = await createApp();
 
     // Create a test org-scoped API key
@@ -50,7 +51,7 @@ describe("API Integration Tests", () => {
       expect(body.ok).toBeDefined();
       expect(body.checks).toBeDefined();
       expect(body.timestamp).toBeDefined();
-      
+
       // Verify checks structure
       expect(body.checks.database).toBeDefined();
       expect(body.checks.redis).toBeDefined();
@@ -186,7 +187,7 @@ describe("API Integration Tests", () => {
 
       // Will return 200 with data, 401 if auth fails (DB unavailable), or 500 if DB is unavailable after auth
       expect([200, 401, 500]).toContain(response.statusCode);
-      
+
       if (response.statusCode === 200) {
         const body = JSON.parse(response.body);
         expect(body).toBeDefined();

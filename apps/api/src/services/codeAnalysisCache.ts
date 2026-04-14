@@ -25,7 +25,10 @@ export class CodeAnalysisCache {
   }
 
   private getCacheKey(key: CacheKey): string {
-    const filesHash = createHash("sha256").update(key.files.sort().join(",")).digest("hex").slice(0, 16);
+    const filesHash = createHash("sha256")
+      .update(key.files.sort().join(","))
+      .digest("hex")
+      .slice(0, 16);
     return `code-analysis:${key.repoId}:${key.sha}:${filesHash}`;
   }
 

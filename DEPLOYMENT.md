@@ -127,6 +127,7 @@ terraform apply
 ```
 
 This creates:
+
 - VPC with public/private subnets
 - EKS cluster
 - RDS PostgreSQL instance
@@ -217,16 +218,19 @@ data:
 Edit deployment files to use your ECR URLs:
 
 `k8s/api-deployment.yaml`:
+
 ```yaml
 image: YOUR_ECR_REGISTRY/mergesignal/api:latest
 ```
 
 `k8s/worker-deployment.yaml`:
+
 ```yaml
 image: YOUR_ECR_REGISTRY/mergesignal/worker:latest
 ```
 
 `k8s/web-deployment.yaml`:
+
 ```yaml
 image: YOUR_ECR_REGISTRY/mergesignal/web:latest
 ```
@@ -238,14 +242,14 @@ Edit `k8s/ingress.yaml`:
 ```yaml
 spec:
   tls:
-  - hosts:
-    - your-domain.com
-    - api.your-domain.com
+    - hosts:
+        - your-domain.com
+        - api.your-domain.com
   rules:
-  - host: your-domain.com
-    # ...
-  - host: api.your-domain.com
-    # ...
+    - host: your-domain.com
+      # ...
+    - host: api.your-domain.com
+      # ...
 ```
 
 ### Step 6: Deploy to Kubernetes
@@ -345,11 +349,13 @@ aws iam create-open-id-connect-provider \
 ### Deployment Workflow
 
 **Staging Deployment** (automatic on push to main):
+
 ```bash
 git push origin main
 ```
 
 **Production Deployment** (manual or tag-based):
+
 ```bash
 # Create and push a tag
 git tag v1.0.0
@@ -418,6 +424,7 @@ The API exposes a `/health` endpoint for health checks. Consider adding:
 RDS automated backups are enabled by default (7-day retention).
 
 **Manual backup**:
+
 ```bash
 aws rds create-db-snapshot \
   --db-instance-identifier mergesignal-postgres \
@@ -425,6 +432,7 @@ aws rds create-db-snapshot \
 ```
 
 **Restore from snapshot**:
+
 ```bash
 aws rds restore-db-instance-from-db-snapshot \
   --db-instance-identifier mergesignal-postgres-restored \
@@ -488,6 +496,7 @@ kubectl logs POD_NAME -n mergesignal
 ```
 
 Common causes:
+
 - Image pull errors (check ECR permissions)
 - Configuration errors (check ConfigMap/Secrets)
 - Resource limits (check node resources)
@@ -501,6 +510,7 @@ kubectl run -it --rm debug --image=postgres:16 --restart=Never -n mergesignal --
 ```
 
 Common causes:
+
 - Incorrect DATABASE_URL in secrets
 - Security group rules blocking traffic
 - Database not ready yet
@@ -517,6 +527,7 @@ kubectl run -it --rm redis-test --image=redis:7 --restart=Never -n mergesignal -
 ```
 
 Common causes:
+
 - Redis connection issues
 - Worker crashes (check logs)
 - Queue configuration mismatch
@@ -532,6 +543,7 @@ kubectl logs -n ingress-nginx deployment/ingress-nginx-controller
 ```
 
 Common causes:
+
 - DNS not pointing to load balancer
 - TLS certificate issues
 - Ingress controller not installed

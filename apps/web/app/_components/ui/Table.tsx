@@ -12,7 +12,10 @@ export function DataTable({
   return (
     <div className={styles.card}>
       <div className={styles.wrap}>
-        <table className={styles.table} style={minWidth ? { minWidth } : undefined}>
+        <table
+          className={styles.table}
+          style={minWidth ? { minWidth } : undefined}
+        >
           <thead>
             <tr>
               {headers.map((h) => (
@@ -34,4 +37,3 @@ export function TD({ children }: { children: React.ReactNode }) {
 }
 
 export { styles as tableStyles };
-

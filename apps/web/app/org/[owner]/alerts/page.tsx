@@ -29,9 +29,12 @@ export default async function Page({
 
   let data: OrgAlerts;
   try {
-    data = await apiGet<OrgAlerts>(`/org/${encodeURIComponent(owner)}/alerts?limit=${limit}`);
+    data = await apiGet<OrgAlerts>(
+      `/org/${encodeURIComponent(owner)}/alerts?limit=${limit}`,
+    );
   } catch (err: unknown) {
-    const errorText = err instanceof ApiError ? err.body ?? err.message : String(err);
+    const errorText =
+      err instanceof ApiError ? (err.body ?? err.message) : String(err);
     return (
       <AppShell title="Alerts" subtitle={owner} owner={owner}>
         <pre style={{ whiteSpace: "pre-wrap" }}>{errorText}</pre>
@@ -40,7 +43,11 @@ export default async function Page({
   }
 
   return (
-    <AppShell title="Alerts" subtitle={`recent: ${data.alerts.length}`} owner={owner}>
+    <AppShell
+      title="Alerts"
+      subtitle={`recent: ${data.alerts.length}`}
+      owner={owner}
+    >
       <DataTable
         headers={["Time", "Repo", "Severity", "Title", "Type"]}
         minWidth={900}
@@ -70,4 +77,3 @@ export default async function Page({
     </AppShell>
   );
 }
-

@@ -8,4 +8,3 @@ export function registerRequestId(app: FastifyInstance) {
     return payload;
   });
 }
-

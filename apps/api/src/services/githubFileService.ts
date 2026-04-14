@@ -13,12 +13,15 @@ export async function fetchFileContent(
   opts: FetchFileOptions,
 ): Promise<string | null> {
   try {
-    const contents = await octokit.request("GET /repos/{owner}/{repo}/contents/{path}", {
-      owner: opts.owner,
-      repo: opts.repo,
-      path: opts.path,
-      ref: opts.ref,
-    });
+    const contents = await octokit.request(
+      "GET /repos/{owner}/{repo}/contents/{path}",
+      {
+        owner: opts.owner,
+        repo: opts.repo,
+        path: opts.path,
+        ref: opts.ref,
+      },
+    );
 
     const b64 = (contents.data as Record<string, unknown>)?.content;
     if (!b64 || typeof b64 !== "string") return null;

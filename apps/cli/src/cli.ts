@@ -3,7 +3,12 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 import { analyze } from "@mergesignal/engine";
-import type { LayerScores, ScanLockfileInput, ScanResult, ScoreLayer } from "@mergesignal/shared";
+import type {
+  LayerScores,
+  ScanLockfileInput,
+  ScanResult,
+  ScoreLayer,
+} from "@mergesignal/shared";
 
 type ArgMap = {
   _: string[];
@@ -19,7 +24,13 @@ async function main() {
   const args = parseArgs(process.argv.slice(2));
   const [cmd] = args._;
 
-  if (!cmd || args["--help"] || cmd === "help" || cmd === "--help" || cmd === "-h") {
+  if (
+    !cmd ||
+    args["--help"] ||
+    cmd === "help" ||
+    cmd === "--help" ||
+    cmd === "-h"
+  ) {
     printHelp();
     process.exit(0);
   }
@@ -31,9 +42,13 @@ async function main() {
   }
 
   const cwd = getInvocationCwd();
-  const repoId = String(args["--repo-id"] ?? path.basename(cwd)).trim() || "local";
+  const repoId =
+    String(args["--repo-id"] ?? path.basename(cwd)).trim() || "local";
 
-  const lockfile = await loadLockfile({ cwd, explicitPath: args["--lockfile"] });
+  const lockfile = await loadLockfile({
+    cwd,
+    explicitPath: args["--lockfile"],
+  });
 
   const result = (await analyze({
     repoId,
@@ -52,7 +67,9 @@ async function main() {
     printSummary({ repoId, lockfile, result, outPath });
   }
 
-  const failAbove = args["--fail-above"] ? Number(args["--fail-above"]) : undefined;
+  const failAbove = args["--fail-above"]
+    ? Number(args["--fail-above"])
+    : undefined;
   if (typeof failAbove === "number" && Number.isFinite(failAbove)) {
     const score = Number(result.totalScore ?? 0);
     if (score > failAbove) process.exit(3);
@@ -87,18 +104,26 @@ function printHelp() {
   );
 }
 
-async function loadLockfile(opts: { cwd: string; explicitPath?: string }): Promise<ScanLockfileInput | undefined> {
+async function loadLockfile(opts: {
+  cwd: string;
+  explicitPath?: string;
+}): Promise<ScanLockfileInput | undefined> {
   if (opts.explicitPath) {
     const p = path.resolve(opts.cwd, opts.explicitPath);
     const content = await readFile(p, "utf8");
     const manager = inferManagerFromFilename(p);
     if (!manager) {
-      throw new Error(`Unsupported lockfile: ${path.basename(p)} (supported: pnpm-lock.yaml, package-lock.json)`);
+      throw new Error(
+        `Unsupported lockfile: ${path.basename(p)} (supported: pnpm-lock.yaml, package-lock.json)`,
+      );
     }
     return { manager, content, path: path.relative(opts.cwd, p) };
   }
 
-  const candidates: Array<{ filename: string; manager: ScanLockfileInput["manager"] }> = [
+  const candidates: Array<{
+    filename: string;
+    manager: ScanLockfileInput["manager"];
+  }> = [
     { filename: "pnpm-lock.yaml", manager: "pnpm" },
     { filename: "package-lock.json", manager: "npm" },
   ];
@@ -116,7 +141,9 @@ async function loadLockfile(opts: { cwd: string; explicitPath?: string }): Promi
   return undefined;
 }
 
-function inferManagerFromFilename(p: string): ScanLockfileInput["manager"] | null {
+function inferManagerFromFilename(
+  p: string,
+): ScanLockfileInput["manager"] | null {
   const base = path.basename(p).toLowerCase();
   if (base === "pnpm-lock.yaml") return "pnpm";
   if (base === "package-lock.json") return "npm";
@@ -124,20 +151,34 @@ function inferManagerFromFilename(p: string): ScanLockfileInput["manager"] | nul
   return null;
 }
 
-function printSummary(opts: { repoId: string; lockfile?: ScanLockfileInput; result: ScanResult; outPath: string | null }) {
+function printSummary(opts: {
+  repoId: string;
+  lockfile?: ScanLockfileInput;
+  result: ScanResult;
+  outPath: string | null;
+}) {
   const { result } = opts;
-  const score = typeof result.totalScore === "number" ? result.totalScore : null;
+  const score =
+    typeof result.totalScore === "number" ? result.totalScore : null;
   const conf = result.confidence ? String(result.confidence) : "n/a";
-  const method = result.methodologyVersion ? String(result.methodologyVersion) : "n/a";
+  const method = result.methodologyVersion
+    ? String(result.methodologyVersion)
+    : "n/a";
 
   const layers: Partial<LayerScores> = result.layerScores ?? {};
   const findings = Array.isArray(result.findings) ? result.findings : [];
-  const recs = Array.isArray(result.recommendations) ? result.recommendations : [];
+  const recs = Array.isArray(result.recommendations)
+    ? result.recommendations
+    : [];
   const reasons = result.explain?.reasons ?? [];
   const graphInsights = result.graphInsights;
-  const deepest = Array.isArray(graphInsights?.deepest) ? graphInsights.deepest : [];
+  const deepest = Array.isArray(graphInsights?.deepest)
+    ? graphInsights.deepest
+    : [];
 
-  const lockfileLine = opts.lockfile ? `${opts.lockfile.path} (${opts.lockfile.manager})` : "none";
+  const lockfileLine = opts.lockfile
+    ? `${opts.lockfile.path} (${opts.lockfile.manager})`
+    : "none";
 
   const lines: string[] = [];
   lines.push("");
@@ -167,7 +208,9 @@ function printSummary(opts: { repoId: string; lockfile?: ScanLockfileInput; resu
       const depth = Number(d?.depth ?? 0);
       const direct = Boolean(d?.direct);
       const via = Array.isArray(d?.via) ? d.via.join(" → ") : "";
-      lines.push(`- ${name} is ${direct ? "direct" : "transitive"} at depth ${depth}${via ? ` via ${via}` : ""}`);
+      lines.push(
+        `- ${name} is ${direct ? "direct" : "transitive"} at depth ${depth}${via ? ` via ${via}` : ""}`,
+      );
     }
   }
 
@@ -191,7 +234,12 @@ function printSummary(opts: { repoId: string; lockfile?: ScanLockfileInput; resu
 }
 
 function formatLayers(layers: Partial<LayerScores>) {
-  const order: ScoreLayer[] = ["security", "maintainability", "ecosystem", "upgradeImpact"];
+  const order: ScoreLayer[] = [
+    "security",
+    "maintainability",
+    "ecosystem",
+    "upgradeImpact",
+  ];
   const bits = order.map((k) => `${k}=${toShortNumber(layers[k])}`);
   return bits.join(" • ");
 }
@@ -222,7 +270,11 @@ function parseArgs(argv: string[]): ArgMap {
       continue;
     }
 
-    const takesValue = a === "--out" || a === "--repo-id" || a === "--lockfile" || a === "--fail-above";
+    const takesValue =
+      a === "--out" ||
+      a === "--repo-id" ||
+      a === "--lockfile" ||
+      a === "--fail-above";
     if (takesValue) {
       const v = argv[i + 1];
       if (!v || v.startsWith("--")) throw new Error(`${a} expects a value`);
@@ -246,4 +298,3 @@ main().catch((e: unknown) => {
   process.stderr.write(`mergesignal: ${msg}\n`);
   process.exit(1);
 });
-

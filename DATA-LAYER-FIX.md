@@ -7,24 +7,28 @@ This fix addresses critical data layer issues by implementing type-safe schema m
 ## Issues Fixed
 
 ### 1. ✅ Type-Safe Query Layer
+
 - **Before**: Raw SQL with `db.query()` and manual type casting (`as any`)
 - **After**: Type-safe query helpers in `db.ts` with compile-time type checking
 - All database types defined in `types/database.ts`
 - Query results are properly typed (e.g., `Policy`, `ApiKey`, `Scan`)
 
 ### 2. ✅ Proper Migration Tracking
+
 - **Before**: Simple file checks, no tracking table, migrations could run multiple times
 - **After**: `_migrations` table tracks applied migrations with timestamps
 - Idempotent migrations prevent re-runs
 - Clear audit trail of schema changes
 
 ### 3. ✅ Centralized Type Definitions
+
 - **Before**: Types manually maintained and scattered (`type Policy = {...}` in routes)
 - **After**: Single source of truth in `types/database.ts`
 - Types derive from SQL schema (SQL migrations remain source of truth)
 - No more schema drift between TypeScript and database
 
 ### 4. ✅ Repository Pattern (Partial)
+
 - **Before**: SQL scattered across 14+ files
 - **After**: Typed query helpers for high-risk operations:
   - `queries.apiKeys.*` - API key operations
@@ -33,6 +37,7 @@ This fix addresses critical data layer issues by implementing type-safe schema m
 - Complex analytical queries (benchmarks, dashboards) remain as raw SQL for now
 
 ### 5. ✅ Prisma Dependency Rationalized
+
 - **Before**: Prisma installed but completely unused (wasted dependency)
 - **After**: Removed Prisma approach due to Node 18 compatibility issues
 - Implemented pragmatic type-safe layer without heavy ORM overhead
@@ -49,7 +54,7 @@ export interface Policy {
   owner: string;
   name: string;
   enabled: boolean;
-  rules: unknown;  // JSON field
+  rules: unknown; // JSON field
   created_at: Date;
   updated_at: Date;
 }
@@ -83,10 +88,12 @@ CREATE TABLE _migrations (
 ## Files Changed
 
 **New files:**
+
 - `src/types/database.ts` - Centralized database type definitions (8 models)
 - `sql/009_migration_tracking.sql` - Migration tracking table (auto-created)
 
 **Modified files:**
+
 - `src/db.ts` - Added type-safe query helpers alongside raw Pool export
 - `src/migrate.ts` - Proper migration tracking with `_migrations` table
 - `src/http/auth.ts` - Use `queries.apiKeys.*` instead of raw SQL
@@ -98,18 +105,21 @@ CREATE TABLE _migrations (
 ## Migration Strategy
 
 ### Phase 1 (This Commit): High-Risk Areas
+
 - ✅ Auth layer (API keys)
 - ✅ Policies (CRUD operations)
 - ✅ Scans (basic operations)
 - ✅ Migration tracking
 
 ### Phase 2 (Future): Gradual Adoption
+
 - Alerts routes
 - Repo sources
 - Policy violations
 - Package health dataset
 
 ### Phase 3 (Future): Complex Queries
+
 - Dashboard analytics (complex CTEs)
 - Benchmark percentiles
 - Upgrade simulations
@@ -117,12 +127,16 @@ CREATE TABLE _migrations (
 ## Type Safety Benefits
 
 ### Before (Unsafe):
+
 ```typescript
-const { rows } = await db.query("SELECT * FROM policies WHERE owner=$1", [owner]);
-const policies = rows as Policy[];  // Manual cast, no compile-time checking
+const { rows } = await db.query("SELECT * FROM policies WHERE owner=$1", [
+  owner,
+]);
+const policies = rows as Policy[]; // Manual cast, no compile-time checking
 ```
 
 ### After (Type-Safe):
+
 ```typescript
 const policies = await queries.policies.findByOwner(owner);
 // Type: Policy[]
@@ -132,6 +146,7 @@ const policies = await queries.policies.findByOwner(owner);
 ## Testing
 
 ### Verify Migration Tracking:
+
 ```bash
 # Run migrations
 npm run migrate
@@ -141,6 +156,7 @@ psql $DATABASE_URL -c "SELECT filename, applied_at FROM _migrations ORDER BY app
 ```
 
 ### Verify Type Safety:
+
 ```bash
 # Should compile without errors
 npm run build
@@ -150,6 +166,7 @@ cd apps/api && npx tsc --noEmit
 ```
 
 ### Test API Operations:
+
 ```bash
 # Generate API key (uses queries.apiKeys.create)
 npm run generate-api-key -- testorg "Test key"

@@ -7,11 +7,13 @@ This module provides code analysis capabilities with performance safeguards for 
 ### 1. Performance Benchmarking
 
 The test suite includes benchmarks for analyzing repositories of different sizes:
+
 - Small repos (10 files)
 - Medium repos (100 files)
 - Large repos (1000+ files)
 
 Run benchmarks:
+
 ```bash
 pnpm test codeAnalysisService.test.ts
 ```
@@ -24,6 +26,7 @@ Code analysis operations have a configurable timeout to prevent long-running ope
 - **Configuration**: Set `CODE_ANALYSIS_TIMEOUT_MS` environment variable
 
 When a timeout occurs:
+
 - Analysis gracefully degrades
 - Returns empty analysis result
 - Sets `timedOut: true` flag
@@ -39,6 +42,7 @@ Analysis results are cached per commit SHA to avoid redundant work:
 - **Storage**: Redis (distributed cache)
 
 Cache benefits:
+
 - Instant results for re-analyzed commits
 - Reduced load on code analysis infrastructure
 - Better performance for CI/CD workflows
@@ -46,6 +50,7 @@ Cache benefits:
 ### 4. Graceful Degradation
 
 When analysis fails or times out:
+
 - Scan continues without code analysis insights
 - Dependency analysis still runs
 - Risk scores are computed from available data
@@ -71,14 +76,10 @@ import { CodeAnalysisCache } from "./codeAnalysisCache.js";
 
 const cache = new CodeAnalysisCache(redisClient, cacheTtlMs);
 
-const result = await analyzeSourceFiles(
-  repoSource,
-  changedFiles,
-  {
-    timeoutMs: 30000,
-    cache,
-  }
-);
+const result = await analyzeSourceFiles(repoSource, changedFiles, {
+  timeoutMs: 30000,
+  cache,
+});
 
 if (result?.timedOut) {
   console.log("Analysis timed out, continuing with partial data");
@@ -116,6 +117,7 @@ For optimal performance:
 ## Future Improvements
 
 Potential enhancements:
+
 - AST-based import scanning (more accurate than regex)
 - Incremental analysis (only changed files)
 - Parallel file processing

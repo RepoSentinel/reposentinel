@@ -112,7 +112,11 @@ export type ExplainBlock = {
   reasons: ExplainReason[];
 };
 
-export type DependencyGraphInsightKind = "hidden" | "vulnerable" | "deep" | "hotspot";
+export type DependencyGraphInsightKind =
+  | "hidden"
+  | "vulnerable"
+  | "deep"
+  | "hotspot";
 
 export type DependencyGraphInsight = {
   kind: DependencyGraphInsightKind;
@@ -133,14 +137,14 @@ export type DependencyGraphInsights = {
   vulnerable?: DependencyGraphInsight[];
 };
 
-export type PRInsightType = 
-  | 'used_breaking_changes' 
-  | 'critical_path_impact' 
-  | 'security_concern' 
-  | 'major_version_bump' 
-  | 'deprecation_warning';
+export type PRInsightType =
+  | "used_breaking_changes"
+  | "critical_path_impact"
+  | "security_concern"
+  | "major_version_bump"
+  | "deprecation_warning";
 
-export type PRInsightPriority = 'critical' | 'high' | 'medium' | 'low';
+export type PRInsightPriority = "critical" | "high" | "medium" | "low";
 
 export type PRInsight = {
   type: PRInsightType;
@@ -151,9 +155,9 @@ export type PRInsight = {
   details?: Record<string, unknown>;
 };
 
-export type PRDecisionRecommendation = 'safe' | 'needs_review' | 'risky';
+export type PRDecisionRecommendation = "safe" | "needs_review" | "risky";
 
-export type PRDecisionConfidence = 'low' | 'medium' | 'high';
+export type PRDecisionConfidence = "low" | "medium" | "high";
 
 export type PRDecision = {
   recommendation: PRDecisionRecommendation;
@@ -254,7 +258,7 @@ export type CriticalPathScore = {
   reasons: string[];
 };
 
-export type ImpactInsightType = 
+export type ImpactInsightType =
   | "breaking_change_used"
   | "breaking_change_unused"
   | "critical_path_affected"

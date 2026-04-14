@@ -25,16 +25,28 @@ export function AppShell({
         <nav className={styles.nav}>
           {owner ? (
             <>
-              <Link className={styles.navLink} href={`/org/${encodeURIComponent(owner)}`}>
+              <Link
+                className={styles.navLink}
+                href={`/org/${encodeURIComponent(owner)}`}
+              >
                 Dashboard
               </Link>
-              <Link className={styles.navLink} href={`/org/${encodeURIComponent(owner)}/alerts`}>
+              <Link
+                className={styles.navLink}
+                href={`/org/${encodeURIComponent(owner)}/alerts`}
+              >
                 Alerts
               </Link>
-              <Link className={styles.navLink} href={`/org/${encodeURIComponent(owner)}/policies`}>
+              <Link
+                className={styles.navLink}
+                href={`/org/${encodeURIComponent(owner)}/policies`}
+              >
                 Policies
               </Link>
-              <Link className={styles.navLink} href={`/org/${encodeURIComponent(owner)}/benchmark`}>
+              <Link
+                className={styles.navLink}
+                href={`/org/${encodeURIComponent(owner)}/benchmark`}
+              >
                 Benchmark
               </Link>
             </>
@@ -58,4 +70,3 @@ export function AppShell({
     </div>
   );
 }
-

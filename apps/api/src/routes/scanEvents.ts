@@ -7,7 +7,9 @@ export async function scanEventsRoutes(app: FastifyInstance) {
     const id = (req.params as { id: string }).id;
 
     // Authorization check: fetch scan and verify ownership before streaming
-    const scanCheck = await db.query("SELECT repo_id FROM scans WHERE id=$1", [id]);
+    const scanCheck = await db.query("SELECT repo_id FROM scans WHERE id=$1", [
+      id,
+    ]);
     if (scanCheck.rows.length === 0) {
       reply.hijack();
       reply.raw.writeHead(404, {
@@ -46,7 +48,10 @@ export async function scanEventsRoutes(app: FastifyInstance) {
     }
 
     const allowedOrigins = new Set(
-      (process.env.CORS_ORIGINS ?? "http://localhost:3000,http://127.0.0.1:3000")
+      (
+        process.env.CORS_ORIGINS ??
+        "http://localhost:3000,http://127.0.0.1:3000"
+      )
         .split(",")
         .map((s) => s.trim())
         .filter(Boolean),
@@ -75,7 +80,9 @@ export async function scanEventsRoutes(app: FastifyInstance) {
       "Cache-Control": "no-cache, no-transform",
       Connection: "keep-alive",
       "x-request-id": String(req.id ?? ""),
-      ...(origin ? { "Access-Control-Allow-Origin": origin, Vary: "Origin" } : {}),
+      ...(origin
+        ? { "Access-Control-Allow-Origin": origin, Vary: "Origin" }
+        : {}),
     });
 
     reply.raw.write(`: connected\n\n`);
@@ -115,7 +122,10 @@ export async function scanEventsRoutes(app: FastifyInstance) {
           [id],
         );
         if (rows.length === 0) {
-          send("error", { message: "Not found", requestId: String(req.id ?? "") });
+          send("error", {
+            message: "Not found",
+            requestId: String(req.id ?? ""),
+          });
           cleanup();
           return;
         }

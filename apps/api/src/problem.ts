@@ -23,7 +23,11 @@ export function buildProblem(req: FastifyRequest, opts: ProblemDetails) {
   return problem;
 }
 
-export function sendProblem(reply: FastifyReply, req: FastifyRequest, opts: ProblemDetails) {
+export function sendProblem(
+  reply: FastifyReply,
+  req: FastifyRequest,
+  opts: ProblemDetails,
+) {
   const problem = buildProblem(req, opts);
   return reply
     .code(opts.status)
@@ -35,4 +39,3 @@ export function sendProblem(reply: FastifyReply, req: FastifyRequest, opts: Prob
 export function problemJsonString(req: FastifyRequest, opts: ProblemDetails) {
   return JSON.stringify(buildProblem(req, opts));
 }
-

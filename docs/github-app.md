@@ -31,4 +31,3 @@ Set these env vars for `apps/api`:
 
 - On `pull_request` (`opened`, `reopened`, `synchronize`), if a lockfile changed, MergeSignal fetches the lockfile from the PR head SHA and enqueues a scan. After the scan completes, it posts/updates a PR comment with a risk delta (pnpm only for now).
 - On `push`, if a lockfile changed, MergeSignal fetches the lockfile at the pushed SHA and enqueues a scan.
-

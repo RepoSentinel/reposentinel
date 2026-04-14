@@ -16,7 +16,7 @@ MergeSignal is licensed under **Apache License 2.0** (see [LICENSE](./LICENSE)).
 
 ### "AS IS" Disclaimer
 
-**THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.** 
+**THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.**
 
 🔴 **Critical: You MUST understand these limitations before using MergeSignal:**
 
@@ -266,7 +266,6 @@ When configured and installed, MergeSignal will **analyze PR lockfile changes** 
 - dependency delta summary (direct + lockfile packages)
 - risk score delta and top signal deltas
 - "Why this is risky" reasons derived from explainable signals
-
 
 **Important**: To enable PR comments, set `FREE_PR_COMMENTS_ENABLED=1` in your worker environment configuration. Without this setting, scans will complete successfully but PR comments will not be posted.
 

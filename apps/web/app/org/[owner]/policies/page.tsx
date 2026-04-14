@@ -50,10 +50,13 @@ export default async function Page({
   try {
     [policies, violations] = await Promise.all([
       apiGet<PoliciesResponse>(`/org/${encodeURIComponent(owner)}/policies`),
-      apiGet<ViolationsResponse>(`/org/${encodeURIComponent(owner)}/policy/violations?limit=${limit}`),
+      apiGet<ViolationsResponse>(
+        `/org/${encodeURIComponent(owner)}/policy/violations?limit=${limit}`,
+      ),
     ]);
   } catch (err: unknown) {
-    const errorText = err instanceof ApiError ? err.body ?? err.message : String(err);
+    const errorText =
+      err instanceof ApiError ? (err.body ?? err.message) : String(err);
     return (
       <AppShell title="Policies" subtitle={owner} owner={owner}>
         <pre style={{ whiteSpace: "pre-wrap" }}>{errorText}</pre>
@@ -71,7 +74,7 @@ export default async function Page({
       {policies.policies.length === 0 ? (
         <Card title="No policies yet" subtitle="Create one via API:">
           <pre style={{ whiteSpace: "pre-wrap" }}>
-{`curl -X POST "${baseUrl}/org/${owner}/policies" \\
+            {`curl -X POST "${baseUrl}/org/${owner}/policies" \\
   -H "Content-Type: application/json" \\
   -d '{"name":"baseline","enabled":true,"rules":[{"type":"no_deprecated"},{"type":"max_stale_releases_count","max":3}]}'`}
           </pre>
@@ -82,7 +85,9 @@ export default async function Page({
             <li key={p.id}>
               <b>{p.name}</b> ({p.enabled ? "enabled" : "disabled"}){" "}
               <code>{p.id}</code>
-              <pre style={{ whiteSpace: "pre-wrap" }}>{JSON.stringify(p.rules, null, 2)}</pre>
+              <pre style={{ whiteSpace: "pre-wrap" }}>
+                {JSON.stringify(p.rules, null, 2)}
+              </pre>
             </li>
           ))}
         </ul>
@@ -118,4 +123,3 @@ export default async function Page({
     </AppShell>
   );
 }
-

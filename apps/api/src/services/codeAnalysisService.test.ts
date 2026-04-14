@@ -1,5 +1,9 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { analyzeSourceFiles, getAnalysisTimeoutMs, getAnalysisCacheTtlMs } from "./codeAnalysisService.js";
+import {
+  analyzeSourceFiles,
+  getAnalysisTimeoutMs,
+  getAnalysisCacheTtlMs,
+} from "./codeAnalysisService.js";
 import { CodeAnalysisCache } from "./codeAnalysisCache.js";
 import type { RepoSource } from "@mergesignal/shared";
 
@@ -41,7 +45,9 @@ describe("codeAnalysisService", () => {
         set: vi.fn(),
       } as unknown as CodeAnalysisCache;
 
-      const result = await analyzeSourceFiles(repoSource, changedFiles, { cache: mockCache });
+      const result = await analyzeSourceFiles(repoSource, changedFiles, {
+        cache: mockCache,
+      });
 
       expect(result).not.toBeNull();
       expect(result?.fromCache).toBe(true);
@@ -65,7 +71,9 @@ describe("codeAnalysisService", () => {
         set: vi.fn().mockResolvedValue(undefined),
       } as unknown as CodeAnalysisCache;
 
-      const result = await analyzeSourceFiles(repoSource, changedFiles, { cache: mockCache });
+      const result = await analyzeSourceFiles(repoSource, changedFiles, {
+        cache: mockCache,
+      });
 
       expect(result).not.toBeNull();
       expect(result?.fromCache).toBe(false);
@@ -84,10 +92,12 @@ describe("codeAnalysisService", () => {
       };
       const changedFiles = ["src/file.ts"];
 
-      const result = await analyzeSourceFiles(repoSource, changedFiles, { timeoutMs: 1 });
+      const result = await analyzeSourceFiles(repoSource, changedFiles, {
+        timeoutMs: 1,
+      });
 
       expect(result).not.toBeNull();
-      
+
       if (result?.timedOut) {
         expect(result.imports).toEqual({});
         expect(result.analysisTimeMs).toBeGreaterThanOrEqual(1);
@@ -187,10 +197,15 @@ describe("Performance benchmarks", () => {
       sha: "abc123",
       installationId: 1,
     };
-    const changedFiles = Array.from({ length: 10 }, (_, i) => `src/file${i}.ts`);
+    const changedFiles = Array.from(
+      { length: 10 },
+      (_, i) => `src/file${i}.ts`,
+    );
 
     const start = Date.now();
-    const result = await analyzeSourceFiles(repoSource, changedFiles, { timeoutMs: 30000 });
+    const result = await analyzeSourceFiles(repoSource, changedFiles, {
+      timeoutMs: 30000,
+    });
     const elapsed = Date.now() - start;
 
     expect(result).not.toBeNull();
@@ -205,10 +220,15 @@ describe("Performance benchmarks", () => {
       sha: "abc123",
       installationId: 1,
     };
-    const changedFiles = Array.from({ length: 100 }, (_, i) => `src/file${i}.ts`);
+    const changedFiles = Array.from(
+      { length: 100 },
+      (_, i) => `src/file${i}.ts`,
+    );
 
     const start = Date.now();
-    const result = await analyzeSourceFiles(repoSource, changedFiles, { timeoutMs: 30000 });
+    const result = await analyzeSourceFiles(repoSource, changedFiles, {
+      timeoutMs: 30000,
+    });
     const elapsed = Date.now() - start;
 
     expect(result).not.toBeNull();
@@ -223,19 +243,28 @@ describe("Performance benchmarks", () => {
       sha: "abc123",
       installationId: 1,
     };
-    const changedFiles = Array.from({ length: 1000 }, (_, i) => `src/file${i}.ts`);
+    const changedFiles = Array.from(
+      { length: 1000 },
+      (_, i) => `src/file${i}.ts`,
+    );
 
     const start = Date.now();
-    const result = await analyzeSourceFiles(repoSource, changedFiles, { timeoutMs: 30000 });
+    const result = await analyzeSourceFiles(repoSource, changedFiles, {
+      timeoutMs: 30000,
+    });
     const elapsed = Date.now() - start;
 
     expect(result).not.toBeNull();
     expect(elapsed).toBeLessThan(31000);
-    
+
     if (result?.timedOut) {
-      console.log(`Analysis timed out after ${elapsed}ms for ${changedFiles.length} files`);
+      console.log(
+        `Analysis timed out after ${elapsed}ms for ${changedFiles.length} files`,
+      );
     } else {
-      console.log(`Analysis completed in ${elapsed}ms for ${changedFiles.length} files`);
+      console.log(
+        `Analysis completed in ${elapsed}ms for ${changedFiles.length} files`,
+      );
     }
   });
 });
