@@ -38,14 +38,7 @@ function buildMockResult(): ScanResult {
         priorityScore: 10,
       },
     ],
-    insights: [
-      {
-        type: "major_version_bump",
-        priority: "low",
-        message: "Stub insight - actual analysis unavailable",
-        action: "Install proprietary engine for real insights",
-      },
-    ],
+    insights: [],
     decision: {
       recommendation: "needs_review",
       confidence: "low",
@@ -64,7 +57,7 @@ function buildMockResult(): ScanResult {
  */
 export async function analyze(_req: ScanRequest): Promise<ScanResult> {
   console.warn(
-    "⚠️  Using stub engine - analysis results are mocked for demonstration only",
+    "⚠️  Using stub engine - analysis results are mocked for demonstration only"
   );
   return buildMockResult();
 }
@@ -75,10 +68,10 @@ export async function analyze(_req: ScanRequest): Promise<ScanResult> {
  * This returns mock data for demonstration purposes.
  */
 export async function simulateUpgrade(
-  _req: UpgradeSimulationRequest,
+  _req: UpgradeSimulationRequest
 ): Promise<UpgradeSimulationResult> {
   console.warn(
-    "⚠️  Using stub engine - upgrade simulation results are mocked for demonstration only",
+    "⚠️  Using stub engine - upgrade simulation results are mocked for demonstration only"
   );
 
   const before = buildMockResult();
