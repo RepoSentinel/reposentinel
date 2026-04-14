@@ -224,20 +224,31 @@ export default function ScanClient({ id }: { id: string }) {
                   </span>
                 </div>
                 <p className={styles.insightMessage}>{insight.message}</p>
-                <p className={styles.insightAction}>
-                  <strong>Action:</strong> {insight.action}
-                </p>
-                {insight.files && insight.files.length > 0 && (
+                {'context' in insight && insight.context && (
+                  <p className={styles.insightAction}>
+                    <strong>Context:</strong> {insight.context}
+                  </p>
+                )}
+                {'remediation' in insight && insight.remediation && (
+                  <p className={styles.insightAction}>
+                    <strong>Remediation:</strong> {insight.remediation}
+                  </p>
+                )}
+                {insight.affectedFiles && insight.affectedFiles.length > 0 && (
                   <details className={styles.affectedFiles}>
-                    <summary>{insight.files.length} file(s) affected</summary>
+                    <summary>
+                      {insight.affectedFiles.length} file(s) affected
+                    </summary>
                     <ul>
-                      {insight.files.slice(0, 10).map((file, i) => (
+                      {insight.affectedFiles.slice(0, 10).map((file, i) => (
                         <li key={i}>
                           <code>{file}</code>
                         </li>
                       ))}
-                      {insight.files.length > 10 && (
-                        <li>...and {insight.files.length - 10} more</li>
+                      {insight.affectedFiles.length > 10 && (
+                        <li>
+                          ...and {insight.affectedFiles.length - 10} more
+                        </li>
                       )}
                     </ul>
                   </details>
