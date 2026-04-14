@@ -224,12 +224,12 @@ export default function ScanClient({ id }: { id: string }) {
                   </span>
                 </div>
                 <p className={styles.insightMessage}>{insight.message}</p>
-                {'context' in insight && insight.context && (
+                {"context" in insight && insight.context && (
                   <p className={styles.insightAction}>
                     <strong>Context:</strong> {insight.context}
                   </p>
                 )}
-                {'remediation' in insight && insight.remediation && (
+                {"remediation" in insight && insight.remediation && (
                   <p className={styles.insightAction}>
                     <strong>Remediation:</strong> {insight.remediation}
                   </p>
@@ -246,9 +246,7 @@ export default function ScanClient({ id }: { id: string }) {
                         </li>
                       ))}
                       {insight.affectedFiles.length > 10 && (
-                        <li>
-                          ...and {insight.affectedFiles.length - 10} more
-                        </li>
+                        <li>...and {insight.affectedFiles.length - 10} more</li>
                       )}
                     </ul>
                   </details>
