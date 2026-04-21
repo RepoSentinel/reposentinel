@@ -1,3 +1,4 @@
+import { Octokit } from "octokit";
 import Fastify from "fastify";
 import { runMigrationsIfEnabled } from "./migrate.js";
 import { registerRoutes } from "./routes/register.js";
@@ -35,7 +36,11 @@ export async function createApp() {
   });
 
   app.log.info(
-    { version: appConfig.version, env: process.env.NODE_ENV ?? "development" },
+    {
+      version: appConfig.version,
+      env: process.env.NODE_ENV ?? "development",
+      octokitSdk: Octokit.name,
+    },
     "Starting API server",
   );
 
