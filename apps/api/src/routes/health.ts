@@ -2,6 +2,7 @@ import { FastifyInstance } from "fastify";
 import { db } from "../db.js";
 import { scanQueue } from "../queue.js";
 
+/** Liveness/readiness for load balancers; independent of scan pipeline. */
 export async function healthRoutes(app: FastifyInstance) {
   app.get("/health", async (req, reply) => {
     const checks: Record<
