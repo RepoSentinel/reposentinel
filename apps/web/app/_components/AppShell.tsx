@@ -10,6 +10,8 @@ export function AppShell({
   owner,
   linkedOwner,
   hideTitlebar,
+  /** Marketing / info-only pages: logo in header only (no auth or org nav). */
+  hideHeaderNav,
   mainWidth = "default",
   children,
 }: {
@@ -20,9 +22,12 @@ export function AppShell({
   linkedOwner?: string;
   /** Omit the built-in H1 block (e.g. marketing pages render their own hero). */
   hideTitlebar?: boolean;
+  hideHeaderNav?: boolean;
   mainWidth?: "default" | "wide";
   children: React.ReactNode;
 }) {
+  const showNav = !hideHeaderNav;
+
   return (
     <div className={styles.page}>
       <header className={styles.header}>
@@ -39,37 +44,39 @@ export function AppShell({
           </Link>
           {owner ? <span className={styles.owner}>/ {owner}</span> : null}
         </div>
-        <nav className={styles.nav}>
-          {owner ? (
-            <>
-              <Link
-                className={styles.navLink}
-                href={`/org/${encodeURIComponent(owner)}`}
-              >
-                Dashboard
-              </Link>
-              <Link
-                className={styles.navLink}
-                href={`/org/${encodeURIComponent(owner)}/alerts`}
-              >
-                Alerts
-              </Link>
-              <Link
-                className={styles.navLink}
-                href={`/org/${encodeURIComponent(owner)}/policies`}
-              >
-                Policies
-              </Link>
-              <Link
-                className={styles.navLink}
-                href={`/org/${encodeURIComponent(owner)}/benchmark`}
-              >
-                Benchmark
-              </Link>
-            </>
-          ) : null}
-          <UserNav linkedOwner={linkedOwner} />
-        </nav>
+        {showNav ? (
+          <nav className={styles.nav}>
+            {owner ? (
+              <>
+                <Link
+                  className={styles.navLink}
+                  href={`/org/${encodeURIComponent(owner)}`}
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  className={styles.navLink}
+                  href={`/org/${encodeURIComponent(owner)}/alerts`}
+                >
+                  Alerts
+                </Link>
+                <Link
+                  className={styles.navLink}
+                  href={`/org/${encodeURIComponent(owner)}/policies`}
+                >
+                  Policies
+                </Link>
+                <Link
+                  className={styles.navLink}
+                  href={`/org/${encodeURIComponent(owner)}/benchmark`}
+                >
+                  Benchmark
+                </Link>
+              </>
+            ) : null}
+            <UserNav linkedOwner={linkedOwner} />
+          </nav>
+        ) : null}
       </header>
 
       <main

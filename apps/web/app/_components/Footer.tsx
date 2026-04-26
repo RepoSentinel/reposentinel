@@ -5,21 +5,6 @@ export function Footer() {
   return (
     <footer className={styles.footer}>
       <div className={styles.footerContent}>
-        <div className={styles.disclaimer}>
-          <strong>Important:</strong> MergeSignal gives{" "}
-          <strong>automated, informational dependency risk insight</strong>—not
-          legal advice or a full security audit. We publish how we handle data
-          and what we won&apos;t do with your content in the{" "}
-          <Link
-            href="https://github.com/MergeSignal/mergesignal/blob/main/PRIVACY.md"
-            className={styles.link}
-          >
-            Privacy Policy
-          </Link>
-          . Please <strong>validate</strong> recommendations and scores before
-          material decisions (for example production deploys).
-        </div>
-
         <div className={styles.links}>
           <Link
             href="https://github.com/MergeSignal/mergesignal"
@@ -64,10 +49,7 @@ export function Footer() {
           </Link>
         </div>
 
-        <div className={styles.copyright}>
-          © 2026 MergeSignal. All analysis is informational only. Validate all
-          outputs before use.
-        </div>
+        <div className={styles.copyright}>© 2026 MergeSignal</div>
       </div>
     </footer>
   );

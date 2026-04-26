@@ -10,22 +10,7 @@
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-}
-
-.disclaimer {
-  background: color-mix(in oklab, var(--rs-color-warning) 14%, transparent);
-  border-left: 3px solid var(--rs-color-warning);
-  padding: 1rem 1.5rem;
-  border-radius: 4px;
-  font-size: 0.875rem;
-  line-height: 1.5;
-  color: var(--rs-color-text);
-}
-
-.disclaimer strong {
-  color: var(--rs-color-warning);
-  font-weight: 600;
+  gap: 1.25rem;
 }
 
 .links {
@@ -54,7 +39,6 @@
 .copyright {
   color: var(--rs-color-text-muted);
   font-size: 0.875rem;
-  margin-top: 0.5rem;
 }
 
 @media (max-width: 768px) {

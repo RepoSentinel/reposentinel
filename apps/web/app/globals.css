@@ -1,24 +1,24 @@
 :root {
-  /* Brand (from logo) */
-  --ms-bg: #3a476f;
-  --ms-text: #b8c8dc;
+  /* Brand: deep blue-black surface, near-white type */
+  --ms-bg: #060a12;
+  --ms-text: #f2f6fb;
 
-  --ms-logo-panel: var(--ms-bg);
-  --ms-frost: var(--ms-text);
+  --ms-logo-panel: #0c1220;
+  --ms-frost: #c8d6ea;
 
-  --rs-color-background: #3a476f;
-  --rs-color-background-elevated: color-mix(in oklab, #3a476f 88%, #000 12%);
-  --rs-color-surface: color-mix(in oklab, var(--ms-text) 9%, transparent);
-  --rs-color-surface-emphasis: color-mix(in oklab, var(--ms-text) 14%, transparent);
-  --rs-color-text: #b8c8dc;
-  --rs-color-text-muted: color-mix(in oklab, #b8c8dc 72%, #3a476f 28%);
-  --rs-color-border: color-mix(in oklab, #b8c8dc 24%, transparent);
-  --rs-color-brand-frost: #b8c8dc;
+  --rs-color-background: #060a12;
+  --rs-color-background-elevated: #0b101c;
+  --rs-color-surface: color-mix(in oklab, #fff 6%, #060a12 94%);
+  --rs-color-surface-emphasis: color-mix(in oklab, #fff 10%, #060a12 90%);
+  --rs-color-text: #f2f6fb;
+  --rs-color-text-muted: color-mix(in oklab, #f2f6fb 72%, #060a12 28%);
+  --rs-color-border: color-mix(in oklab, #f2f6fb 14%, transparent);
+  --rs-color-brand-frost: #c8d6ea;
 
-  /* Light controls on brand background */
-  --rs-color-accent: color-mix(in oklab, #fff 94%, #b8c8dc 6%);
-  --rs-color-accent-alt: color-mix(in oklab, #b8c8dc 55%, #fff 45%);
-  --rs-color-on-accent: #1e2436;
+  /* Light controls on dark background */
+  --rs-color-accent: color-mix(in oklab, #fff 92%, #c8d6ea 8%);
+  --rs-color-accent-alt: color-mix(in oklab, #c8d6ea 45%, #fff 55%);
+  --rs-color-on-accent: #0a0e18;
   --rs-color-success: #6ee7b7;
   --rs-color-warning: #fbbf24;
   --rs-color-danger: #fb7185;
@@ -28,7 +28,7 @@
   --rs-shadow-sm: 0 1px 0 rgba(0, 0, 0, 0.2);
   --rs-shadow-md: 0 18px 50px rgba(0, 0, 0, 0.35);
 
-  --rs-focus-ring: color-mix(in oklab, #b8c8dc 38%, transparent);
+  --rs-focus-ring: color-mix(in oklab, #c8d6ea 42%, transparent);
 
   --ms-accent: var(--rs-color-accent);
   --ms-border: var(--rs-color-border);
@@ -51,12 +51,12 @@ body {
   background:
     radial-gradient(
       900px 520px at 12% -10%,
-      color-mix(in oklab, #b8c8dc 12%, transparent),
+      color-mix(in oklab, #c8d6ea 8%, transparent),
       transparent 55%
     ),
     radial-gradient(
       700px 420px at 92% 0%,
-      color-mix(in oklab, #3a476f 40%, #000 60%),
+      color-mix(in oklab, #0b1428 85%, #000 15%),
       transparent 50%
     ),
     linear-gradient(180deg, var(--rs-color-background), var(--rs-color-background-elevated));
@@ -80,5 +80,5 @@ code {
 }
 
 ::selection {
-  background: color-mix(in oklab, #b8c8dc 30%, transparent);
+  background: color-mix(in oklab, #c8d6ea 28%, transparent);
 }

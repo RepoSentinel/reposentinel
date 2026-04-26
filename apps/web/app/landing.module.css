@@ -29,8 +29,8 @@
   background:
     linear-gradient(
       145deg,
-      color-mix(in oklab, var(--ms-logo-panel) 88%, transparent),
-      color-mix(in oklab, var(--rs-color-background-elevated) 70%, transparent)
+      color-mix(in oklab, var(--ms-logo-panel) 92%, #000 8%),
+      color-mix(in oklab, var(--rs-color-background-elevated) 85%, transparent)
     );
   box-shadow: var(--rs-shadow-md);
 }
@@ -98,210 +98,80 @@
   max-width: 42rem;
 }
 
-.p {
-  margin: 0 0 0.85rem;
-  line-height: 1.65;
-  color: var(--rs-color-text-muted);
-  max-width: 48rem;
-}
-
-.p:last-child {
-  margin-bottom: 0;
-}
-
-.pSpaced {
-  margin-top: 1rem;
-}
-
-.pEmphasis {
-  font-weight: 500;
-}
-
-.bullets {
-  margin: 0.5rem 0 0;
-  padding-left: 1.2rem;
-  color: var(--rs-color-text-muted);
-  line-height: 1.65;
-}
-
-.bullets li {
-  margin-bottom: 0.4rem;
-}
-
-.focusList {
+/* Unified body lists: title + supporting line per row */
+.sectionList {
   list-style: none;
   padding: 0;
-  margin: 1rem 0 0;
-  display: grid;
-  gap: 0.65rem;
-}
-
-.focusList li {
+  margin: 0.85rem 0 0;
   display: flex;
+  flex-direction: column;
   gap: 0.65rem;
-  align-items: flex-start;
-  padding: 0.65rem 0.85rem;
+}
+
+.sectionListItem {
+  padding: 0.9rem 1.05rem;
   border-radius: var(--rs-radius-md);
   border: 1px solid var(--rs-color-border);
   background: var(--rs-color-surface);
+  font-size: 0.98rem;
+  line-height: 1.55;
   color: var(--rs-color-text-muted);
-  line-height: 1.5;
 }
 
-.focusGlyph {
-  flex-shrink: 0;
-  width: 1.5rem;
-  text-align: center;
-  color: var(--rs-color-brand-frost);
-  font-weight: 700;
-}
-
-.focusStrong {
+.itemLabel {
+  display: block;
+  font-weight: 600;
   color: var(--rs-color-text);
+  margin-bottom: 0.2rem;
+  font-size: 1rem;
 }
 
-.steps {
-  margin: 1.25rem 0 0;
-  padding: 0;
-  list-style: none;
+.sectionListOrdered .sectionListItem {
   display: grid;
-  gap: 1rem;
+  grid-template-columns: 2.35rem 1fr;
+  gap: 0.85rem;
+  align-items: start;
 }
 
-@media (min-width: 720px) {
-  .steps {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-.stepCard {
-  border-radius: var(--rs-radius-md);
-  border: 1px solid var(--rs-color-border);
-  background: var(--rs-color-surface);
-  padding: 1.1rem 1.15rem;
-  min-height: 100%;
-}
-
-.stepNum {
+.listStepNum {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 1.75rem;
-  height: 1.75rem;
+  width: 2.35rem;
+  height: 2.35rem;
   border-radius: 999px;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   font-weight: 700;
-  margin-bottom: 0.65rem;
   color: var(--rs-color-on-accent);
   background: var(--rs-color-brand-frost);
 }
 
-.stepTitle {
-  font-size: 1rem;
-  font-weight: 600;
-  margin: 0 0 0.4rem;
-  color: var(--rs-color-text);
+.listStepBody {
+  min-width: 0;
 }
 
-.stepBody {
-  margin: 0;
-  font-size: 0.95rem;
-  line-height: 1.55;
-  color: var(--rs-color-text-muted);
-}
-
-.grid3 {
-  display: grid;
-  gap: 1rem;
-  margin-top: 1.25rem;
-}
-
-@media (min-width: 720px) {
-  .grid3 {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-.card {
-  border-radius: var(--rs-radius-md);
-  border: 1px solid var(--rs-color-border);
-  background: var(--rs-color-surface);
-  padding: 1.15rem 1.2rem;
-  height: 100%;
-}
-
-.cardTitle {
-  font-size: 1.02rem;
-  font-weight: 600;
-  margin: 0 0 0.45rem;
-  color: var(--rs-color-text);
-}
-
-.cardBody {
-  margin: 0;
-  font-size: 0.95rem;
-  line-height: 1.55;
-  color: var(--rs-color-text-muted);
-}
-
-.scenarioList {
-  margin: 0.75rem 0 0;
-  padding-left: 1.1rem;
+.nestedBullets {
+  margin: 0.5rem 0 0;
+  padding-left: 1.15rem;
   color: var(--rs-color-text-muted);
   font-size: 0.92rem;
   line-height: 1.55;
 }
 
-.scenarioList li {
-  margin-bottom: 0.35rem;
+.nestedBullets li {
+  margin-bottom: 0.3rem;
 }
 
-.valueGrid {
-  display: grid;
-  gap: 0.85rem;
-  margin-top: 1.15rem;
-}
-
-@media (min-width: 640px) {
-  .valueGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-.valueItem {
-  padding: 0.85rem 1rem;
-  border-left: 3px solid var(--rs-color-brand-frost);
-  background: color-mix(in oklab, var(--rs-color-surface) 80%, transparent);
-  border-radius: 0 var(--rs-radius-md) var(--rs-radius-md) 0;
-}
-
-.valueItem strong {
-  display: block;
-  color: var(--rs-color-text);
-  font-size: 0.98rem;
-  margin-bottom: 0.2rem;
-}
-
-.valueItem span {
-  font-size: 0.92rem;
-  color: var(--rs-color-text-muted);
-  line-height: 1.5;
-}
-
-.positioning {
+.accentPanel {
   margin-top: 0.5rem;
   padding: 1.35rem 1.35rem 1.4rem;
   border-radius: var(--rs-radius-lg);
   border: 1px solid var(--rs-color-border);
   background: linear-gradient(
     120deg,
-    color-mix(in oklab, var(--ms-logo-panel) 35%, transparent),
+    color-mix(in oklab, var(--ms-logo-panel) 55%, transparent),
     var(--rs-color-surface)
   );
-}
-
-.positioning .p {
-  color: var(--rs-color-text-muted);
 }
 
 .finalCta {
@@ -315,6 +185,7 @@
   font-size: clamp(1.65rem, 3vw, 2.1rem);
   font-weight: 600;
   margin: 0 0 0.5rem;
+  color: var(--rs-color-text);
 }
 
 .finalLead {
