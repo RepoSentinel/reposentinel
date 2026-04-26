@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import styles from "./AppShell.module.css";
 import { Footer } from "./Footer";
@@ -8,6 +9,8 @@ export function AppShell({
   subtitle,
   owner,
   linkedOwner,
+  hideTitlebar,
+  mainWidth = "default",
   children,
 }: {
   title: string;
@@ -15,6 +18,9 @@ export function AppShell({
   owner?: string;
   /** Shown in header for quick dashboard link when signed in. */
   linkedOwner?: string;
+  /** Omit the built-in H1 block (e.g. marketing pages render their own hero). */
+  hideTitlebar?: boolean;
+  mainWidth?: "default" | "wide";
   children: React.ReactNode;
 }) {
   return (
@@ -22,7 +28,14 @@ export function AppShell({
       <header className={styles.header}>
         <div className={styles.headerLeft}>
           <Link href="/" className={styles.brand}>
-            MergeSignal
+            <Image
+              src="/mergesignal-logo.png"
+              alt="MergeSignal"
+              width={1024}
+              height={680}
+              className={styles.brandLogo}
+              priority
+            />
           </Link>
           {owner ? <span className={styles.owner}>/ {owner}</span> : null}
         </div>
@@ -59,11 +72,19 @@ export function AppShell({
         </nav>
       </header>
 
-      <main className={styles.main}>
-        <div className={styles.titlebar}>
-          <h1 className={styles.title}>{title}</h1>
-          {subtitle ? <p className={styles.subtitle}>{subtitle}</p> : null}
-        </div>
+      <main
+        className={
+          mainWidth === "wide"
+            ? `${styles.main} ${styles.mainWide}`
+            : styles.main
+        }
+      >
+        {hideTitlebar ? null : (
+          <div className={styles.titlebar}>
+            <h1 className={styles.title}>{title}</h1>
+            {subtitle ? <p className={styles.subtitle}>{subtitle}</p> : null}
+          </div>
+        )}
         {children}
       </main>
 

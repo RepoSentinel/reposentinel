@@ -1,71 +1,350 @@
+.githubCta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.35rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--rs-color-on-accent);
+  background: var(--rs-color-accent);
+  border: 1px solid color-mix(in oklab, var(--rs-color-accent) 70%, var(--rs-color-border));
+  box-shadow: var(--rs-shadow-sm);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+
+.githubCta:hover {
+  background: color-mix(in oklab, var(--rs-color-accent) 88%, #fff);
+  box-shadow: var(--rs-shadow-md);
+  transform: translateY(-1px);
+}
+
 .hero {
-  margin-bottom: 2rem;
+  margin: 0 0 3.5rem;
+  padding: 2.25rem 1.5rem 2.5rem;
+  border-radius: var(--rs-radius-lg);
+  border: 1px solid var(--rs-color-border);
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in oklab, var(--ms-logo-panel) 88%, transparent),
+      color-mix(in oklab, var(--rs-color-background-elevated) 70%, transparent)
+    );
+  box-shadow: var(--rs-shadow-md);
 }
 
-.lead {
-  font-size: 1.05rem;
-  line-height: 1.55;
-  max-width: 42rem;
-  margin: 0 0 1.25rem;
-  opacity: 0.92;
+.heroInner {
+  max-width: 44rem;
 }
 
-.ctaRow {
+.kicker {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--rs-color-brand-frost);
+  opacity: 0.95;
+  margin: 0 0 0.85rem;
+}
+
+.heroTitle {
+  font-family: Georgia, ui-serif, serif;
+  font-size: clamp(2rem, 4.5vw, 2.75rem);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: 0.01em;
+  margin: 0 0 1rem;
+  color: var(--rs-color-text);
+}
+
+.heroLead {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: var(--rs-color-text-muted);
+  margin: 0 0 1.5rem;
+  max-width: 40rem;
+}
+
+.heroActions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
   align-items: center;
 }
 
-.primaryCta,
-.secondaryCta {
-  display: inline-block;
-  text-decoration: none;
-  border-radius: 8px;
-  padding: 0.55rem 1rem;
-  font-size: 0.95rem;
-  font-weight: 500;
-}
-
-.primaryCta {
-  background: var(--ms-accent, #2563eb);
-  color: #fff;
-  border: 1px solid transparent;
-}
-
-.secondaryCta {
-  border: 1px solid var(--ms-border, #444);
-  color: inherit;
-}
-
 .section {
-  margin-bottom: 2rem;
+  margin-bottom: 3.25rem;
+}
+
+.sectionHead {
+  margin-bottom: 1.25rem;
 }
 
 .h2 {
-  font-size: 1.15rem;
-  margin: 0 0 0.65rem;
+  font-family: Georgia, ui-serif, serif;
+  font-size: clamp(1.5rem, 2.5vw, 1.85rem);
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  color: var(--rs-color-text);
+}
+
+.subhead {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.55;
+  color: var(--rs-color-text-muted);
+  max-width: 42rem;
 }
 
 .p {
-  margin: 0 0 0.65rem;
-  line-height: 1.55;
+  margin: 0 0 0.85rem;
+  line-height: 1.65;
+  color: var(--rs-color-text-muted);
   max-width: 48rem;
-  opacity: 0.9;
 }
 
-.inlineLink {
-  color: var(--ms-accent, #60a5fa);
-  text-decoration: underline;
+.p:last-child {
+  margin-bottom: 0;
+}
+
+.pSpaced {
+  margin-top: 1rem;
+}
+
+.pEmphasis {
+  font-weight: 500;
+}
+
+.bullets {
+  margin: 0.5rem 0 0;
+  padding-left: 1.2rem;
+  color: var(--rs-color-text-muted);
+  line-height: 1.65;
+}
+
+.bullets li {
+  margin-bottom: 0.4rem;
+}
+
+.focusList {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.focusList li {
+  display: flex;
+  gap: 0.65rem;
+  align-items: flex-start;
+  padding: 0.65rem 0.85rem;
+  border-radius: var(--rs-radius-md);
+  border: 1px solid var(--rs-color-border);
+  background: var(--rs-color-surface);
+  color: var(--rs-color-text-muted);
+  line-height: 1.5;
+}
+
+.focusGlyph {
+  flex-shrink: 0;
+  width: 1.5rem;
+  text-align: center;
+  color: var(--rs-color-brand-frost);
+  font-weight: 700;
+}
+
+.focusStrong {
+  color: var(--rs-color-text);
 }
 
 .steps {
-  margin: 0;
-  padding-left: 1.25rem;
-  line-height: 1.65;
-  max-width: 48rem;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 1rem;
 }
 
-.steps li {
+@media (min-width: 720px) {
+  .steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.stepCard {
+  border-radius: var(--rs-radius-md);
+  border: 1px solid var(--rs-color-border);
+  background: var(--rs-color-surface);
+  padding: 1.1rem 1.15rem;
+  min-height: 100%;
+}
+
+.stepNum {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 0.65rem;
+  color: var(--rs-color-on-accent);
+  background: var(--rs-color-brand-frost);
+}
+
+.stepTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.4rem;
+  color: var(--rs-color-text);
+}
+
+.stepBody {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--rs-color-text-muted);
+}
+
+.grid3 {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+@media (min-width: 720px) {
+  .grid3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.card {
+  border-radius: var(--rs-radius-md);
+  border: 1px solid var(--rs-color-border);
+  background: var(--rs-color-surface);
+  padding: 1.15rem 1.2rem;
+  height: 100%;
+}
+
+.cardTitle {
+  font-size: 1.02rem;
+  font-weight: 600;
+  margin: 0 0 0.45rem;
+  color: var(--rs-color-text);
+}
+
+.cardBody {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--rs-color-text-muted);
+}
+
+.scenarioList {
+  margin: 0.75rem 0 0;
+  padding-left: 1.1rem;
+  color: var(--rs-color-text-muted);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.scenarioList li {
   margin-bottom: 0.35rem;
+}
+
+.valueGrid {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 1.15rem;
+}
+
+@media (min-width: 640px) {
+  .valueGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.valueItem {
+  padding: 0.85rem 1rem;
+  border-left: 3px solid var(--rs-color-brand-frost);
+  background: color-mix(in oklab, var(--rs-color-surface) 80%, transparent);
+  border-radius: 0 var(--rs-radius-md) var(--rs-radius-md) 0;
+}
+
+.valueItem strong {
+  display: block;
+  color: var(--rs-color-text);
+  font-size: 0.98rem;
+  margin-bottom: 0.2rem;
+}
+
+.valueItem span {
+  font-size: 0.92rem;
+  color: var(--rs-color-text-muted);
+  line-height: 1.5;
+}
+
+.positioning {
+  margin-top: 0.5rem;
+  padding: 1.35rem 1.35rem 1.4rem;
+  border-radius: var(--rs-radius-lg);
+  border: 1px solid var(--rs-color-border);
+  background: linear-gradient(
+    120deg,
+    color-mix(in oklab, var(--ms-logo-panel) 35%, transparent),
+    var(--rs-color-surface)
+  );
+}
+
+.positioning .p {
+  color: var(--rs-color-text-muted);
+}
+
+.finalCta {
+  text-align: center;
+  padding: 2.5rem 1.25rem 0.5rem;
+  margin-top: 1rem;
+}
+
+.finalTag {
+  font-family: Georgia, ui-serif, serif;
+  font-size: clamp(1.65rem, 3vw, 2.1rem);
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+}
+
+.finalLead {
+  margin: 0 auto 1.35rem;
+  max-width: 36rem;
+  color: var(--rs-color-text-muted);
+  line-height: 1.6;
+}
+
+.inlineLink {
+  color: var(--rs-color-brand-frost);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.inlineLink:hover {
+  color: var(--rs-color-text);
+}
+
+.installNote {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rs-color-border);
+  font-size: 0.9rem;
+  color: var(--rs-color-text-muted);
+  line-height: 1.55;
+}
+
+.installNote a {
+  color: var(--rs-color-brand-frost);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }

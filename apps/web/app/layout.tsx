@@ -14,8 +14,9 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "MergeSignal",
-  description: "Dependency risk intelligence with explainable scoring.",
+  title: "MergeSignal — dependency risk before you merge",
+  description:
+    "MergeSignal analyzes dependency changes and surfaces runtime-impacting risks so you can merge with confidence.",
 };
 
 export default async function RootLayout({

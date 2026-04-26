@@ -36,9 +36,10 @@
 }
 
 .button {
-  border: 1px solid var(--ms-border, #333);
-  background: var(--ms-accent, #2563eb);
-  color: #fff;
+  border: 1px solid color-mix(in oklab, var(--rs-color-accent) 35%, var(--rs-color-border));
+  background: var(--rs-color-accent);
+  color: var(--rs-color-on-accent);
+  font-weight: 600;
 }
 
 .buttonSecondary {

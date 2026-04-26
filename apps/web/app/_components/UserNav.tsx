@@ -23,7 +23,7 @@ export function UserNav({
         className={styles.button}
         onClick={() => void signIn("github")}
       >
-        Sign in with GitHub
+        Continue with GitHub
       </button>
     );
   }

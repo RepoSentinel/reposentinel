@@ -1,8 +1,8 @@
 .footer {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--rs-color-border);
   padding: 2rem 1.5rem;
   margin-top: 4rem;
-  background: rgba(0, 0, 0, 0.2);
+  background: color-mix(in oklab, #000 18%, var(--rs-color-background) 82%);
 }
 
 .footerContent {
@@ -14,17 +14,17 @@
 }
 
 .disclaimer {
-  background: rgba(255, 193, 7, 0.1);
-  border-left: 3px solid #ffc107;
+  background: color-mix(in oklab, var(--rs-color-warning) 14%, transparent);
+  border-left: 3px solid var(--rs-color-warning);
   padding: 1rem 1.5rem;
   border-radius: 4px;
   font-size: 0.875rem;
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--rs-color-text);
 }
 
 .disclaimer strong {
-  color: #ffc107;
+  color: var(--rs-color-warning);
   font-weight: 600;
 }
 
@@ -37,22 +37,22 @@
 }
 
 .link {
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--rs-color-text-muted);
   text-decoration: none;
   transition: color 0.2s;
 }
 
 .link:hover {
-  color: rgba(255, 255, 255, 0.95);
+  color: var(--rs-color-text);
   text-decoration: underline;
 }
 
 .separator {
-  color: rgba(255, 255, 255, 0.3);
+  color: color-mix(in oklab, var(--rs-color-text) 35%, transparent);
 }
 
 .copyright {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--rs-color-text-muted);
   font-size: 0.875rem;
   margin-top: 0.5rem;
 }

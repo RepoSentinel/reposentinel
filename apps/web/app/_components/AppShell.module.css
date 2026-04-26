@@ -26,12 +26,17 @@
 }
 
 .brand {
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  background: linear-gradient(90deg, var(--rs-color-accent), var(--rs-color-accent-alt));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  display: inline-flex;
+  align-items: center;
+  line-height: 0;
+}
+
+.brandLogo {
+  height: 40px;
+  width: auto;
+  max-width: min(260px, 58vw);
+  object-fit: contain;
+  object-position: left center;
 }
 
 .owner {
@@ -67,6 +72,10 @@
   max-width: 980px;
   margin: 0 auto;
   padding: 18px 16px 42px;
+}
+
+.mainWide {
+  max-width: 1120px;
 }
 
 .titlebar {
