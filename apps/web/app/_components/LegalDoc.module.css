@@ -1,0 +1,111 @@
+.article {
+  max-width: 46rem;
+  color: var(--rs-color-text-muted);
+  line-height: 1.65;
+  font-size: 0.98rem;
+}
+
+.article :global(h1) {
+  font-family: Georgia, ui-serif, serif;
+  font-size: clamp(1.65rem, 3vw, 2rem);
+  font-weight: 600;
+  color: var(--rs-color-text);
+  margin: 0 0 0.75rem;
+  line-height: 1.2;
+}
+
+.article :global(h2) {
+  font-family: Georgia, ui-serif, serif;
+  font-size: clamp(1.2rem, 2vw, 1.35rem);
+  font-weight: 600;
+  color: var(--rs-color-text);
+  margin: 2rem 0 0.65rem;
+  line-height: 1.25;
+}
+
+.article :global(h2:first-of-type) {
+  margin-top: 0.5rem;
+}
+
+.article :global(h3) {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--rs-color-text);
+  margin: 1.25rem 0 0.45rem;
+}
+
+.article :global(p) {
+  margin: 0 0 0.85rem;
+}
+
+.article :global(ul),
+.article :global(ol) {
+  margin: 0 0 0.85rem;
+  padding-left: 1.35rem;
+}
+
+.article :global(li) {
+  margin-bottom: 0.35rem;
+}
+
+.article :global(strong) {
+  color: var(--rs-color-text);
+  font-weight: 600;
+}
+
+.article :global(hr) {
+  border: none;
+  border-top: 1px solid var(--rs-color-border);
+  margin: 1.75rem 0;
+}
+
+.article :global(a) {
+  color: var(--rs-color-brand-frost);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.article :global(a:hover) {
+  color: var(--rs-color-text);
+}
+
+.article :global(pre) {
+  margin: 0 0 0.85rem;
+  padding: 0.85rem 1rem;
+  border-radius: var(--rs-radius-md);
+  border: 1px solid var(--rs-color-border);
+  background: var(--rs-color-surface);
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.article :global(code) {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.88em;
+}
+
+.article :global(pre code) {
+  font-size: inherit;
+}
+
+.article :global(table) {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+}
+
+.article :global(th),
+.article :global(td) {
+  border: 1px solid var(--rs-color-border);
+  padding: 0.5rem 0.65rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.article :global(th) {
+  background: var(--rs-color-surface);
+  color: var(--rs-color-text);
+  font-weight: 600;
+}

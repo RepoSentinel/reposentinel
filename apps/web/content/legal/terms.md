@@ -126,7 +126,7 @@ We may modify these Terms at any time by posting updated Terms on our website or
 
 Material changes will be notified through:
 
-- Updates to the GitHub repository
+- Updates published on the MergeSignal website
 - Notices in the application interface
 - Email notifications (if contact information is available)
 
@@ -179,11 +179,11 @@ If any provision of these Terms is found to be unenforceable or invalid, that pr
 
 ## 16. Entire Agreement
 
-These Terms, together with the Privacy Policy and API Terms, constitute the entire agreement between you and MergeSignal regarding the Service and supersede any prior agreements.
+These Terms, together with the [Privacy Policy](/privacy) and [API Terms](/api-terms), constitute the entire agreement between you and MergeSignal regarding the Service and supersede any prior agreements.
 
 ## 17. Contact
 
-For legal inquiries regarding these Terms, please see CONTACT.md or open an issue in the GitHub repository.
+For legal inquiries regarding these Terms, please see [Contact](/contact) or open an issue in the GitHub repository.
 
 ---
 

@@ -189,7 +189,7 @@ You have the right to lodge a complaint with your local data protection supervis
 
 For privacy-related inquiries, data access requests, or to exercise your rights, contact us at:
 
-- **Email**: See CONTACT.md for contact information
+- **Email**: See [Contact](/contact) for contact information
 - **GitHub**: Open a confidential issue in the repository (for non-sensitive inquiries)
 
 We will respond to requests within 30 days (or as required by applicable law).
@@ -226,7 +226,7 @@ This Privacy Policy applies to the official hosted instance of MergeSignal.
 
 We may update this Privacy Policy periodically. Changes will be notified through:
 
-- Updates to the GitHub repository with commit history
+- Updates published on the MergeSignal website
 - Notices in the application interface
 - Email notifications (if contact information is available)
 
@@ -256,4 +256,4 @@ In the event of a data breach that may affect your information, we will:
 
 **Last Updated:** March 16, 2026
 
-**For questions about this Privacy Policy, please see CONTACT.md.**
+**For questions about this Privacy Policy, please see [Contact](/contact).**

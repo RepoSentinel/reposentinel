@@ -2,7 +2,7 @@
 
 **Effective Date:** March 16, 2026
 
-These API Terms supplement the main Terms of Service (TERMS.md) and govern your use of the MergeSignal API.
+These API Terms supplement the main [Terms of Service](/terms) and govern your use of the MergeSignal API.
 
 ## 1. API Access and Authentication
 
@@ -189,12 +189,12 @@ When submitting data to the API:
 
 - You represent that you have the right to submit such data
 - You retain ownership of your data
-- You grant MergeSignal a **limited** license to process and store data **solely to provide, secure, improve, and bill for the Service**, as described in the Privacy Policy (including Customer Content restrictions)
+- You grant MergeSignal a **limited** license to process and store data **solely to provide, secure, improve, and bill for the Service**, as described in the [Privacy Policy](/privacy) (including Customer Content restrictions)
 - Sensitive data (secrets, credentials, unnecessary PII) should not be included in API requests
 
 ### 6.2 Data Retention
 
-API-submitted data is retained as described in the Privacy Policy:
+API-submitted data is retained as described in the [Privacy Policy](/privacy):
 
 - Scan results: Retained indefinitely unless deleted
 - Request logs: Retained for 90 days
@@ -257,7 +257,7 @@ For API support:
 
 - **Documentation**: Check the official docs first
 - **GitHub Issues**: Report bugs or request features
-- **Email**: Contact us for critical issues (see CONTACT.md)
+- **Email**: Contact us for critical issues (see [Contact](/contact))
 
 Support is provided on a best-effort basis with no guaranteed response time.
 
@@ -352,7 +352,7 @@ You agree to indemnify MergeSignal from claims arising from:
 
 ## 13. Changes to API Terms
 
-We may update these API Terms at any time. Changes will be posted in the GitHub repository with an updated "Effective Date." Continued use of the API after changes constitutes acceptance.
+We may update these API Terms at any time. Changes will be posted on the MergeSignal website with an updated "Effective Date." Continued use of the API after changes constitutes acceptance.
 
 ## 14. Termination
 
@@ -369,7 +369,7 @@ We may terminate API access as described in Section 7.
 For API-related inquiries, contact us at:
 
 - **GitHub Issues**: For technical questions and bug reports
-- **Email**: See CONTACT.md for legal or billing inquiries
+- **Email**: See [Contact](/contact) for legal or billing inquiries
 
 ---
 

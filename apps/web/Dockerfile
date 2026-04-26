@@ -56,6 +56,7 @@ RUN pnpm install --frozen-lockfile --prod --filter web...
 # Copy built Next.js artifacts from builder
 COPY --from=builder /app/apps/web/.next ./apps/web/.next
 COPY --from=builder /app/apps/web/public ./apps/web/public
+COPY --from=builder /app/apps/web/content ./apps/web/content
 COPY --from=builder /app/apps/web/next.config.js ./apps/web/
 COPY --from=builder /app/packages/shared ./packages/shared
 

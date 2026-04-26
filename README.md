@@ -67,7 +67,7 @@ See [`docs/github-app.md`](./docs/github-app.md).
 
 MergeSignal software in this repository is licensed under **[Apache License 2.0](./LICENSE)**; see also [NOTICE](./NOTICE).
 
-**Data and responsibility:** We publish clear rules for **what we collect, what we do not do with your content, and what remains your responsibility**—including that automated risk output is **informational** and must be validated for your context. Read **[Privacy Policy](./PRIVACY.md)** (Customer Content restrictions), **[Terms of Service](./TERMS.md)**, **[API Terms](./API-TERMS.md)**, and **[Contact](./CONTACT.md)**. **These documents are not legal advice for your company**; consult counsel where you need certainty for regulated or high-risk use.
+**Data and responsibility:** We publish clear rules for **what we collect, what we do not do with your content, and what remains your responsibility**—including that automated risk output is **informational** and must be validated for your context. The canonical legal pages ship with the **web app** (same routes on your deployment, e.g. the public Fly build: **[Privacy Policy](https://mergesignal-web.fly.dev/privacy)** (Customer Content restrictions), **[Terms of Service](https://mergesignal-web.fly.dev/terms)**, **[API Terms](https://mergesignal-web.fly.dev/api-terms)**, and **[Contact](https://mergesignal-web.fly.dev/contact)**). **These documents are not legal advice for your company**; consult counsel where you need certainty for regulated or high-risk use.
 
 ---
 

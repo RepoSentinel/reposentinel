@@ -1,5 +1,9 @@
 import type { FastifyInstance } from "fastify";
 
+/** Canonical web app URL for legal links in OpenAPI (override per deployment). */
+const MERGESIGNAL_WEB_APP_URL =
+  process.env.MERGESIGNAL_WEB_APP_URL ?? "https://mergesignal-web.fly.dev";
+
 export async function openApiRoutes(app: FastifyInstance) {
   app.get("/openapi.json", async (_req, reply) => {
     return reply
@@ -25,9 +29,15 @@ function getOpenApiSpec() {
       description:
         "Dependency risk intelligence API for scans, org views, policies, alerts, benchmarking, and simulations.\n\n" +
         "**Important**: Responses are **informational** and may be incomplete; validate material decisions. " +
-        "Customer Content handling and commitments: [Privacy Policy](https://github.com/MergeSignal/mergesignal/blob/main/PRIVACY.md). " +
-        "Terms: [Terms of Service](https://github.com/MergeSignal/mergesignal/blob/main/TERMS.md), " +
-        "[API Terms](https://github.com/MergeSignal/mergesignal/blob/main/API-TERMS.md).",
+        "Customer Content handling and commitments: [Privacy Policy](" +
+        MERGESIGNAL_WEB_APP_URL +
+        "/privacy). " +
+        "Terms: [Terms of Service](" +
+        MERGESIGNAL_WEB_APP_URL +
+        "/terms), " +
+        "[API Terms](" +
+        MERGESIGNAL_WEB_APP_URL +
+        "/api-terms).",
       contact: {
         name: "MergeSignal Support",
         url: "https://github.com/MergeSignal/mergesignal",
@@ -37,8 +47,7 @@ function getOpenApiSpec() {
         name: "Apache 2.0",
         url: "https://github.com/MergeSignal/mergesignal/blob/main/LICENSE",
       },
-      termsOfService:
-        "https://github.com/MergeSignal/mergesignal/blob/main/API-TERMS.md",
+      termsOfService: `${MERGESIGNAL_WEB_APP_URL}/api-terms`,
     },
     servers: [{ url: "https://mergesignal-api.fly.dev" }],
     tags: [

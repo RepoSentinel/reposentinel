@@ -12,6 +12,8 @@ export function AppShell({
   hideTitlebar,
   /** Marketing / info-only pages: logo in header only (no auth or org nav). */
   hideHeaderNav,
+  /** Legal pages: copyright only (no footer link row). */
+  footerVariant = "full",
   mainWidth = "default",
   children,
 }: {
@@ -23,6 +25,7 @@ export function AppShell({
   /** Omit the built-in H1 block (e.g. marketing pages render their own hero). */
   hideTitlebar?: boolean;
   hideHeaderNav?: boolean;
+  footerVariant?: "full" | "minimal";
   mainWidth?: "default" | "wide";
   children: React.ReactNode;
 }) {
@@ -95,7 +98,7 @@ export function AppShell({
         {children}
       </main>
 
-      <Footer />
+      <Footer variant={footerVariant} />
     </div>
   );
 }
