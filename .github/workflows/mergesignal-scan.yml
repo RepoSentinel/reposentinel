@@ -59,9 +59,8 @@ jobs:
       - name: Build engine + CLI
         run: |
           set -euo pipefail
-          pnpm -C packages/engine-stub build
-          pnpm -C packages/engine build
-          pnpm -C apps/cli build
+          # @mergesignal/shared must be built first (exports point at dist/*.js).
+          pnpm turbo run build --filter=@mergesignal/cli...
 
       - name: Run MergeSignal scan
         env:
@@ -83,7 +82,7 @@ jobs:
           const layers = r.layerScores ?? {};
           const recs = Array.isArray(r.recommendations) ? r.recommendations : [];
           const gi = r.graphInsights ?? {};
-          
+
           // Determine risk status
           function getRiskStatus(score) {
             if (score === null) return { emoji: "⚪", label: "Unknown risk" };
@@ -91,7 +90,7 @@ jobs:
             if (score >= 40) return { emoji: "⚠️", label: "Medium risk" };
             return { emoji: "✅", label: "Low risk" };
           }
-          
+
           // Map impact to priority emoji and time estimate
           function getActionMeta(rec) {
             const impact = rec.impact ?? "low";
@@ -100,21 +99,21 @@ jobs:
             if (impact === "medium" || prio >= 50) return { icon: "⚠️", time: "~15 min" };
             return { icon: "ℹ️", time: "~30 min" };
           }
-          
+
           // Format layer score with status
           function formatLayerStatus(score) {
             if (score === null || score === undefined) return "—";
             return score < 20 ? `${score} ✅` : score < 40 ? `${score} ⚠️` : `${score} 🔴`;
           }
-          
+
           const status = getRiskStatus(total);
           const lines = [];
-          
+
           // TIER 1: Score + Status (3-second scan)
           lines.push(`# MergeSignal Scan: Score ${total ?? "—"}/100`);
           lines.push(`${status.emoji} **${status.label}**${recs.length === 0 ? " — No critical issues" : ""}`);
           lines.push("");
-          
+
           // TIER 2: Actionable recommendations (30-second scan)
           if (recs.length > 0) {
             lines.push(`## 🎯 Recommended actions (${Math.min(3, recs.length)}):`);
@@ -133,7 +132,7 @@ jobs:
             lines.push("## 🎯 No immediate actions required");
             lines.push("");
           }
-          
+
           // TIER 3: Details (collapsible)
           lines.push("<details>");
           lines.push("<summary>📈 Risk breakdown (expand)</summary>");
@@ -145,7 +144,7 @@ jobs:
           lines.push(`| Ecosystem | ${layers.ecosystem ?? "—"} | ${formatLayerStatus(layers.ecosystem)} |`);
           lines.push(`| Upgrade Impact | ${layers.upgradeImpact ?? "—"} | ${formatLayerStatus(layers.upgradeImpact)} |`);
           lines.push("");
-          
+
           // Graph insights summary
           if (gi.nodes || gi.maxDepth) {
             const nodes = gi.nodes ?? "—";
@@ -154,9 +153,9 @@ jobs:
             const vulnCount = Array.isArray(gi.vulnerable) ? gi.vulnerable.length : 0;
             lines.push(`**Graph insights**: ${nodes} packages, max depth ${depth}${hotspotCount > 0 ? `, ${hotspotCount} hotspot${hotspotCount > 1 ? "s" : ""}` : ""}${vulnCount > 0 ? `, ${vulnCount} vulnerable` : ""}`);
           }
-          
+
           lines.push("</details>");
-          
+
           fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, lines.join("\n") + "\n");
           '
 
@@ -168,4 +167,3 @@ jobs:
             mergesignal-scan.json
             mergesignal-scan.pretty.json
           if-no-files-found: error
-
