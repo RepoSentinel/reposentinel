@@ -110,6 +110,11 @@
   --ms-text-3xl: 1.875rem; /* 30px */
   --ms-text-4xl: 2.25rem; /* 36px */
 
+  --ms-font-weight-regular: 400;
+  --ms-font-weight-medium: 500;
+  --ms-font-weight-semibold: 600;
+  --ms-font-weight-bold: 700;
+
   /* Unitless line-height (multiplies element font-size) */
   --ms-leading-snug: 1.5;
   --ms-leading-relaxed: 1.55;
@@ -164,7 +169,39 @@ body {
     );
   font-family: var(--font-geist-sans), system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   font-size: var(--ms-text-base);
-  line-height: 1.45;
+  font-weight: var(--ms-font-weight-regular);
+  line-height: var(--ms-leading-snug);
+}
+
+/* Semantic typography */
+h1 {
+  font-size: var(--ms-text-4xl);
+  font-weight: var(--ms-font-weight-bold);
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: var(--ms-text-3xl);
+  font-weight: var(--ms-font-weight-bold);
+  line-height: 1.22;
+}
+
+h3 {
+  font-size: var(--ms-text-2xl);
+  font-weight: var(--ms-font-weight-semibold);
+  line-height: 1.25;
+}
+
+p {
+  font-size: var(--ms-text-base);
+  font-weight: var(--ms-font-weight-regular);
+  line-height: var(--ms-leading-snug);
+}
+
+label {
+  font-size: var(--ms-text-sm);
+  font-weight: var(--ms-font-weight-medium);
+  line-height: var(--ms-leading-snug);
 }
 
 * {
