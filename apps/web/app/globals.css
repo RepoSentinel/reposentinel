@@ -167,7 +167,8 @@ body {
       var(--ms-color-canvas),
       var(--ms-color-canvas-elevated)
     );
-  font-family: var(--font-geist-sans), system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-family:
+    var(--font-sans), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   font-size: var(--ms-text-base);
   font-weight: var(--ms-font-weight-regular);
   line-height: var(--ms-leading-snug);
