@@ -109,6 +109,12 @@
   --ms-text-2xl: 1.5rem; /* 24px */
   --ms-text-3xl: 1.875rem; /* 30px */
   --ms-text-4xl: 2.25rem; /* 36px */
+  --ms-text-5xl: 2.5rem; /* 40px */
+  --ms-text-6xl: 3rem; /* 48px */
+
+  /* Display serif for marketing / page titles; body stays sans via body {} */
+  --ms-font-display: Georgia, "Iowan Old Style", "Palatino Linotype", ui-serif,
+    serif;
 
   --ms-font-weight-regular: 400;
   --ms-font-weight-medium: 500;
@@ -127,6 +133,19 @@
   --ms-radius-md: 0.75rem; /* 12px */
   --ms-radius-lg: 1rem; /* 16px */
   --ms-radius-full: 9999px;
+
+  /* Sticky header block height (logo row + padding) — used for viewport math */
+  --ms-site-header-height: 3.75rem;
+
+  /* GitHub sign-in button (matches common github.com OAuth styling) */
+  --ms-github-button-bg: #24292f;
+  --ms-github-button-bg-hover: #2f363d;
+  --ms-github-button-fg: #ffffff;
+  --ms-github-button-border: color-mix(
+    in oklab,
+    var(--ms-color-black) 42%,
+    var(--ms-github-button-bg)
+  );
 
   /* Short aliases (older / marketing modules) */
   --ms-bg: var(--ms-color-canvas);
@@ -174,23 +193,55 @@ body {
   line-height: var(--ms-leading-snug);
 }
 
-/* Semantic typography */
+/* Semantic typography — h1/h2 use display serif; h3–h6 stay sans (inherit body) */
 h1 {
-  font-size: var(--ms-text-4xl);
-  font-weight: var(--ms-font-weight-bold);
-  line-height: 1.2;
+  font-family: var(--ms-font-display);
+  font-size: clamp(
+    var(--ms-text-3xl),
+    1.35rem + 2.8vw,
+    var(--ms-text-6xl)
+  );
+  font-weight: var(--ms-font-weight-semibold);
+  line-height: 1.12;
+  letter-spacing: 0.01em;
 }
 
 h2 {
-  font-size: var(--ms-text-3xl);
-  font-weight: var(--ms-font-weight-bold);
-  line-height: 1.22;
+  font-family: var(--ms-font-display);
+  font-size: clamp(
+    var(--ms-text-2xl),
+    1rem + 2vw,
+    var(--ms-text-4xl)
+  );
+  font-weight: var(--ms-font-weight-semibold);
+  line-height: 1.2;
+  letter-spacing: 0.01em;
 }
 
 h3 {
   font-size: var(--ms-text-2xl);
   font-weight: var(--ms-font-weight-semibold);
-  line-height: 1.25;
+  line-height: 1.28;
+}
+
+h4 {
+  font-size: var(--ms-text-xl);
+  font-weight: var(--ms-font-weight-semibold);
+  line-height: 1.35;
+}
+
+h5 {
+  font-size: var(--ms-text-lg);
+  font-weight: var(--ms-font-weight-semibold);
+  line-height: 1.4;
+}
+
+h6 {
+  font-size: var(--ms-text-base);
+  font-weight: var(--ms-font-weight-semibold);
+  line-height: var(--ms-leading-snug);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
 }
 
 p {

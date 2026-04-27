@@ -1,5 +1,71 @@
+import type { ReactNode } from "react";
+import type { LucideIcon } from "lucide-react";
+import {
+  Activity,
+  BookOpen,
+  ClipboardCheck,
+  Crosshair,
+  FileWarning,
+  GitBranch,
+  Layers,
+  ListFilter,
+  ListTodo,
+  MapPinned,
+  MessagesSquare,
+  Route,
+  ShieldAlert,
+  ShieldCheck,
+  Target,
+  Telescope,
+  Timer,
+  UsersRound,
+} from "lucide-react";
 import Link from "next/link";
 import styles from "./landing.module.css";
+
+function GitHubMark({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden
+    >
+      <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.82-.255.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12c0-6.627-5.373-12-12-12z" />
+    </svg>
+  );
+}
+
+function GithubCtaLink({ href }: { href: string }) {
+  return (
+    <Link className={styles.githubCta} href={href}>
+      <GitHubMark className={styles.githubCtaIcon} />
+      Continue with GitHub
+    </Link>
+  );
+}
+
+function SectionRow({
+  icon: Icon,
+  title,
+  children,
+}: {
+  icon: LucideIcon;
+  title: string;
+  children: ReactNode;
+}) {
+  return (
+    <li className={styles.sectionListItem}>
+      <span className={styles.rowIcon}>
+        <Icon size={22} strokeWidth={1.75} aria-hidden />
+      </span>
+      <div className={styles.rowBody}>
+        <span className={styles.itemLabel}>{title}</span>
+        {children}
+      </div>
+    </li>
+  );
+}
 
 export default function Home() {
   const githubHref = "/api/auth/signin/github";
@@ -9,7 +75,7 @@ export default function Home() {
       <section className={styles.hero} aria-labelledby="hero-heading">
         <div className={styles.heroInner}>
           <p className={styles.kicker}>Dependency risk, before you merge</p>
-          <h1 id="hero-heading" className={styles.heroTitle}>
+          <h1 id="hero-heading">
             Understand what an upgrade can break—before it ships
           </h1>
           <p className={styles.heroLead}>
@@ -18,233 +84,223 @@ export default function Home() {
             language so reviewers know what to check first.
           </p>
           <div className={styles.heroActions}>
-            <Link className={styles.githubCta} href={githubHref}>
-              Continue with GitHub
-            </Link>
+            <GithubCtaLink href={githubHref} />
           </div>
         </div>
       </section>
 
-      <section className={styles.section} aria-labelledby="pain-heading">
-        <div className={styles.sectionHead}>
-          <h2 id="pain-heading" className={styles.h2}>
-            Why dependency upgrades are hard to review
-          </h2>
-          <p className={styles.subhead}>
-            Version bumps are routine; understanding their blast radius is not.
-          </p>
-        </div>
-        <ul className={styles.sectionList}>
-          <li className={styles.sectionListItem}>
-            <span className={styles.itemLabel}>
-              Release notes hide behavior
-            </span>
-            Breaking or risky changes are easy to miss when you only scan
-            changelogs.
-          </li>
-          <li className={styles.sectionListItem}>
-            <span className={styles.itemLabel}>Security tools add noise</span>A
-            flood of findings makes it hard to see what actually matters for
-            this PR.
-          </li>
-          <li className={styles.sectionListItem}>
-            <span className={styles.itemLabel}>
-              Reviews rarely trace runtime
-            </span>
-            Most reviewers cannot mentally simulate how an upgrade touches auth,
-            middleware, and critical paths.
-          </li>
-        </ul>
-      </section>
+      <div className={styles.sectionStack}>
+        <section className={styles.sectionCard} aria-labelledby="pain-heading">
+          <div className={styles.sectionHead}>
+            <h2 id="pain-heading" className={styles.h2}>
+              Why dependency upgrades are hard to review
+            </h2>
+            <p className={styles.subhead}>
+              Version bumps are routine; understanding their blast radius is
+              not.
+            </p>
+          </div>
+          <ul className={styles.sectionList}>
+            <SectionRow icon={FileWarning} title="Release notes hide behavior">
+              Breaking or risky changes are easy to miss when you only scan
+              changelogs.
+            </SectionRow>
+            <SectionRow icon={ShieldAlert} title="Security tools add noise">
+              A flood of findings makes it hard to see what actually matters for
+              this PR.
+            </SectionRow>
+            <SectionRow icon={Route} title="Reviews rarely trace runtime">
+              Most reviewers cannot mentally simulate how an upgrade touches
+              auth, middleware, and critical paths.
+            </SectionRow>
+          </ul>
+        </section>
 
-      <section className={styles.section} aria-labelledby="focus-heading">
-        <div className={styles.sectionHead}>
-          <h2 id="focus-heading" className={styles.h2}>
-            What MergeSignal emphasizes
-          </h2>
-          <p className={styles.subhead}>
-            Signal over volume: fewer items, each tied to how your app runs.
-          </p>
-        </div>
-        <ul className={styles.sectionList}>
-          <li className={styles.sectionListItem}>
-            <span className={styles.itemLabel}>What could break</span>
-            Likely failure modes—not every advisory or theoretical issue.
-          </li>
-          <li className={styles.sectionListItem}>
-            <span className={styles.itemLabel}>Where it could break</span>
-            Auth flows, middleware, hooks, and other paths that actually ship.
-          </li>
-          <li className={styles.sectionListItem}>
-            <span className={styles.itemLabel}>
-              What to verify before merge
-            </span>
-            Concrete checks so the team agrees on what “done” looks like for
-            this upgrade.
-          </li>
-        </ul>
-      </section>
+        <section className={styles.sectionCard} aria-labelledby="focus-heading">
+          <div className={styles.sectionHead}>
+            <h2 id="focus-heading" className={styles.h2}>
+              What MergeSignal emphasizes
+            </h2>
+            <p className={styles.subhead}>
+              Signal over volume: fewer items, each tied to how your app runs.
+            </p>
+          </div>
+          <ul className={styles.sectionList}>
+            <SectionRow icon={Crosshair} title="What could break">
+              Likely failure modes—not every advisory or theoretical issue.
+            </SectionRow>
+            <SectionRow icon={MapPinned} title="Where it could break">
+              Auth flows, middleware, hooks, and other paths that actually ship.
+            </SectionRow>
+            <SectionRow
+              icon={ClipboardCheck}
+              title="What to verify before merge"
+            >
+              Concrete checks so the team agrees on what “done” looks like for
+              this upgrade.
+            </SectionRow>
+          </ul>
+        </section>
 
-      <section className={styles.section} aria-labelledby="how-heading">
-        <div className={styles.sectionHead}>
-          <h2 id="how-heading" className={styles.h2}>
-            How it works
-          </h2>
-          <p className={styles.subhead}>
-            From the lockfile diff to decision-ready notes in four steps.
-          </p>
-        </div>
-        <ol className={`${styles.sectionList} ${styles.sectionListOrdered}`}>
-          <li className={styles.sectionListItem}>
-            <span className={styles.listStepNum} aria-hidden>
-              1
-            </span>
-            <div className={styles.listStepBody}>
-              <span className={styles.itemLabel}>Scan dependency changes</span>
-              Detects version updates and how updated packages are referenced
-              across the repo.
-            </div>
-          </li>
-          <li className={styles.sectionListItem}>
-            <span className={styles.listStepNum} aria-hidden>
-              2
-            </span>
-            <div className={styles.listStepBody}>
-              <span className={styles.itemLabel}>
-                Prioritize plausible impact
+        <section className={styles.sectionCard} aria-labelledby="how-heading">
+          <div className={styles.sectionHead}>
+            <h2 id="how-heading" className={styles.h2}>
+              How it works
+            </h2>
+            <p className={styles.subhead}>
+              From the lockfile diff to decision-ready notes in four steps.
+            </p>
+          </div>
+          <ol className={`${styles.sectionList} ${styles.sectionListOrdered}`}>
+            <li className={styles.sectionListItem}>
+              <span className={styles.listStepNum} aria-hidden>
+                1
               </span>
-              Highlights changes most likely to affect runtime—not an exhaustive
-              inventory of every finding.
-            </div>
-          </li>
-          <li className={styles.sectionListItem}>
-            <span className={styles.listStepNum} aria-hidden>
-              3
-            </span>
-            <div className={styles.listStepBody}>
-              <span className={styles.itemLabel}>Stress critical paths</span>
-              Goes deeper on flows that tend to carry user-facing risk, instead
-              of treating the tree as a flat list of files.
-            </div>
-          </li>
-          <li className={styles.sectionListItem}>
-            <span className={styles.listStepNum} aria-hidden>
-              4
-            </span>
-            <div className={styles.listStepBody}>
-              <span className={styles.itemLabel}>Ship concise guidance</span>
-              Short explanations: what might break, why it matters, what to test
-              or confirm next.
-            </div>
-          </li>
-        </ol>
-      </section>
+              <div className={styles.listStepBody}>
+                <span className={styles.itemLabel}>
+                  Scan dependency changes
+                </span>
+                Detects version updates and how updated packages are referenced
+                across the repo.
+              </div>
+            </li>
+            <li className={styles.sectionListItem}>
+              <span className={styles.listStepNum} aria-hidden>
+                2
+              </span>
+              <div className={styles.listStepBody}>
+                <span className={styles.itemLabel}>
+                  Prioritize plausible impact
+                </span>
+                Highlights changes most likely to affect runtime—not an
+                exhaustive inventory of every finding.
+              </div>
+            </li>
+            <li className={styles.sectionListItem}>
+              <span className={styles.listStepNum} aria-hidden>
+                3
+              </span>
+              <div className={styles.listStepBody}>
+                <span className={styles.itemLabel}>Stress critical paths</span>
+                Goes deeper on flows that tend to carry user-facing risk,
+                instead of treating the tree as a flat list of files.
+              </div>
+            </li>
+            <li className={styles.sectionListItem}>
+              <span className={styles.listStepNum} aria-hidden>
+                4
+              </span>
+              <div className={styles.listStepBody}>
+                <span className={styles.itemLabel}>Ship concise guidance</span>
+                Short explanations: what might break, why it matters, what to
+                test or confirm next.
+              </div>
+            </li>
+          </ol>
+        </section>
 
-      <section className={styles.section} aria-labelledby="features-heading">
-        <div className={styles.sectionHead}>
-          <h2 id="features-heading" className={styles.h2}>
-            What you get
-          </h2>
-          <p className={styles.subhead}>
-            Built for reviewers and maintainers who need clarity under time
-            pressure.
-          </p>
-        </div>
-        <ul className={styles.sectionList}>
-          <li className={styles.sectionListItem}>
-            <span className={styles.itemLabel}>
-              Usage-aware dependency analysis
-            </span>
-            Connects manifest changes to real call sites—not only what bumped in
-            the lockfile.
-          </li>
-          <li className={styles.sectionListItem}>
-            <span className={styles.itemLabel}>Readable, ranked insight</span>
-            Surfaces a small set of high-signal items so the first pass of
-            review goes to the right places.
-          </li>
-          <li className={styles.sectionListItem}>
-            <span className={styles.itemLabel}>Runtime-shaped scenarios</span>
-            Frames how things could fail in production terms, for example:
-            <ul className={styles.nestedBullets}>
-              <li>broken request or response handling</li>
-              <li>validation or auth edge regressions</li>
-              <li>ordering and concurrency surprises</li>
-            </ul>
-          </li>
-          <li className={styles.sectionListItem}>
-            <span className={styles.itemLabel}>Context, not just alerts</span>
-            Points to where risk concentrates: middleware, lifecycle hooks,
-            shared clients, and similar choke points.
-          </li>
-          <li className={styles.sectionListItem}>
-            <span className={styles.itemLabel}>Actionable next steps</span>
-            Each item suggests what to verify, automate, or double-check before
-            merge.
-          </li>
-        </ul>
-      </section>
+        <section
+          className={styles.sectionCard}
+          aria-labelledby="features-heading"
+        >
+          <div className={styles.sectionHead}>
+            <h2 id="features-heading" className={styles.h2}>
+              What you get
+            </h2>
+            <p className={styles.subhead}>
+              Built for reviewers and maintainers who need clarity under time
+              pressure.
+            </p>
+          </div>
+          <ul className={styles.sectionList}>
+            <SectionRow
+              icon={GitBranch}
+              title="Usage-aware dependency analysis"
+            >
+              Connects manifest changes to real call sites—not only what bumped
+              in the lockfile.
+            </SectionRow>
+            <SectionRow icon={ListFilter} title="Readable, ranked insight">
+              Surfaces a small set of high-signal items so the first pass of
+              review goes to the right places.
+            </SectionRow>
+            <SectionRow icon={Activity} title="Runtime-shaped scenarios">
+              Frames how things could fail in production terms, for example:
+              <ul className={styles.nestedBullets}>
+                <li>broken request or response handling</li>
+                <li>validation or auth edge regressions</li>
+                <li>ordering and concurrency surprises</li>
+              </ul>
+            </SectionRow>
+            <SectionRow icon={Layers} title="Context, not just alerts">
+              Points to where risk concentrates: middleware, lifecycle hooks,
+              shared clients, and similar choke points.
+            </SectionRow>
+            <SectionRow icon={ListTodo} title="Actionable next steps">
+              Each item suggests what to verify, automate, or double-check
+              before merge.
+            </SectionRow>
+          </ul>
+        </section>
 
-      <section className={styles.section} aria-labelledby="value-heading">
-        <div className={styles.sectionHead}>
-          <h2 id="value-heading" className={styles.h2}>
-            Why teams reach for it
-          </h2>
-          <p className={styles.subhead}>
-            Outcomes you can explain to engineering leadership in one slide.
-          </p>
-        </div>
-        <ul className={styles.sectionList}>
-          <li className={styles.sectionListItem}>
-            <span className={styles.itemLabel}>Fewer surprise incidents</span>
-            Catch dependency-driven breakage while the diff is still small and
-            cheap to fix.
-          </li>
-          <li className={styles.sectionListItem}>
-            <span className={styles.itemLabel}>Faster PR reviews</span>
-            Minutes on targeted signal instead of hours re-deriving impact from
-            docs and threads.
-          </li>
-          <li className={styles.sectionListItem}>
-            <span className={styles.itemLabel}>Smarter test investment</span>
-            Aim depth where runtime impact is plausible, not everywhere at once.
-          </li>
-          <li className={styles.sectionListItem}>
-            <span className={styles.itemLabel}>Shared mental model</span>
-            Everyone sees the same picture of what could go wrong before the
-            green button.
-          </li>
-        </ul>
-      </section>
+        <section className={styles.sectionCard} aria-labelledby="value-heading">
+          <div className={styles.sectionHead}>
+            <h2 id="value-heading" className={styles.h2}>
+              Why teams reach for it
+            </h2>
+            <p className={styles.subhead}>
+              Outcomes you can explain to engineering leadership in one slide.
+            </p>
+          </div>
+          <ul className={styles.sectionList}>
+            <SectionRow icon={ShieldCheck} title="Fewer surprise incidents">
+              Catch dependency-driven breakage while the diff is still small and
+              cheap to fix.
+            </SectionRow>
+            <SectionRow icon={Timer} title="Faster PR reviews">
+              Minutes on targeted signal instead of hours re-deriving impact
+              from docs and threads.
+            </SectionRow>
+            <SectionRow icon={Target} title="Smarter test investment">
+              Aim depth where runtime impact is plausible, not everywhere at
+              once.
+            </SectionRow>
+            <SectionRow icon={UsersRound} title="Shared mental model">
+              Everyone sees the same picture of what could go wrong before the
+              green button.
+            </SectionRow>
+          </ul>
+        </section>
 
-      <section
-        className={`${styles.section} ${styles.accentPanel}`}
-        aria-labelledby="position-heading"
-      >
-        <div className={styles.sectionHead}>
-          <h2 id="position-heading" className={styles.h2}>
-            Not another “find everything” scanner
-          </h2>
-          <p className={styles.subhead}>
-            MergeSignal is intentionally narrow: dependency shifts that can
-            change how your application behaves, explained so your team can act.
-          </p>
-        </div>
-        <ul className={styles.sectionList}>
-          <li className={styles.sectionListItem}>
-            <span className={styles.itemLabel}>Depth where it counts</span>
-            Skips vanity counts in favor of a short list tied to this PR&apos;s
-            dependency graph and usage.
-          </li>
-          <li className={styles.sectionListItem}>
-            <span className={styles.itemLabel}>
-              Language your team already uses
-            </span>
-            Outcomes and checks you can paste into a review comment or ticket—no
-            proprietary jargon required.
-          </li>
-        </ul>
-      </section>
+        <section
+          className={`${styles.sectionCard} ${styles.sectionCardAccent}`}
+          aria-labelledby="position-heading"
+        >
+          <div className={styles.sectionHead}>
+            <h2 id="position-heading" className={styles.h2}>
+              Not another “find everything” scanner
+            </h2>
+            <p className={styles.subhead}>
+              MergeSignal is intentionally narrow: dependency shifts that can
+              change how your application behaves, explained so your team can
+              act.
+            </p>
+          </div>
+          <ul className={styles.sectionList}>
+            <SectionRow icon={Telescope} title="Depth where it counts">
+              Skips vanity counts in favor of a short list tied to this
+              PR&apos;s dependency graph and usage.
+            </SectionRow>
+            <SectionRow
+              icon={MessagesSquare}
+              title="Language your team already uses"
+            >
+              Outcomes and checks you can paste into a review comment or
+              ticket—no proprietary jargon required.
+            </SectionRow>
+          </ul>
+        </section>
+      </div>
 
       <section className={styles.finalCta} aria-labelledby="final-heading">
         <h2 id="final-heading" className={styles.finalTag}>
@@ -254,12 +310,10 @@ export default function Home() {
           Connect GitHub when you&apos;re ready to scan a repo; until then, this
           page is here to explain how MergeSignal thinks about dependency risk.
         </p>
-        <Link className={styles.githubCta} href={githubHref}>
-          Continue with GitHub
-        </Link>
+        <GithubCtaLink href={githubHref} />
       </section>
 
-      <section className={styles.section} aria-labelledby="docs-heading">
+      <section className={styles.sectionCard} aria-labelledby="docs-heading">
         <div className={styles.sectionHead}>
           <h2 id="docs-heading" className={styles.h2}>
             GitHub App &amp; self-hosting
@@ -269,8 +323,7 @@ export default function Home() {
           </p>
         </div>
         <ul className={styles.sectionList}>
-          <li className={styles.sectionListItem}>
-            <span className={styles.itemLabel}>Documentation</span>
+          <SectionRow icon={BookOpen} title="Documentation">
             See{" "}
             <Link
               className={styles.inlineLink}
@@ -279,7 +332,7 @@ export default function Home() {
               GitHub App setup (docs)
             </Link>{" "}
             in the open-source repository.
-          </li>
+          </SectionRow>
         </ul>
       </section>
     </>

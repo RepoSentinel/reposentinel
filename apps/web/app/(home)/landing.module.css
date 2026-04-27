@@ -1,92 +1,159 @@
+/* ---------- GitHub OAuth CTA ---------- */
 .githubCta {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--ms-space-xs);
-  padding: 0.75rem 1.35rem;
-  border-radius: 0.625rem;
+  gap: var(--ms-space-sm);
+  padding: 0.72rem 1.4rem;
+  border-radius: var(--ms-radius-md);
   font-size: var(--ms-text-base);
-  font-weight: 600;
+  font-weight: var(--ms-font-weight-semibold);
   text-decoration: none;
-  color: var(--ms-color-on-accent);
-  background: var(--ms-color-accent);
-  border: var(--ms-border-width) solid color-mix(in oklab, var(--ms-color-accent) 70%, var(--ms-color-border));
+  color: var(--ms-github-button-fg);
+  background: var(--ms-github-button-bg);
+  border: var(--ms-border-width) solid var(--ms-github-button-border);
   box-shadow: var(--ms-shadow-sm);
-  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+  transition:
+    transform 0.14s ease,
+    box-shadow 0.14s ease,
+    background 0.14s ease;
 }
 
 .githubCta:hover {
-  background: color-mix(in oklab, var(--ms-color-accent) 88%, var(--ms-color-white));
+  background: var(--ms-github-button-bg-hover);
   box-shadow: var(--ms-shadow-md);
-  transform: translateY(-1px);
 }
 
+.githubCta:focus-visible {
+  outline: 2px solid var(--ms-color-focus-ring);
+  outline-offset: 2px;
+}
+
+.githubCtaIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .githubCta {
+    transition: none;
+  }
+
+  .githubCta:hover {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .githubCta:hover {
+    transform: translateY(-1px);
+  }
+}
+
+/* ---------- Hero (full viewport band, edge bleed, no card chrome) ---------- */
 .hero {
-  margin: 0 0 3.5rem;
-  padding: 2.25rem 1.5rem 2.5rem;
-  border-radius: var(--ms-radius-lg);
-  border: var(--ms-border-width) solid var(--ms-color-border);
+  margin-left: calc(-1 * var(--ms-space-md));
+  margin-right: calc(-1 * var(--ms-space-md));
+  width: calc(100% + 2 * var(--ms-space-md));
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: calc(100svh - var(--ms-site-header-height));
+  margin-bottom: var(--ms-space-2xl);
+  padding: var(--ms-space-2xl) var(--ms-space-md);
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
   background:
+    radial-gradient(
+      ellipse 120% 80% at 50% 20%,
+      color-mix(in oklab, var(--ms-color-ink) 14%, transparent),
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse 90% 60% at 50% 100%,
+      color-mix(in oklab, var(--ms-logo-panel) 65%, transparent),
+      transparent 50%
+    ),
     linear-gradient(
-      145deg,
-      color-mix(in oklab, var(--ms-logo-panel) 92%, var(--ms-color-black) 8%),
-      color-mix(in oklab, var(--ms-color-canvas-elevated) 85%, transparent)
+      165deg,
+      color-mix(in oklab, var(--ms-logo-panel) 88%, var(--ms-color-black)),
+      var(--ms-color-canvas-elevated) 55%
     );
-  box-shadow: var(--ms-shadow-md);
 }
 
 .heroInner {
-  max-width: 44rem;
+  width: 100%;
+  max-width: min(48rem, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .kicker {
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.22em;
+  font-size: var(--ms-text-xs);
+  font-weight: var(--ms-font-weight-semibold);
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--ms-color-brand-frost);
   opacity: 0.95;
-  margin: 0 0 0.85rem;
-}
-
-.heroTitle {
-  font-family: Georgia, ui-serif, serif;
-  font-size: clamp(2rem, 4.5vw, 2.75rem);
-  font-weight: 600;
-  line-height: 1.12;
-  letter-spacing: 0.01em;
-  margin: 0 0 1rem;
-  color: var(--ms-color-ink);
+  margin: 0 0 var(--ms-space-md);
 }
 
 .heroLead {
   font-size: var(--ms-text-lg);
   line-height: var(--ms-leading-roomy);
   color: var(--ms-color-text-muted);
-  margin: 0 0 1.5rem;
-  max-width: 40rem;
+  margin: var(--ms-space-md) 0 var(--ms-space-xl);
+  max-width: 42rem;
 }
 
 .heroActions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: var(--ms-space-sm);
   align-items: center;
+  justify-content: center;
 }
 
-.section {
-  margin-bottom: 3.25rem;
+/* ---------- Section stack & cards ---------- */
+.sectionStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ms-space-xl);
+  margin-bottom: var(--ms-space-2xl);
+}
+
+.sectionCard {
+  padding: var(--ms-space-lg);
+  border-radius: var(--ms-radius-lg);
+  border: var(--ms-border-width) solid var(--ms-color-border);
+  background: linear-gradient(
+    155deg,
+    color-mix(in oklab, var(--ms-color-surface-emphasis) 92%, transparent),
+    color-mix(in oklab, var(--ms-color-surface) 96%, transparent)
+  );
+  box-shadow: var(--ms-shadow-sm);
+}
+
+.sectionCardAccent {
+  background: linear-gradient(
+    125deg,
+    color-mix(in oklab, var(--ms-logo-panel) 48%, transparent),
+    color-mix(in oklab, var(--ms-color-surface) 94%, transparent)
+  );
 }
 
 .sectionHead {
-  margin-bottom: 1.25rem;
+  margin-bottom: var(--ms-space-md);
 }
 
 .h2 {
-  font-family: Georgia, ui-serif, serif;
-  font-size: clamp(1.5rem, 2.5vw, 1.85rem);
-  font-weight: 600;
-  margin: 0 0 0.5rem;
+  margin: 0 0 var(--ms-space-xs);
   color: var(--ms-color-ink);
 }
 
@@ -98,18 +165,22 @@
   max-width: 42rem;
 }
 
-/* Unified body lists: title + supporting line per row */
+/* ---------- List rows (icon + body) ---------- */
 .sectionList {
   list-style: none;
   padding: 0;
-  margin: 0.85rem 0 0;
+  margin: var(--ms-space-md) 0 0;
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  gap: var(--ms-space-sm);
 }
 
 .sectionListItem {
-  padding: 0.9rem 1.05rem;
+  display: grid;
+  grid-template-columns: 2.35rem 1fr;
+  gap: var(--ms-space-md);
+  align-items: start;
+  padding: var(--ms-space-md) var(--ms-space-md);
   border-radius: var(--ms-radius-md);
   border: var(--ms-border-width) solid var(--ms-color-border);
   background: var(--ms-color-surface);
@@ -118,19 +189,29 @@
   color: var(--ms-color-text-muted);
 }
 
+.rowIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  color: color-mix(in oklab, var(--ms-color-ink) 88%, transparent);
+}
+
+.rowBody {
+  min-width: 0;
+}
+
 .itemLabel {
   display: block;
-  font-weight: 600;
+  font-weight: var(--ms-font-weight-semibold);
   color: var(--ms-color-ink);
   margin-bottom: 0.2rem;
   font-size: var(--ms-text-base);
 }
 
 .sectionListOrdered .sectionListItem {
-  display: grid;
   grid-template-columns: 2.35rem 1fr;
-  gap: 0.85rem;
-  align-items: start;
 }
 
 .listStepNum {
@@ -141,7 +222,7 @@
   height: 2.35rem;
   border-radius: var(--ms-radius-full);
   font-size: var(--ms-text-md);
-  font-weight: 700;
+  font-weight: var(--ms-font-weight-bold);
   color: var(--ms-color-on-accent);
   background: var(--ms-color-brand-frost);
 }
@@ -162,37 +243,53 @@
   margin-bottom: 0.3rem;
 }
 
-.accentPanel {
-  margin-top: var(--ms-space-xs);
-  padding: 1.35rem 1.35rem 1.4rem;
-  border-radius: var(--ms-radius-lg);
-  border: var(--ms-border-width) solid var(--ms-color-border);
-  background: linear-gradient(
-    120deg,
-    color-mix(in oklab, var(--ms-logo-panel) 55%, transparent),
-    var(--ms-color-surface)
-  );
-}
-
+/* ---------- Final CTA band ---------- */
 .finalCta {
+  margin-left: calc(-1 * var(--ms-space-md));
+  margin-right: calc(-1 * var(--ms-space-md));
+  width: calc(100% + 2 * var(--ms-space-md));
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  padding: 2.5rem 1.25rem 0.5rem;
-  margin-top: 1rem;
+  min-height: min(70vh, 36rem);
+  margin-top: var(--ms-space-xl);
+  margin-bottom: var(--ms-space-xl);
+  padding: var(--ms-space-2xl) var(--ms-space-md);
+  border: none;
+  border-radius: 0;
+  background:
+    radial-gradient(
+      ellipse 100% 70% at 50% 0%,
+      color-mix(in oklab, var(--ms-color-ink) 12%, transparent),
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse 80% 55% at 50% 100%,
+      color-mix(in oklab, var(--ms-logo-panel) 55%, transparent),
+      transparent 55%
+    ),
+    linear-gradient(
+      175deg,
+      color-mix(in oklab, var(--ms-logo-panel) 75%, var(--ms-color-black)),
+      var(--ms-color-canvas-elevated)
+    );
 }
 
 .finalTag {
-  font-family: Georgia, ui-serif, serif;
-  font-size: clamp(1.65rem, 3vw, 2.1rem);
-  font-weight: 600;
-  margin: 0 0 0.5rem;
+  margin: 0 0 var(--ms-space-xs);
+  max-width: min(36rem, 100%);
   color: var(--ms-color-ink);
 }
 
 .finalLead {
-  margin: 0 auto 1.35rem;
-  max-width: 36rem;
+  margin: 0 auto var(--ms-space-lg);
+  max-width: min(36rem, 100%);
   color: var(--ms-color-text-muted);
   line-height: var(--ms-leading-roomy);
+  font-size: var(--ms-text-lg);
 }
 
 .inlineLink {
@@ -203,19 +300,4 @@
 
 .inlineLink:hover {
   color: var(--ms-color-ink);
-}
-
-.installNote {
-  margin-top: 2.5rem;
-  padding-top: 1.5rem;
-  border-top: var(--ms-border-width) solid var(--ms-color-border);
-  font-size: var(--ms-text-md);
-  color: var(--ms-color-text-muted);
-  line-height: var(--ms-leading-relaxed);
-}
-
-.installNote a {
-  color: var(--ms-color-brand-frost);
-  text-decoration: underline;
-  text-underline-offset: var(--ms-space-2xs);
 }
