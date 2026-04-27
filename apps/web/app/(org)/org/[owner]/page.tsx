@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { AppShell } from "../../components/shared/layout/AppShell/AppShell";
-import { DataTable, TD } from "../../components/shared/Table/Table";
-import { Card, cardStyles } from "../../components/shared/Card/Card";
-import { ApiError, serverApiGet } from "../../../lib/api";
-import { requireOrgAccess } from "../../../lib/org-guard";
+import { DataTable, TD } from "../../../components/shared/Table/Table";
+import { Card, cardStyles } from "../../../components/shared/Card/Card";
+import { ShellTitlebar } from "../../../components/shared/layout/SiteChrome/ShellTitlebar";
+import { ApiError, serverApiGet } from "../../../../lib/api";
+import { requireOrgAccess } from "../../../../lib/org-guard";
 import styles from "./OrgDashboard.module.css";
 
 type Dashboard = {
@@ -48,9 +48,10 @@ export default async function Page({
     const errorText =
       err instanceof ApiError ? (err.body ?? err.message) : String(err);
     return (
-      <AppShell title="Org dashboard" subtitle={owner} owner={owner}>
+      <>
+        <ShellTitlebar title="Org dashboard" subtitle={owner} />
         <pre style={{ whiteSpace: "pre-wrap" }}>{errorText}</pre>
-      </AppShell>
+      </>
     );
   }
 
@@ -58,7 +59,8 @@ export default async function Page({
   const hasRepos = data.repos.length > 0;
 
   return (
-    <AppShell title="Org dashboard" subtitle={owner} owner={owner}>
+    <>
+      <ShellTitlebar title="Org dashboard" subtitle={owner} />
       {/* 5. Highlight worst repos - moved to top */}
       {data.summary.worst.length > 0 && (
         <Card as="div" title="⚠️ High Risk Repositories" padding={true}>
@@ -152,7 +154,7 @@ export default async function Page({
           />
         </>
       )}
-    </AppShell>
+    </>
   );
 }
 

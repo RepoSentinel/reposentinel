@@ -4,7 +4,6 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 import { readLegalDoc } from "../../../../lib/readLegalDoc";
-import { AppShell } from "../../shared/layout/AppShell/AppShell";
 import styles from "./LegalDoc.module.css";
 
 const DOC_FILES = {
@@ -32,21 +31,13 @@ const markdownComponents: Partial<Components> = {
 export function LegalMarkdown({ doc }: { doc: LegalDocId }) {
   const source = readLegalDoc(DOC_FILES[doc]);
   return (
-    <AppShell
-      title="MergeSignal"
-      hideTitlebar
-      hideHeaderNav
-      footerVariant="minimal"
-      mainWidth="default"
-    >
-      <article className={styles.article}>
-        <ReactMarkdown
-          remarkPlugins={[remarkGfm]}
-          components={markdownComponents}
-        >
-          {source}
-        </ReactMarkdown>
-      </article>
-    </AppShell>
+    <article className={styles.article}>
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        components={markdownComponents}
+      >
+        {source}
+      </ReactMarkdown>
+    </article>
   );
 }

@@ -1,12 +1,11 @@
 import Link from "next/link";
-import { AppShell } from "./components/shared/layout/AppShell/AppShell";
 import styles from "./landing.module.css";
 
 export default function Home() {
   const githubHref = "/api/auth/signin/github";
 
   return (
-    <AppShell title="MergeSignal" hideTitlebar hideHeaderNav mainWidth="wide">
+    <>
       <section className={styles.hero} aria-labelledby="hero-heading">
         <div className={styles.heroInner}>
           <p className={styles.kicker}>Dependency risk, before you merge</p>
@@ -283,6 +282,6 @@ export default function Home() {
           </li>
         </ul>
       </section>
-    </AppShell>
+    </>
   );
 }

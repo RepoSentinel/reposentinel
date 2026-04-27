@@ -1,10 +1,10 @@
-import { AppShell } from "../../../components/shared/layout/AppShell/AppShell";
-import { DataTable, TD } from "../../../components/shared/Table/Table";
-import { Card, cardStyles } from "../../../components/shared/Card/Card";
+import { DataTable, TD } from "../../../../components/shared/Table/Table";
+import { Card, cardStyles } from "../../../../components/shared/Card/Card";
+import { ShellTitlebar } from "../../../../components/shared/layout/SiteChrome/ShellTitlebar";
 import styles from "./Benchmark.module.css";
-import typo from "../../../_styles/typography.module.css";
-import { ApiError, serverApiGet } from "../../../../lib/api";
-import { requireOrgAccess } from "../../../../lib/org-guard";
+import typo from "../../../../_styles/typography.module.css";
+import { ApiError, serverApiGet } from "../../../../../lib/api";
+import { requireOrgAccess } from "../../../../../lib/org-guard";
 
 type Summary = {
   scope: "global" | "owner";
@@ -39,18 +39,19 @@ export default async function Page({
     const errorText =
       err instanceof ApiError ? (err.body ?? err.message) : String(err);
     return (
-      <AppShell title="Benchmark" subtitle={owner} owner={owner}>
+      <>
+        <ShellTitlebar title="Benchmark" subtitle={owner} />
         <pre style={{ whiteSpace: "pre-wrap" }}>{errorText}</pre>
-      </AppShell>
+      </>
     );
   }
 
   return (
-    <AppShell
-      title="Benchmark"
-      subtitle="Higher totalScore means higher relative risk."
-      owner={owner}
-    >
+    <>
+      <ShellTitlebar
+        title="Benchmark"
+        subtitle="Higher totalScore means higher relative risk."
+      />
       <h2 className={typo.h2Tight}>Global distribution</h2>
       <SummaryCards s={global} />
 
@@ -62,7 +63,7 @@ export default async function Page({
 
       <h2 className={typo.h2}>Org best (lowest risk)</h2>
       <RepoList rows={org.best} />
-    </AppShell>
+    </>
   );
 }
 

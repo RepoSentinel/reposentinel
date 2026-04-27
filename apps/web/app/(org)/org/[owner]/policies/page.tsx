@@ -1,10 +1,10 @@
-import { AppShell } from "../../../components/shared/layout/AppShell/AppShell";
-import { Card } from "../../../components/shared/Card/Card";
-import { DataTable, TD } from "../../../components/shared/Table/Table";
-import typo from "../../../_styles/typography.module.css";
-import { ApiError, serverApiGet } from "../../../../lib/api";
-import { getPublicApiBaseUrl } from "../../../../lib/env";
-import { requireOrgAccess } from "../../../../lib/org-guard";
+import { Card } from "../../../../components/shared/Card/Card";
+import { DataTable, TD } from "../../../../components/shared/Table/Table";
+import { ShellTitlebar } from "../../../../components/shared/layout/SiteChrome/ShellTitlebar";
+import typo from "../../../../_styles/typography.module.css";
+import { ApiError, serverApiGet } from "../../../../../lib/api";
+import { getPublicApiBaseUrl } from "../../../../../lib/env";
+import { requireOrgAccess } from "../../../../../lib/org-guard";
 
 type PoliciesResponse = {
   owner: string;
@@ -63,18 +63,19 @@ export default async function Page({
     const errorText =
       err instanceof ApiError ? (err.body ?? err.message) : String(err);
     return (
-      <AppShell title="Policies" subtitle={owner} owner={owner}>
+      <>
+        <ShellTitlebar title="Policies" subtitle={owner} />
         <pre style={{ whiteSpace: "pre-wrap" }}>{errorText}</pre>
-      </AppShell>
+      </>
     );
   }
 
   return (
-    <AppShell
-      title="Policies"
-      subtitle={`policies: ${policies.policies.length} • recent violations: ${violations.violations.length}`}
-      owner={owner}
-    >
+    <>
+      <ShellTitlebar
+        title="Policies"
+        subtitle={`policies: ${policies.policies.length} • recent violations: ${violations.violations.length}`}
+      />
       <h2 className={typo.h2Tight}>Policies</h2>
       {policies.policies.length === 0 ? (
         <Card title="No policies yet" subtitle="Create one via API:">
@@ -125,6 +126,6 @@ export default async function Page({
           </pre>
         </>
       )}
-    </AppShell>
+    </>
   );
 }

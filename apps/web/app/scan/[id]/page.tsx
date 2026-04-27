@@ -1,5 +1,5 @@
 import ScanClient from "./ScanClient";
-import { AppShell } from "../../components/shared/layout/AppShell/AppShell";
+import { SiteChrome } from "../../components/shared/layout/SiteChrome/SiteChrome";
 import { repoOwnerFromRepoId } from "../../../lib/access";
 import { ApiError, serverApiGet } from "../../../lib/api";
 import { requireOrgAccess } from "../../../lib/org-guard";
@@ -26,9 +26,9 @@ export default async function Page({
     const errorText =
       err instanceof ApiError ? (err.body ?? err.message) : String(err);
     return (
-      <AppShell title="Scan" subtitle={id}>
+      <SiteChrome title="Scan" subtitle={id}>
         <pre style={{ whiteSpace: "pre-wrap" }}>{errorText}</pre>
-      </AppShell>
+      </SiteChrome>
     );
   }
 
@@ -36,7 +36,7 @@ export default async function Page({
   await requireOrgAccess(owner);
 
   return (
-    <AppShell title="Scan" subtitle={scan.repo_id} owner={owner}>
+    <SiteChrome title="Scan" subtitle={scan.repo_id} owner={owner}>
       <ScanClient
         id={id}
         initialRow={{
@@ -46,6 +46,6 @@ export default async function Page({
           error: scan.error ?? null,
         }}
       />
-    </AppShell>
+    </SiteChrome>
   );
 }
