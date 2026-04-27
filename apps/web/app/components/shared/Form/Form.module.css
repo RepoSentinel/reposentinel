@@ -1,18 +1,18 @@
 .row {
   display: flex;
-  gap: 10px;
+  gap: var(--ms-space-xl);
   align-items: center;
-  margin-top: 12px;
+  margin-top: var(--ms-space-2xl);
 }
 
 .input {
   flex: 1;
-  padding: 10px 12px;
+  padding: var(--ms-space-xl) var(--ms-space-2xl);
   border-radius: var(--rs-radius-md);
-  border: 1px solid var(--rs-color-border);
+  border: var(--ms-border-width) solid var(--rs-color-border);
   background: color-mix(in oklab, var(--rs-color-surface) 85%, transparent);
   color: var(--rs-color-text);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 var(--ms-border-width) 0 rgba(255, 255, 255, 0.06);
   transition: border-color 120ms ease, box-shadow 120ms ease, transform 120ms ease;
 }
 
@@ -23,13 +23,13 @@
 .input:focus-visible {
   outline: none;
   border-color: color-mix(in oklab, var(--rs-color-accent-alt) 55%, var(--rs-color-border));
-  box-shadow: 0 0 0 4px var(--rs-focus-ring);
+  box-shadow: 0 0 0 var(--ms-space-sm) var(--rs-focus-ring);
 }
 
 .button {
-  padding: 10px 12px;
+  padding: var(--ms-space-xl) var(--ms-space-2xl);
   border-radius: var(--rs-radius-md);
-  border: 1px solid color-mix(in oklab, var(--rs-color-border) 85%, transparent);
+  border: var(--ms-border-width) solid color-mix(in oklab, var(--rs-color-border) 85%, transparent);
   background: linear-gradient(
     90deg,
     var(--rs-color-accent),
@@ -47,7 +47,7 @@
 
 .button:hover {
   filter: brightness(1.02);
-  transform: translateY(-1px);
+  transform: translateY(calc(-1 * var(--ms-space-3xs)));
 }
 
 .button[disabled] {
@@ -66,4 +66,3 @@
 .buttonSecondary:hover {
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.18);
 }
-

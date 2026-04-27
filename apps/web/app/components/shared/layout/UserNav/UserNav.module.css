@@ -30,20 +30,20 @@
 .buttonSecondary {
   font: inherit;
   cursor: pointer;
-  border-radius: 6px;
+  border-radius: var(--ms-radius-xs);
   padding: 0.35rem 0.75rem;
   font-size: 0.85rem;
 }
 
 .button {
-  border: 1px solid color-mix(in oklab, var(--rs-color-accent) 35%, var(--rs-color-border));
+  border: var(--ms-border-width) solid color-mix(in oklab, var(--rs-color-accent) 35%, var(--rs-color-border));
   background: var(--rs-color-accent);
   color: var(--rs-color-on-accent);
   font-weight: 600;
 }
 
 .buttonSecondary {
-  border: 1px solid var(--ms-border);
+  border: var(--ms-border-width) solid var(--ms-border);
   background: transparent;
   color: inherit;
 }

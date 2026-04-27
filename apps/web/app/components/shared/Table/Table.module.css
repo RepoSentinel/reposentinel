@@ -1,5 +1,5 @@
 .card {
-  border: 1px solid var(--rs-color-border);
+  border: var(--ms-border-width) solid var(--rs-color-border);
   background: linear-gradient(
     180deg,
     color-mix(in oklab, var(--rs-color-surface-emphasis) 55%, transparent),
@@ -22,22 +22,21 @@
 
 .th {
   text-align: left;
-  border-bottom: 1px solid var(--rs-color-border);
-  padding: 10px 12px;
+  border-bottom: var(--ms-border-width) solid var(--rs-color-border);
+  padding: var(--ms-space-xl) var(--ms-space-2xl);
   white-space: nowrap;
-  font-size: 12px;
+  font-size: var(--ms-text-xs);
   opacity: 0.8;
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
 
 .td {
-  padding: 10px 12px;
-  border-bottom: 1px solid var(--rs-color-border);
+  padding: var(--ms-space-xl) var(--ms-space-2xl);
+  border-bottom: var(--ms-border-width) solid var(--rs-color-border);
   vertical-align: top;
 }
 
 .table tbody tr:hover .td {
   background: color-mix(in oklab, var(--rs-color-surface-emphasis) 50%, transparent);
 }
-

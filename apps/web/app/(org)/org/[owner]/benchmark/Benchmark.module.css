@@ -1,10 +1,9 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 10px;
+  gap: var(--ms-space-xl);
 }
 
 .metricValue {
-  font-size: 20px;
+  font-size: 1.25rem;
 }
-

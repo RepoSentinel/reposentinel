@@ -1,12 +1,12 @@
 .score {
   display: flex;
   align-items: baseline;
-  gap: 10px;
-  margin-top: 10px;
+  gap: var(--ms-space-xl);
+  margin-top: var(--ms-space-xl);
 }
 
 .scoreValue {
-  font-size: 40px;
+  font-size: 2.5rem;
   font-weight: 800;
   letter-spacing: -0.04em;
   background: linear-gradient(90deg, var(--rs-color-accent), var(--rs-color-accent-alt));
@@ -17,25 +17,25 @@
 
 .scoreMeta {
   color: var(--rs-color-text-muted);
-  font-size: 13px;
+  font-size: var(--ms-text-sm);
 }
 
 .pill {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  border: 1px solid var(--rs-color-border);
+  gap: var(--ms-space-lg);
+  padding: var(--ms-space-md) var(--ms-space-xl);
+  border-radius: var(--ms-radius-full);
+  border: var(--ms-border-width) solid var(--rs-color-border);
   background: color-mix(in oklab, var(--rs-color-surface-emphasis) 75%, transparent);
-  font-size: 13px;
+  font-size: var(--ms-text-sm);
   color: var(--rs-color-text);
 }
 
 .dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
+  width: var(--ms-space-lg);
+  height: var(--ms-space-lg);
+  border-radius: var(--ms-radius-full);
   background: var(--rs-color-text-muted);
 }
 
@@ -57,36 +57,36 @@
 
 .detailsPre {
   white-space: pre-wrap;
-  margin-top: 10px;
+  margin-top: var(--ms-space-xl);
   border-radius: var(--rs-radius-md);
-  border: 1px solid var(--rs-color-border);
+  border: var(--ms-border-width) solid var(--rs-color-border);
   background: color-mix(in oklab, var(--rs-color-surface) 85%, transparent);
-  padding: 12px;
+  padding: var(--ms-space-2xl);
   overflow: auto;
 }
 
 .list {
-  margin-top: 10px;
-  padding-left: 18px;
+  margin-top: var(--ms-space-xl);
+  padding-left: var(--ms-space-5xl);
 }
 
 .failurePre {
   white-space: pre-wrap;
   border-radius: var(--rs-radius-md);
-  border: 1px solid color-mix(in oklab, var(--rs-color-border) 70%, var(--rs-color-danger) 30%);
+  border: var(--ms-border-width) solid color-mix(in oklab, var(--rs-color-border) 70%, var(--rs-color-danger) 30%);
   background: color-mix(in oklab, var(--rs-color-danger) 12%, var(--rs-color-surface));
-  padding: 12px;
+  padding: var(--ms-space-2xl);
 }
 
 .decisionBadge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
+  gap: var(--ms-space-md);
+  padding: var(--ms-space-lg) var(--ms-space-2xl);
   border-radius: var(--rs-radius-md);
-  font-size: 14px;
+  font-size: var(--ms-text-md);
   font-weight: 600;
-  border: 1px solid;
+  border: var(--ms-border-width) solid;
 }
 
 .decisionBadge[data-recommendation="safe"] {
@@ -108,26 +108,26 @@
 }
 
 .decisionReasoning {
-  margin-top: 12px;
-  padding-left: 20px;
-  font-size: 13px;
+  margin-top: var(--ms-space-2xl);
+  padding-left: var(--ms-space-6xl);
+  font-size: var(--ms-text-sm);
   color: var(--rs-color-text);
 }
 
 .decisionReasoning li {
-  margin-top: 6px;
+  margin-top: var(--ms-space-md);
 }
 
 .insightPriorityBadge {
   display: inline-flex;
   align-items: center;
-  padding: 2px 8px;
+  padding: var(--ms-space-xs) var(--ms-space-lg);
   border-radius: var(--rs-radius-sm);
-  font-size: 11px;
+  font-size: var(--ms-text-2xs);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.02em;
-  border: 1px solid;
+  border: var(--ms-border-width) solid;
 }
 
 .insightPriorityBadge[data-priority="critical"] {
@@ -157,14 +157,14 @@
 .insightsList {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin-top: 12px;
+  gap: var(--ms-space-4xl);
+  margin-top: var(--ms-space-2xl);
 }
 
 .insight {
-  padding: 16px;
+  padding: var(--ms-space-4xl);
   border-radius: var(--rs-radius-md);
-  border-left: 4px solid;
+  border-left: var(--ms-space-sm) solid;
 }
 
 .insight[data-priority="critical"] {
@@ -190,20 +190,20 @@
 .insightHeader {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
+  gap: var(--ms-space-lg);
+  margin-bottom: var(--ms-space-lg);
 }
 
 .priorityBadge {
   display: inline-flex;
   align-items: center;
-  padding: 3px 8px;
+  padding: var(--ms-space-xs) var(--ms-space-lg);
   border-radius: var(--rs-radius-sm);
-  font-size: 11px;
+  font-size: var(--ms-text-2xs);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.03em;
-  border: 1px solid;
+  border: var(--ms-border-width) solid;
 }
 
 .priorityBadge[data-priority="critical"] {
@@ -231,13 +231,13 @@
 }
 
 .insightType {
-  font-size: 13px;
+  font-size: var(--ms-text-sm);
   color: var(--rs-color-text-muted);
   text-transform: capitalize;
 }
 
 .insightMessage {
-  font-size: 15px;
+  font-size: 0.9375rem;
   font-weight: 600;
   color: var(--rs-color-text);
   margin: 0;
@@ -245,9 +245,9 @@
 }
 
 .insightAction {
-  font-size: 14px;
+  font-size: var(--ms-text-md);
   color: var(--rs-color-text);
-  margin: 8px 0 0 0;
+  margin: var(--ms-space-lg) 0 0 0;
 }
 
 .insightAction strong {
@@ -255,8 +255,8 @@
 }
 
 .affectedFiles {
-  margin-top: 12px;
-  font-size: 13px;
+  margin-top: var(--ms-space-2xl);
+  font-size: var(--ms-text-sm);
 }
 
 .affectedFiles summary {
@@ -271,21 +271,20 @@
 }
 
 .affectedFiles ul {
-  margin-top: 8px;
-  padding-left: 20px;
+  margin-top: var(--ms-space-lg);
+  padding-left: var(--ms-space-6xl);
 }
 
 .affectedFiles li {
-  margin-top: 4px;
+  margin-top: var(--ms-space-sm);
   color: var(--rs-color-text);
 }
 
 .affectedFiles code {
   font-family: var(--rs-font-mono);
-  font-size: 12px;
-  padding: 2px 6px;
+  font-size: var(--ms-text-xs);
+  padding: var(--ms-space-2xs) var(--ms-space-md);
   border-radius: var(--rs-radius-sm);
   background: color-mix(in oklab, var(--rs-color-surface-emphasis) 50%, transparent);
   color: var(--rs-color-text-emphasis);
 }
-

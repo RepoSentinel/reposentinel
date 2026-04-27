@@ -79,9 +79,45 @@
   --ms-shadow-sm: 0 1px 0 color-mix(in oklab, var(--ms-color-black) 20%, transparent);
   --ms-shadow-md: 0 18px 50px color-mix(in oklab, var(--ms-color-black) 35%, transparent);
 
-  /* --- Layout tokens --- */
-  --ms-radius-lg: 16px;
-  --ms-radius-md: 12px;
+  /* --- Hairline border (do not use rem for border width) --- */
+  --ms-border-width: 1px;
+
+  /* --- External palette (OrgDashboard chips / score gradient) --- */
+  --ms-color-emerald-500: #10b981;
+  --ms-color-amber-500: #f59e0b;
+  --ms-color-red-500: #ef4444;
+  --ms-color-blue-500: #3b82f6;
+
+  /* --- Spacing scale (rem); names are relative size, not pixel values --- */
+  --ms-space-3xs: 0.0625rem; /* 1px */
+  --ms-space-2xs: 0.125rem; /* 2px */
+  --ms-space-xs: 0.1875rem; /* 3px */
+  --ms-space-sm: 0.25rem; /* 4px */
+  --ms-space-md: 0.375rem; /* 6px */
+  --ms-space-lg: 0.5rem; /* 8px */
+  --ms-space-xl: 0.625rem; /* 10px */
+  --ms-space-2xl: 0.75rem; /* 12px */
+  --ms-space-3xl: 0.875rem; /* 14px */
+  --ms-space-4xl: 1rem; /* 16px */
+  --ms-space-5xl: 1.125rem; /* 18px */
+  --ms-space-6xl: 1.25rem; /* 20px */
+  --ms-space-7xl: 2.5rem; /* 40px */
+  --ms-space-layout-min: 16.25rem; /* 260px min column / logo cap */
+
+  /* --- Typography scale (rem) --- */
+  --ms-text-2xs: 0.6875rem; /* 11px */
+  --ms-text-xs: 0.75rem; /* 12px */
+  --ms-text-sm: 0.8125rem; /* 13px */
+  --ms-text-md: 0.875rem; /* 14px */
+  --ms-text-base: 1rem; /* 16px */
+
+  /* --- Radius (rem only): 2xs → xs → sm → md → lg → full --- */
+  --ms-radius-2xs: 0.25rem; /* 4px */
+  --ms-radius-xs: 0.375rem; /* 6px */
+  --ms-radius-sm: 0.5rem; /* 8px */
+  --ms-radius-md: 0.75rem; /* 12px */
+  --ms-radius-lg: 1rem; /* 16px */
+  --ms-radius-full: 62.4375rem; /* pill */
 
   /* =============================================================================
    * Semantic contract (`rs-*`) — used across components; maps to derived tokens.
@@ -104,6 +140,7 @@
 
   --rs-radius-lg: var(--ms-radius-lg);
   --rs-radius-md: var(--ms-radius-md);
+  --rs-radius-sm: var(--ms-radius-2xs);
   --rs-shadow-sm: var(--ms-shadow-sm);
   --rs-shadow-md: var(--ms-shadow-md);
   --rs-focus-ring: var(--ms-color-focus-ring);

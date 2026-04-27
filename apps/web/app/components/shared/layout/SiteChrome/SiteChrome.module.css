@@ -5,7 +5,7 @@
 .main {
   max-width: 980px;
   margin: 0 auto;
-  padding: 18px 16px 42px;
+  padding: var(--ms-space-5xl) var(--ms-space-4xl) 2.625rem;
 }
 
 .mainWide {
@@ -13,16 +13,16 @@
 }
 
 .titlebar {
-  margin-top: 10px;
-  margin-bottom: 18px;
+  margin-top: var(--ms-space-xl);
+  margin-bottom: var(--ms-space-5xl);
 }
 
 .title {
-  font-size: 30px;
+  font-size: 1.875rem;
   letter-spacing: -0.03em;
 }
 
 .subtitle {
-  margin-top: 8px;
+  margin-top: var(--ms-space-lg);
   color: var(--rs-color-text-muted);
 }

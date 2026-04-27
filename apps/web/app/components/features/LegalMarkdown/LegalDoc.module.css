@@ -55,14 +55,14 @@
 
 .article :global(hr) {
   border: none;
-  border-top: 1px solid var(--rs-color-border);
+  border-top: var(--ms-border-width) solid var(--rs-color-border);
   margin: 1.75rem 0;
 }
 
 .article :global(a) {
   color: var(--rs-color-brand-frost);
   text-decoration: underline;
-  text-underline-offset: 3px;
+  text-underline-offset: var(--ms-space-xs);
 }
 
 .article :global(a:hover) {
@@ -73,7 +73,7 @@
   margin: 0 0 0.85rem;
   padding: 0.85rem 1rem;
   border-radius: var(--rs-radius-md);
-  border: 1px solid var(--rs-color-border);
+  border: var(--ms-border-width) solid var(--rs-color-border);
   background: var(--rs-color-surface);
   overflow-x: auto;
   font-size: 0.85rem;
@@ -98,7 +98,7 @@
 
 .article :global(th),
 .article :global(td) {
-  border: 1px solid var(--rs-color-border);
+  border: var(--ms-border-width) solid var(--rs-color-border);
   padding: 0.5rem 0.65rem;
   text-align: left;
   vertical-align: top;
