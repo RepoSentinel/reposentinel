@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { AppShell } from "../../_components/AppShell";
-import { DataTable, TD } from "../../_components/ui/Table";
-import { Card, cardStyles } from "../../_components/ui/Card";
+import { AppShell } from "../../components/shared/layout/AppShell/AppShell";
+import { DataTable, TD } from "../../components/shared/Table/Table";
+import { Card, cardStyles } from "../../components/shared/Card/Card";
 import { ApiError, serverApiGet } from "../../../lib/api";
 import { requireOrgAccess } from "../../../lib/org-guard";
 import styles from "./OrgDashboard.module.css";

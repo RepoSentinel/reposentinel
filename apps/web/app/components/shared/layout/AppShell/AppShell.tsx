@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./AppShell.module.css";
-import { Footer } from "./Footer";
-import { UserNav } from "./UserNav";
+import { Footer } from "../Footer/Footer";
+import { UserNav } from "../UserNav/UserNav";
 
 export function AppShell({
   title,

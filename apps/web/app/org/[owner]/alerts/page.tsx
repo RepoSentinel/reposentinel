@@ -1,5 +1,5 @@
-import { AppShell } from "../../../_components/AppShell";
-import { DataTable, TD } from "../../../_components/ui/Table";
+import { AppShell } from "../../../components/shared/layout/AppShell/AppShell";
+import { DataTable, TD } from "../../../components/shared/Table/Table";
 import typo from "../../../_styles/typography.module.css";
 import { ApiError, serverApiGet } from "../../../../lib/api";
 import { requireOrgAccess } from "../../../../lib/org-guard";

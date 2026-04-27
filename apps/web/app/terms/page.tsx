@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { LegalMarkdown } from "../_components/LegalMarkdown";
+import { LegalMarkdown } from "../components/features/LegalMarkdown/LegalMarkdown";
 
 export const metadata: Metadata = {
   title: "Terms of Service — MergeSignal",

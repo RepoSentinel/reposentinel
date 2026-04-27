@@ -1,6 +1,6 @@
-import { AppShell } from "../../../_components/AppShell";
-import { DataTable, TD } from "../../../_components/ui/Table";
-import { Card, cardStyles } from "../../../_components/ui/Card";
+import { AppShell } from "../../../components/shared/layout/AppShell/AppShell";
+import { DataTable, TD } from "../../../components/shared/Table/Table";
+import { Card, cardStyles } from "../../../components/shared/Card/Card";
 import styles from "./Benchmark.module.css";
 import typo from "../../../_styles/typography.module.css";
 import { ApiError, serverApiGet } from "../../../../lib/api";

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { AppShell } from "./_components/AppShell";
+import { AppShell } from "./components/shared/layout/AppShell/AppShell";
 import styles from "./landing.module.css";
 
 export default function Home() {

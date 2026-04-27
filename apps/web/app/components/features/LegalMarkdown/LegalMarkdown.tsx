@@ -3,8 +3,8 @@ import type { Components } from "react-markdown";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-import { readLegalDoc } from "../../lib/readLegalDoc";
-import { AppShell } from "./AppShell";
+import { readLegalDoc } from "../../../../lib/readLegalDoc";
+import { AppShell } from "../../shared/layout/AppShell/AppShell";
 import styles from "./LegalDoc.module.css";
 
 const DOC_FILES = {

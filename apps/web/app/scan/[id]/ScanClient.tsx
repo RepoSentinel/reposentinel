@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import type { PRInsight, PRDecision } from "@mergesignal/shared";
 import styles from "./ScanClient.module.css";
 import layoutStyles from "./ScanClientLayout.module.css";
-import { Card, cardStyles } from "../../_components/ui/Card";
-import { Button, Row } from "../../_components/ui/Form";
+import { Card, cardStyles } from "../../components/shared/Card/Card";
+import { Button, Row } from "../../components/shared/Form/Form";
 
 type ScanRow = {
   id: string;

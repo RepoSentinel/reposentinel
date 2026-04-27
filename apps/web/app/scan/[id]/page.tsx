@@ -1,5 +1,5 @@
 import ScanClient from "./ScanClient";
-import { AppShell } from "../../_components/AppShell";
+import { AppShell } from "../../components/shared/layout/AppShell/AppShell";
 import { repoOwnerFromRepoId } from "../../../lib/access";
 import { ApiError, serverApiGet } from "../../../lib/api";
 import { requireOrgAccess } from "../../../lib/org-guard";
