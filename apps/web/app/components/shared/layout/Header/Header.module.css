@@ -5,10 +5,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--ms-space-4xl);
-  padding: var(--ms-space-3xl) var(--ms-space-4xl);
-  border-bottom: var(--ms-border-width) solid var(--rs-color-border);
-  background: color-mix(in oklab, var(--rs-color-background) 92%, transparent);
+  gap: var(--ms-space-md);
+  padding: var(--ms-space-sm) var(--ms-space-md);
+  border-bottom: var(--ms-border-width) solid var(--ms-color-border);
+  background: color-mix(in oklab, var(--ms-color-canvas) 92%, transparent);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   box-shadow: 0 14px 60px rgba(0, 0, 0, 0.28);
@@ -17,7 +17,7 @@
 .headerLeft {
   display: flex;
   align-items: baseline;
-  gap: var(--ms-space-xl);
+  gap: var(--ms-space-sm);
   min-width: 0;
 }
 
@@ -28,7 +28,7 @@
 }
 
 .brandLogo {
-  height: var(--ms-space-7xl);
+  height: var(--ms-space-xl);
   width: auto;
   max-width: min(var(--ms-space-layout-min), 58vw);
   object-fit: contain;
@@ -45,21 +45,21 @@
 
 .nav {
   display: flex;
-  gap: var(--ms-space-2xl);
+  gap: var(--ms-space-sm);
   flex-wrap: wrap;
   justify-content: flex-end;
 }
 
 .navLink {
   opacity: 0.9;
-  padding: var(--ms-space-md) var(--ms-space-xl);
-  border: var(--ms-border-width) solid var(--rs-color-border);
+  padding: var(--ms-space-2xs) var(--ms-space-sm);
+  border: var(--ms-border-width) solid var(--ms-color-border);
   border-radius: var(--ms-radius-full);
-  background: color-mix(in oklab, var(--rs-color-surface) 70%, transparent);
-  box-shadow: var(--rs-shadow-sm);
+  background: color-mix(in oklab, var(--ms-color-surface) 70%, transparent);
+  box-shadow: var(--ms-shadow-sm);
 }
 
 .navLink:hover {
   opacity: 1;
-  background: color-mix(in oklab, var(--rs-color-surface-emphasis) 85%, transparent);
+  background: color-mix(in oklab, var(--ms-color-surface-emphasis) 85%, transparent);
 }

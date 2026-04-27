@@ -9,7 +9,7 @@
 .navLink {
   color: inherit;
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: var(--ms-text-md);
   opacity: 0.9;
 }
 
@@ -18,7 +18,7 @@
 }
 
 .user {
-  font-size: 0.85rem;
+  font-size: var(--ms-text-sm);
   opacity: 0.85;
   max-width: 12rem;
   overflow: hidden;
@@ -32,13 +32,13 @@
   cursor: pointer;
   border-radius: var(--ms-radius-xs);
   padding: 0.35rem 0.75rem;
-  font-size: 0.85rem;
+  font-size: var(--ms-text-sm);
 }
 
 .button {
-  border: var(--ms-border-width) solid color-mix(in oklab, var(--rs-color-accent) 35%, var(--rs-color-border));
-  background: var(--rs-color-accent);
-  color: var(--rs-color-on-accent);
+  border: var(--ms-border-width) solid color-mix(in oklab, var(--ms-color-accent) 35%, var(--ms-color-border));
+  background: var(--ms-color-accent);
+  color: var(--ms-color-on-accent);
   font-weight: 600;
 }
 
@@ -50,5 +50,5 @@
 
 .muted {
   opacity: 0.6;
-  font-size: 0.85rem;
+  font-size: var(--ms-text-sm);
 }

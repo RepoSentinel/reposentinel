@@ -5,7 +5,7 @@
 .main {
   max-width: 980px;
   margin: 0 auto;
-  padding: var(--ms-space-5xl) var(--ms-space-4xl) 2.625rem;
+  padding: var(--ms-space-md) var(--ms-space-md) 2.625rem;
 }
 
 .mainWide {
@@ -13,8 +13,8 @@
 }
 
 .titlebar {
-  margin-top: var(--ms-space-xl);
-  margin-bottom: var(--ms-space-5xl);
+  margin-top: var(--ms-space-sm);
+  margin-bottom: var(--ms-space-md);
 }
 
 .title {
@@ -23,6 +23,6 @@
 }
 
 .subtitle {
-  margin-top: var(--ms-space-lg);
-  color: var(--rs-color-text-muted);
+  margin-top: var(--ms-space-xs);
+  color: var(--ms-color-text-muted);
 }

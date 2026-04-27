@@ -1,12 +1,12 @@
 .card {
-  border: var(--ms-border-width) solid var(--rs-color-border);
+  border: var(--ms-border-width) solid var(--ms-color-border);
   background: linear-gradient(
     180deg,
-    color-mix(in oklab, var(--rs-color-surface-emphasis) 55%, transparent),
-    var(--rs-color-surface)
+    color-mix(in oklab, var(--ms-color-surface-emphasis) 55%, transparent),
+    var(--ms-color-surface)
   );
-  border-radius: var(--rs-radius-lg);
-  box-shadow: var(--rs-shadow-sm);
+  border-radius: var(--ms-radius-lg);
+  box-shadow: var(--ms-shadow-sm);
   backdrop-filter: blur(10px);
 }
 
@@ -22,8 +22,8 @@
 
 .th {
   text-align: left;
-  border-bottom: var(--ms-border-width) solid var(--rs-color-border);
-  padding: var(--ms-space-xl) var(--ms-space-2xl);
+  border-bottom: var(--ms-border-width) solid var(--ms-color-border);
+  padding: var(--ms-space-sm) var(--ms-space-sm);
   white-space: nowrap;
   font-size: var(--ms-text-xs);
   opacity: 0.8;
@@ -32,11 +32,11 @@
 }
 
 .td {
-  padding: var(--ms-space-xl) var(--ms-space-2xl);
-  border-bottom: var(--ms-border-width) solid var(--rs-color-border);
+  padding: var(--ms-space-sm) var(--ms-space-sm);
+  border-bottom: var(--ms-border-width) solid var(--ms-color-border);
   vertical-align: top;
 }
 
 .table tbody tr:hover .td {
-  background: color-mix(in oklab, var(--rs-color-surface-emphasis) 50%, transparent);
+  background: color-mix(in oklab, var(--ms-color-surface-emphasis) 50%, transparent);
 }

@@ -1,13 +1,13 @@
 .card {
-  border: var(--ms-border-width) solid color-mix(in oklab, var(--rs-color-border) 90%, transparent);
+  border: var(--ms-border-width) solid color-mix(in oklab, var(--ms-color-border) 90%, transparent);
   background: linear-gradient(
     180deg,
-    color-mix(in oklab, var(--rs-color-surface-emphasis) 65%, transparent),
-    var(--rs-color-surface)
+    color-mix(in oklab, var(--ms-color-surface-emphasis) 65%, transparent),
+    var(--ms-color-surface)
   );
-  border-radius: var(--rs-radius-lg);
-  padding: var(--ms-space-4xl);
-  box-shadow: var(--rs-shadow-sm);
+  border-radius: var(--ms-radius-lg);
+  padding: var(--ms-space-md);
+  box-shadow: var(--ms-shadow-sm);
   backdrop-filter: blur(10px);
   transition:
     transform 140ms ease,
@@ -16,8 +16,8 @@
 }
 
 .card:hover {
-  transform: translateY(calc(-1 * var(--ms-space-3xs)));
-  border-color: color-mix(in oklab, var(--rs-color-border) 70%, var(--rs-color-accent) 30%);
+  transform: translateY(-1px);
+  border-color: color-mix(in oklab, var(--ms-color-border) 70%, var(--ms-color-accent) 30%);
 }
 
 .noPadding {
@@ -33,25 +33,25 @@
 }
 
 .title + * {
-  margin-top: var(--ms-space-xl);
+  margin-top: var(--ms-space-sm);
   letter-spacing: -0.01em;
 }
 
 .muted {
-  margin-top: var(--ms-space-md);
-  color: var(--rs-color-text-muted);
+  margin-top: var(--ms-space-2xs);
+  color: var(--ms-color-text-muted);
   font-size: var(--ms-text-sm);
 }
 
 .note {
-  margin-top: var(--ms-space-3xl);
-  color: var(--rs-color-text-muted);
+  margin-top: var(--ms-space-sm);
+  color: var(--ms-color-text-muted);
   font-size: var(--ms-text-sm);
 }
 
 .note code {
-  background: color-mix(in oklab, var(--rs-color-surface-emphasis) 70%, transparent);
-  padding: var(--ms-space-2xs) var(--ms-space-md);
+  background: color-mix(in oklab, var(--ms-color-surface-emphasis) 70%, transparent);
+  padding: 2px var(--ms-space-2xs);
   border-radius: var(--ms-radius-sm);
-  border: var(--ms-border-width) solid var(--rs-color-border);
+  border: var(--ms-border-width) solid var(--ms-color-border);
 }

@@ -281,7 +281,7 @@ export default function ScanClient({
             {data.result.codeAnalysisMetrics.analysisTimeMs &&
               ` in ${(data.result.codeAnalysisMetrics.analysisTimeMs / 1000).toFixed(1)}s`}
             {data.result.codeAnalysisMetrics.timedOut && (
-              <div style={{ marginTop: 8, color: "var(--rs-color-warning)" }}>
+              <div style={{ marginTop: 8, color: "var(--ms-color-warning)" }}>
                 ⚠️ Analysis timed out - results based on dependency graph only
               </div>
             )}

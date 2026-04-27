@@ -88,20 +88,14 @@
   --ms-color-red-500: #ef4444;
   --ms-color-blue-500: #3b82f6;
 
-  /* --- Spacing scale (rem); names are relative size, not pixel values --- */
-  --ms-space-3xs: 0.0625rem; /* 1px */
-  --ms-space-2xs: 0.125rem; /* 2px */
-  --ms-space-xs: 0.1875rem; /* 3px */
-  --ms-space-sm: 0.25rem; /* 4px */
-  --ms-space-md: 0.375rem; /* 6px */
-  --ms-space-lg: 0.5rem; /* 8px */
-  --ms-space-xl: 0.625rem; /* 10px */
-  --ms-space-2xl: 0.75rem; /* 12px */
-  --ms-space-3xl: 0.875rem; /* 14px */
-  --ms-space-4xl: 1rem; /* 16px */
-  --ms-space-5xl: 1.125rem; /* 18px */
-  --ms-space-6xl: 1.25rem; /* 20px */
-  --ms-space-7xl: 2.5rem; /* 40px */
+  /* --- Spacing (rem) — simple scale --- */
+  --ms-space-2xs: 0.25rem; /* 4px */
+  --ms-space-xs: 0.5rem; /* 8px */
+  --ms-space-sm: 0.75rem; /* 12px */
+  --ms-space-md: 1rem; /* 16px */
+  --ms-space-lg: 1.5rem; /* 24px */
+  --ms-space-xl: 2rem; /* 32px */
+  --ms-space-2xl: 3rem; /* 48px */
   --ms-space-layout-min: 16.25rem; /* 260px min column / logo cap */
 
   /* --- Typography scale (rem) --- */
@@ -110,6 +104,16 @@
   --ms-text-sm: 0.8125rem; /* 13px */
   --ms-text-md: 0.875rem; /* 14px */
   --ms-text-base: 1rem; /* 16px */
+  --ms-text-lg: 1.125rem; /* 18px */
+  --ms-text-xl: 1.25rem; /* 20px */
+  --ms-text-2xl: 1.5rem; /* 24px */
+  --ms-text-3xl: 1.875rem; /* 30px */
+  --ms-text-4xl: 2.25rem; /* 36px */
+
+  /* Unitless line-height (multiplies element font-size) */
+  --ms-leading-snug: 1.5;
+  --ms-leading-relaxed: 1.55;
+  --ms-leading-roomy: 1.6;
 
   /* --- Radius (rem only): 2xs → xs → sm → md → lg → full --- */
   --ms-radius-2xs: 0.25rem; /* 4px */
@@ -117,33 +121,7 @@
   --ms-radius-sm: 0.5rem; /* 8px */
   --ms-radius-md: 0.75rem; /* 12px */
   --ms-radius-lg: 1rem; /* 16px */
-  --ms-radius-full: 62.4375rem; /* pill */
-
-  /* =============================================================================
-   * Semantic contract (`rs-*`) — used across components; maps to derived tokens.
-   * ============================================================================= */
-  --rs-color-background: var(--ms-color-canvas);
-  --rs-color-background-elevated: var(--ms-color-canvas-elevated);
-  --rs-color-surface: var(--ms-color-surface);
-  --rs-color-surface-emphasis: var(--ms-color-surface-emphasis);
-  --rs-color-text: var(--ms-color-ink);
-  --rs-color-text-muted: var(--ms-color-text-muted);
-  --rs-color-text-emphasis: var(--ms-color-text-emphasis);
-  --rs-color-border: var(--ms-color-border);
-  --rs-color-brand-frost: var(--ms-color-brand-frost);
-  --rs-color-accent: var(--ms-color-accent);
-  --rs-color-accent-alt: var(--ms-color-accent-alt);
-  --rs-color-on-accent: var(--ms-color-on-accent);
-  --rs-color-success: var(--ms-color-success);
-  --rs-color-warning: var(--ms-color-warning);
-  --rs-color-danger: var(--ms-color-danger);
-
-  --rs-radius-lg: var(--ms-radius-lg);
-  --rs-radius-md: var(--ms-radius-md);
-  --rs-radius-sm: var(--ms-radius-2xs);
-  --rs-shadow-sm: var(--ms-shadow-sm);
-  --rs-shadow-md: var(--ms-shadow-md);
-  --rs-focus-ring: var(--ms-color-focus-ring);
+  --ms-radius-full: 9999px;
 
   /* Short aliases (older / marketing modules) */
   --ms-bg: var(--ms-color-canvas);
@@ -167,7 +145,7 @@ body {
 }
 
 body {
-  color: var(--rs-color-text);
+  color: var(--ms-color-ink);
   background:
     radial-gradient(
       900px 520px at 12% -10%,
@@ -181,10 +159,11 @@ body {
     ),
     linear-gradient(
       180deg,
-      var(--rs-color-background),
-      var(--rs-color-background-elevated)
+      var(--ms-color-canvas),
+      var(--ms-color-canvas-elevated)
     );
   font-family: var(--font-geist-sans), system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-size: var(--ms-text-base);
   line-height: 1.45;
 }
 

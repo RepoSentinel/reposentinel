@@ -1,8 +1,8 @@
 .footer {
-  border-top: var(--ms-border-width) solid var(--rs-color-border);
+  border-top: var(--ms-border-width) solid var(--ms-color-border);
   padding: 2rem 1.5rem;
   margin-top: 4rem;
-  background: color-mix(in oklab, var(--ms-color-black) 18%, var(--rs-color-background) 82%);
+  background: color-mix(in oklab, var(--ms-color-black) 18%, var(--ms-color-canvas) 82%);
 }
 
 .footerContent {
@@ -18,27 +18,27 @@
   flex-wrap: wrap;
   gap: 1.5rem;
   align-items: center;
-  font-size: 0.875rem;
+  font-size: var(--ms-text-md);
 }
 
 .link {
-  color: var(--rs-color-text-muted);
+  color: var(--ms-color-text-muted);
   text-decoration: none;
   transition: color 0.2s;
 }
 
 .link:hover {
-  color: var(--rs-color-text);
+  color: var(--ms-color-ink);
   text-decoration: underline;
 }
 
 .separator {
-  color: color-mix(in oklab, var(--rs-color-text) 35%, transparent);
+  color: color-mix(in oklab, var(--ms-color-ink) 35%, transparent);
 }
 
 .copyright {
-  color: var(--rs-color-text-muted);
-  font-size: 0.875rem;
+  color: var(--ms-color-text-muted);
+  font-size: var(--ms-text-md);
 }
 
 @media (max-width: 768px) {

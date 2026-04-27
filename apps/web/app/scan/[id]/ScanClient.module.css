@@ -1,128 +1,128 @@
 .score {
   display: flex;
   align-items: baseline;
-  gap: var(--ms-space-xl);
-  margin-top: var(--ms-space-xl);
+  gap: var(--ms-space-sm);
+  margin-top: var(--ms-space-sm);
 }
 
 .scoreValue {
   font-size: 2.5rem;
   font-weight: 800;
   letter-spacing: -0.04em;
-  background: linear-gradient(90deg, var(--rs-color-accent), var(--rs-color-accent-alt));
+  background: linear-gradient(90deg, var(--ms-color-accent), var(--ms-color-accent-alt));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
 .scoreMeta {
-  color: var(--rs-color-text-muted);
+  color: var(--ms-color-text-muted);
   font-size: var(--ms-text-sm);
 }
 
 .pill {
   display: inline-flex;
   align-items: center;
-  gap: var(--ms-space-lg);
-  padding: var(--ms-space-md) var(--ms-space-xl);
+  gap: var(--ms-space-xs);
+  padding: var(--ms-space-2xs) var(--ms-space-sm);
   border-radius: var(--ms-radius-full);
-  border: var(--ms-border-width) solid var(--rs-color-border);
-  background: color-mix(in oklab, var(--rs-color-surface-emphasis) 75%, transparent);
+  border: var(--ms-border-width) solid var(--ms-color-border);
+  background: color-mix(in oklab, var(--ms-color-surface-emphasis) 75%, transparent);
   font-size: var(--ms-text-sm);
-  color: var(--rs-color-text);
+  color: var(--ms-color-ink);
 }
 
 .dot {
-  width: var(--ms-space-lg);
-  height: var(--ms-space-lg);
+  width: var(--ms-space-xs);
+  height: var(--ms-space-xs);
   border-radius: var(--ms-radius-full);
-  background: var(--rs-color-text-muted);
+  background: var(--ms-color-text-muted);
 }
 
 .dotQueued {
-  background: var(--rs-color-warning);
+  background: var(--ms-color-warning);
 }
 
 .dotRunning {
-  background: var(--rs-color-accent-alt);
+  background: var(--ms-color-accent-alt);
 }
 
 .dotDone {
-  background: var(--rs-color-success);
+  background: var(--ms-color-success);
 }
 
 .dotFailed {
-  background: var(--rs-color-danger);
+  background: var(--ms-color-danger);
 }
 
 .detailsPre {
   white-space: pre-wrap;
-  margin-top: var(--ms-space-xl);
-  border-radius: var(--rs-radius-md);
-  border: var(--ms-border-width) solid var(--rs-color-border);
-  background: color-mix(in oklab, var(--rs-color-surface) 85%, transparent);
-  padding: var(--ms-space-2xl);
+  margin-top: var(--ms-space-sm);
+  border-radius: var(--ms-radius-md);
+  border: var(--ms-border-width) solid var(--ms-color-border);
+  background: color-mix(in oklab, var(--ms-color-surface) 85%, transparent);
+  padding: var(--ms-space-sm);
   overflow: auto;
 }
 
 .list {
-  margin-top: var(--ms-space-xl);
-  padding-left: var(--ms-space-5xl);
+  margin-top: var(--ms-space-sm);
+  padding-left: var(--ms-space-md);
 }
 
 .failurePre {
   white-space: pre-wrap;
-  border-radius: var(--rs-radius-md);
-  border: var(--ms-border-width) solid color-mix(in oklab, var(--rs-color-border) 70%, var(--rs-color-danger) 30%);
-  background: color-mix(in oklab, var(--rs-color-danger) 12%, var(--rs-color-surface));
-  padding: var(--ms-space-2xl);
+  border-radius: var(--ms-radius-md);
+  border: var(--ms-border-width) solid color-mix(in oklab, var(--ms-color-border) 70%, var(--ms-color-danger) 30%);
+  background: color-mix(in oklab, var(--ms-color-danger) 12%, var(--ms-color-surface));
+  padding: var(--ms-space-sm);
 }
 
 .decisionBadge {
   display: inline-flex;
   align-items: center;
-  gap: var(--ms-space-md);
-  padding: var(--ms-space-lg) var(--ms-space-2xl);
-  border-radius: var(--rs-radius-md);
+  gap: var(--ms-space-2xs);
+  padding: var(--ms-space-xs) var(--ms-space-sm);
+  border-radius: var(--ms-radius-md);
   font-size: var(--ms-text-md);
   font-weight: 600;
   border: var(--ms-border-width) solid;
 }
 
 .decisionBadge[data-recommendation="safe"] {
-  background: color-mix(in oklab, var(--rs-color-success) 15%, var(--rs-color-surface));
-  border-color: color-mix(in oklab, var(--rs-color-success) 40%, var(--rs-color-border));
-  color: var(--rs-color-success);
+  background: color-mix(in oklab, var(--ms-color-success) 15%, var(--ms-color-surface));
+  border-color: color-mix(in oklab, var(--ms-color-success) 40%, var(--ms-color-border));
+  color: var(--ms-color-success);
 }
 
 .decisionBadge[data-recommendation="needs_review"] {
-  background: color-mix(in oklab, var(--rs-color-warning) 15%, var(--rs-color-surface));
-  border-color: color-mix(in oklab, var(--rs-color-warning) 40%, var(--rs-color-border));
-  color: var(--rs-color-warning);
+  background: color-mix(in oklab, var(--ms-color-warning) 15%, var(--ms-color-surface));
+  border-color: color-mix(in oklab, var(--ms-color-warning) 40%, var(--ms-color-border));
+  color: var(--ms-color-warning);
 }
 
 .decisionBadge[data-recommendation="risky"] {
-  background: color-mix(in oklab, var(--rs-color-danger) 15%, var(--rs-color-surface));
-  border-color: color-mix(in oklab, var(--rs-color-danger) 40%, var(--rs-color-border));
-  color: var(--rs-color-danger);
+  background: color-mix(in oklab, var(--ms-color-danger) 15%, var(--ms-color-surface));
+  border-color: color-mix(in oklab, var(--ms-color-danger) 40%, var(--ms-color-border));
+  color: var(--ms-color-danger);
 }
 
 .decisionReasoning {
-  margin-top: var(--ms-space-2xl);
-  padding-left: var(--ms-space-6xl);
+  margin-top: var(--ms-space-sm);
+  padding-left: var(--ms-space-lg);
   font-size: var(--ms-text-sm);
-  color: var(--rs-color-text);
+  color: var(--ms-color-ink);
 }
 
 .decisionReasoning li {
-  margin-top: var(--ms-space-md);
+  margin-top: var(--ms-space-2xs);
 }
 
 .insightPriorityBadge {
   display: inline-flex;
   align-items: center;
-  padding: var(--ms-space-xs) var(--ms-space-lg);
-  border-radius: var(--rs-radius-sm);
+  padding: var(--ms-space-2xs) var(--ms-space-xs);
+  border-radius: var(--ms-radius-2xs);
   font-size: var(--ms-text-2xs);
   font-weight: 600;
   text-transform: uppercase;
@@ -131,74 +131,74 @@
 }
 
 .insightPriorityBadge[data-priority="critical"] {
-  background: color-mix(in oklab, var(--rs-color-danger) 20%, var(--rs-color-surface));
-  border-color: var(--rs-color-danger);
-  color: var(--rs-color-danger);
+  background: color-mix(in oklab, var(--ms-color-danger) 20%, var(--ms-color-surface));
+  border-color: var(--ms-color-danger);
+  color: var(--ms-color-danger);
 }
 
 .insightPriorityBadge[data-priority="high"] {
-  background: color-mix(in oklab, var(--rs-color-warning) 20%, var(--rs-color-surface));
-  border-color: var(--rs-color-warning);
-  color: var(--rs-color-warning);
+  background: color-mix(in oklab, var(--ms-color-warning) 20%, var(--ms-color-surface));
+  border-color: var(--ms-color-warning);
+  color: var(--ms-color-warning);
 }
 
 .insightPriorityBadge[data-priority="medium"] {
-  background: color-mix(in oklab, var(--rs-color-accent) 20%, var(--rs-color-surface));
-  border-color: var(--rs-color-accent);
-  color: var(--rs-color-accent);
+  background: color-mix(in oklab, var(--ms-color-accent) 20%, var(--ms-color-surface));
+  border-color: var(--ms-color-accent);
+  color: var(--ms-color-accent);
 }
 
 .insightPriorityBadge[data-priority="low"] {
-  background: color-mix(in oklab, var(--rs-color-text-muted) 20%, var(--rs-color-surface));
-  border-color: var(--rs-color-text-muted);
-  color: var(--rs-color-text-muted);
+  background: color-mix(in oklab, var(--ms-color-text-muted) 20%, var(--ms-color-surface));
+  border-color: var(--ms-color-text-muted);
+  color: var(--ms-color-text-muted);
 }
 
 .insightsList {
   display: flex;
   flex-direction: column;
-  gap: var(--ms-space-4xl);
-  margin-top: var(--ms-space-2xl);
+  gap: var(--ms-space-md);
+  margin-top: var(--ms-space-sm);
 }
 
 .insight {
-  padding: var(--ms-space-4xl);
-  border-radius: var(--rs-radius-md);
-  border-left: var(--ms-space-sm) solid;
+  padding: var(--ms-space-md);
+  border-radius: var(--ms-radius-md);
+  border-left: var(--ms-space-2xs) solid;
 }
 
 .insight[data-priority="critical"] {
-  border-color: var(--rs-color-danger);
-  background: color-mix(in oklab, var(--rs-color-danger) 5%, var(--rs-color-surface));
+  border-color: var(--ms-color-danger);
+  background: color-mix(in oklab, var(--ms-color-danger) 5%, var(--ms-color-surface));
 }
 
 .insight[data-priority="high"] {
-  border-color: var(--rs-color-warning);
-  background: color-mix(in oklab, var(--rs-color-warning) 5%, var(--rs-color-surface));
+  border-color: var(--ms-color-warning);
+  background: color-mix(in oklab, var(--ms-color-warning) 5%, var(--ms-color-surface));
 }
 
 .insight[data-priority="medium"] {
-  border-color: var(--rs-color-accent);
-  background: color-mix(in oklab, var(--rs-color-accent) 5%, var(--rs-color-surface));
+  border-color: var(--ms-color-accent);
+  background: color-mix(in oklab, var(--ms-color-accent) 5%, var(--ms-color-surface));
 }
 
 .insight[data-priority="low"] {
-  border-color: var(--rs-color-text-muted);
-  background: color-mix(in oklab, var(--rs-color-text-muted) 5%, var(--rs-color-surface));
+  border-color: var(--ms-color-text-muted);
+  background: color-mix(in oklab, var(--ms-color-text-muted) 5%, var(--ms-color-surface));
 }
 
 .insightHeader {
   display: flex;
   align-items: center;
-  gap: var(--ms-space-lg);
-  margin-bottom: var(--ms-space-lg);
+  gap: var(--ms-space-xs);
+  margin-bottom: var(--ms-space-xs);
 }
 
 .priorityBadge {
   display: inline-flex;
   align-items: center;
-  padding: var(--ms-space-xs) var(--ms-space-lg);
-  border-radius: var(--rs-radius-sm);
+  padding: var(--ms-space-2xs) var(--ms-space-xs);
+  border-radius: var(--ms-radius-2xs);
   font-size: var(--ms-text-2xs);
   font-weight: 700;
   text-transform: uppercase;
@@ -207,61 +207,61 @@
 }
 
 .priorityBadge[data-priority="critical"] {
-  background: var(--rs-color-danger);
-  border-color: var(--rs-color-danger);
+  background: var(--ms-color-danger);
+  border-color: var(--ms-color-danger);
   color: white;
 }
 
 .priorityBadge[data-priority="high"] {
-  background: var(--rs-color-warning);
-  border-color: var(--rs-color-warning);
+  background: var(--ms-color-warning);
+  border-color: var(--ms-color-warning);
   color: white;
 }
 
 .priorityBadge[data-priority="medium"] {
-  background: var(--rs-color-accent);
-  border-color: var(--rs-color-accent);
+  background: var(--ms-color-accent);
+  border-color: var(--ms-color-accent);
   color: white;
 }
 
 .priorityBadge[data-priority="low"] {
-  background: var(--rs-color-text-muted);
-  border-color: var(--rs-color-text-muted);
+  background: var(--ms-color-text-muted);
+  border-color: var(--ms-color-text-muted);
   color: white;
 }
 
 .insightType {
   font-size: var(--ms-text-sm);
-  color: var(--rs-color-text-muted);
+  color: var(--ms-color-text-muted);
   text-transform: capitalize;
 }
 
 .insightMessage {
   font-size: 0.9375rem;
   font-weight: 600;
-  color: var(--rs-color-text);
+  color: var(--ms-color-ink);
   margin: 0;
-  line-height: 1.5;
+  line-height: var(--ms-leading-snug);
 }
 
 .insightAction {
   font-size: var(--ms-text-md);
-  color: var(--rs-color-text);
-  margin: var(--ms-space-lg) 0 0 0;
+  color: var(--ms-color-ink);
+  margin: var(--ms-space-xs) 0 0 0;
 }
 
 .insightAction strong {
-  color: var(--rs-color-text-emphasis);
+  color: var(--ms-color-text-emphasis);
 }
 
 .affectedFiles {
-  margin-top: var(--ms-space-2xl);
+  margin-top: var(--ms-space-sm);
   font-size: var(--ms-text-sm);
 }
 
 .affectedFiles summary {
   cursor: pointer;
-  color: var(--rs-color-accent);
+  color: var(--ms-color-accent);
   font-weight: 600;
   user-select: none;
 }
@@ -271,20 +271,20 @@
 }
 
 .affectedFiles ul {
-  margin-top: var(--ms-space-lg);
-  padding-left: var(--ms-space-6xl);
+  margin-top: var(--ms-space-xs);
+  padding-left: var(--ms-space-lg);
 }
 
 .affectedFiles li {
-  margin-top: var(--ms-space-sm);
-  color: var(--rs-color-text);
+  margin-top: var(--ms-space-2xs);
+  color: var(--ms-color-ink);
 }
 
 .affectedFiles code {
-  font-family: var(--rs-font-mono);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
   font-size: var(--ms-text-xs);
-  padding: var(--ms-space-2xs) var(--ms-space-md);
-  border-radius: var(--rs-radius-sm);
-  background: color-mix(in oklab, var(--rs-color-surface-emphasis) 50%, transparent);
-  color: var(--rs-color-text-emphasis);
+  padding: 2px var(--ms-space-2xs);
+  border-radius: var(--ms-radius-2xs);
+  background: color-mix(in oklab, var(--ms-color-surface-emphasis) 50%, transparent);
+  color: var(--ms-color-text-emphasis);
 }
