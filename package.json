@@ -53,5 +53,8 @@
   "packageManager": "pnpm@9.0.0",
   "engines": {
     "node": ">=20.19"
+  },
+  "volta": {
+    "node": "22.15.1"
   }
 }

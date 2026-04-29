@@ -10,7 +10,7 @@ This repository lets you run the **public web experience**, **HTTP API**, **Bull
 
 ### Prerequisites
 
-- **Node.js** ≥ 20.19 (this repo pins a 22.x release in [`.nvmrc`](./.nvmrc))
+- **Node.js** ≥ 20.19 — pinned **22.15.1** in [`.nvmrc`](./.nvmrc), [`.node-version`](./.node-version), and Volta in `package.json`. Install [Volta](https://volta.sh/) (recommended) or [fnm](https://github.com/Schniz/fnm) with `eval "$(fnm env --use-on-cd)"` in your shell so the correct Node is selected automatically; plain **nvm** does not read `.nvmrc` on `cd` unless you add a hook.
 - **pnpm** 9.x (see root `packageManager` in `package.json`)
 - **Docker** — only if you run the API and databases locally
 
@@ -19,7 +19,7 @@ This repository lets you run the **public web experience**, **HTTP API**, **Bull
 ```bash
 git clone https://github.com/MergeSignal/mergesignal.git
 cd mergesignal
-nvm use   # optional; uses .nvmrc
+# nvm only (no Volta/fnm hook): nvm install && nvm use
 pnpm install
 ```
 

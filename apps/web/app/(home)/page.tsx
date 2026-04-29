@@ -1,15 +1,10 @@
 import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 import {
-  Activity,
   BookOpen,
   ClipboardCheck,
   Crosshair,
   FileWarning,
-  GitBranch,
-  Layers,
-  ListFilter,
-  ListTodo,
   MapPinned,
   MessagesSquare,
   Route,
@@ -74,14 +69,12 @@ export default function Home() {
     <>
       <section className={styles.hero} aria-labelledby="hero-heading">
         <div className={styles.heroInner}>
-          <p className={styles.kicker}>Dependency risk, before you merge</p>
-          <h1 id="hero-heading">
-            Understand what an upgrade can break—before it ships
-          </h1>
+          <p className={styles.kicker}>Know the risk before you merge</p>
+          <h1 id="hero-heading">See what a dependency upgrade can break</h1>
           <p className={styles.heroLead}>
-            MergeSignal reads your dependency diff and how those packages are
-            used in your code, then surfaces runtime-style risks in plain
-            language so reviewers know what to check first.
+            MergeSignal analyzes your dependency changes and shows where real
+            runtime issues are likely to occur, so your team knows exactly what
+            to verify before merging.
           </p>
           <div className={styles.heroActions}>
             <GithubCtaLink href={githubHref} />
@@ -96,22 +89,30 @@ export default function Home() {
               Why dependency upgrades are hard to review
             </h2>
             <p className={styles.subhead}>
-              Version bumps are routine; understanding their blast radius is
-              not.
+              Upgrading is easy. Knowing what it actually affects is not.
             </p>
           </div>
           <ul className={styles.sectionList}>
-            <SectionRow icon={FileWarning} title="Release notes hide behavior">
-              Breaking or risky changes are easy to miss when you only scan
-              changelogs.
+            <SectionRow
+              icon={FileWarning}
+              title="Changelogs don’t show real impact"
+            >
+              They list changes, but not how those changes affect your code
+              paths, flows, and edge cases.
             </SectionRow>
-            <SectionRow icon={ShieldAlert} title="Security tools add noise">
-              A flood of findings makes it hard to see what actually matters for
-              this PR.
+            <SectionRow
+              icon={ShieldAlert}
+              title="Too much signal, not enough clarity"
+            >
+              Security tools and alerts create noise, but rarely show what
+              actually matters for this specific PR.
             </SectionRow>
-            <SectionRow icon={Route} title="Reviews rarely trace runtime">
-              Most reviewers cannot mentally simulate how an upgrade touches
-              auth, middleware, and critical paths.
+            <SectionRow
+              icon={Route}
+              title="Runtime impact is hard to reason about"
+            >
+              Understanding how a change flows through auth, middleware, and
+              critical paths requires context most reviews do not have.
             </SectionRow>
           </ul>
         </section>
@@ -119,155 +120,114 @@ export default function Home() {
         <section className={styles.sectionCard} aria-labelledby="focus-heading">
           <div className={styles.sectionHead}>
             <h2 id="focus-heading" className={styles.h2}>
-              What MergeSignal emphasizes
+              What MergeSignal focuses on
             </h2>
             <p className={styles.subhead}>
-              Signal over volume: fewer items, each tied to how your app runs.
+              Less noise. Clear answers about what actually matters.
             </p>
           </div>
           <ul className={styles.sectionList}>
-            <SectionRow icon={Crosshair} title="What could break">
-              Likely failure modes—not every advisory or theoretical issue.
+            <SectionRow icon={Crosshair} title="What can break">
+              Highlights likely failure modes based on how your code uses the
+              updated dependencies.
             </SectionRow>
-            <SectionRow icon={MapPinned} title="Where it could break">
-              Auth flows, middleware, hooks, and other paths that actually ship.
+            <SectionRow icon={MapPinned} title="Where it can break">
+              Points to the exact parts of your app affected, including auth
+              flows, middleware, and critical paths.
             </SectionRow>
             <SectionRow
               icon={ClipboardCheck}
-              title="What to verify before merge"
+              title="What to verify before merging"
             >
-              Concrete checks so the team agrees on what “done” looks like for
-              this upgrade.
+              Provides concrete checks so your team knows exactly what needs to
+              be validated for this upgrade.
             </SectionRow>
           </ul>
         </section>
 
-        <section className={styles.sectionCard} aria-labelledby="how-heading">
+        {/* <section className={styles.sectionCard} aria-labelledby="how-heading">
           <div className={styles.sectionHead}>
-            <h2 id="how-heading" className={styles.h2}>
+            <h2 id="focus-heading" className={styles.h2}>
               How it works
             </h2>
             <p className={styles.subhead}>
-              From the lockfile diff to decision-ready notes in four steps.
+              From dependency changes to clear, actionable insight.
             </p>
           </div>
-          <ol className={`${styles.sectionList} ${styles.sectionListOrdered}`}>
-            <li className={styles.sectionListItem}>
-              <span className={styles.listStepNum} aria-hidden>
-                1
-              </span>
-              <div className={styles.listStepBody}>
-                <span className={styles.itemLabel}>
-                  Scan dependency changes
-                </span>
-                Detects version updates and how updated packages are referenced
-                across the repo.
-              </div>
-            </li>
-            <li className={styles.sectionListItem}>
-              <span className={styles.listStepNum} aria-hidden>
-                2
-              </span>
-              <div className={styles.listStepBody}>
-                <span className={styles.itemLabel}>
-                  Prioritize plausible impact
-                </span>
-                Highlights changes most likely to affect runtime—not an
-                exhaustive inventory of every finding.
-              </div>
-            </li>
-            <li className={styles.sectionListItem}>
-              <span className={styles.listStepNum} aria-hidden>
-                3
-              </span>
-              <div className={styles.listStepBody}>
-                <span className={styles.itemLabel}>Stress critical paths</span>
-                Goes deeper on flows that tend to carry user-facing risk,
-                instead of treating the tree as a flat list of files.
-              </div>
-            </li>
-            <li className={styles.sectionListItem}>
-              <span className={styles.listStepNum} aria-hidden>
-                4
-              </span>
-              <div className={styles.listStepBody}>
-                <span className={styles.itemLabel}>Ship concise guidance</span>
-                Short explanations: what might break, why it matters, what to
-                test or confirm next.
-              </div>
-            </li>
-          </ol>
-        </section>
+          <ul className={styles.sectionList}>
+            <SectionRow icon={Crosshair} title="Scan dependency changes">
+              Detects version updates and maps how updated packages are actually
+              used across your codebase.
+            </SectionRow>
+            <SectionRow icon={MapPinned} title="Focus on real impact">
+              Prioritizes changes that are most likely to affect runtime
+              behavior, not a full list of every possible issue.
+            </SectionRow>
+            <SectionRow icon={ClipboardCheck} title="Trace critical paths">
+              Analyzes how changes propagate through auth, middleware, and other
+              user-facing flows.
+            </SectionRow>
+            <SectionRow icon={ClipboardCheck} title="Deliver clear next steps">
+              Provides concise guidance on what could break, why it matters, and
+              what to verify before merging.
+            </SectionRow>
+          </ul>
+        </section> */}
 
-        <section
+        {/* <section
           className={styles.sectionCard}
           aria-labelledby="features-heading"
         >
           <div className={styles.sectionHead}>
             <h2 id="features-heading" className={styles.h2}>
-              What you get
+              What you get in every PR
             </h2>
             <p className={styles.subhead}>
-              Built for reviewers and maintainers who need clarity under time
-              pressure.
+              Clear, focused insight into what actually matters.
             </p>
           </div>
           <ul className={styles.sectionList}>
-            <SectionRow
-              icon={GitBranch}
-              title="Usage-aware dependency analysis"
-            >
-              Connects manifest changes to real call sites—not only what bumped
-              in the lockfile.
+            <SectionRow icon={GitBranch} title="Usage-aware analysis">
+              Connects dependency changes to the parts of your code that
+              actually use them.
             </SectionRow>
-            <SectionRow icon={ListFilter} title="Readable, ranked insight">
-              Surfaces a small set of high-signal items so the first pass of
-              review goes to the right places.
+            <SectionRow icon={ListFilter} title="Prioritized insight">
+              Surfaces a small set of high-impact items so reviews start in the
+              right place.
             </SectionRow>
-            <SectionRow icon={Activity} title="Runtime-shaped scenarios">
-              Frames how things could fail in production terms, for example:
-              <ul className={styles.nestedBullets}>
-                <li>broken request or response handling</li>
-                <li>validation or auth edge regressions</li>
-                <li>ordering and concurrency surprises</li>
-              </ul>
+            <SectionRow icon={Activity} title="Real runtime context">
+              Shows where issues are likely to appear, across auth, middleware,
+              and critical flows.
             </SectionRow>
-            <SectionRow icon={Layers} title="Context, not just alerts">
-              Points to where risk concentrates: middleware, lifecycle hooks,
-              shared clients, and similar choke points.
-            </SectionRow>
-            <SectionRow icon={ListTodo} title="Actionable next steps">
-              Each item suggests what to verify, automate, or double-check
-              before merge.
+            <SectionRow icon={Layers} title="Actionable next steps">
+              Actionable next steps
             </SectionRow>
           </ul>
-        </section>
+        </section> */}
 
         <section className={styles.sectionCard} aria-labelledby="value-heading">
           <div className={styles.sectionHead}>
             <h2 id="value-heading" className={styles.h2}>
-              Why teams reach for it
+              What changes when you use MergeSignal
             </h2>
             <p className={styles.subhead}>
-              Outcomes you can explain to engineering leadership in one slide.
+              Faster decisions, fewer surprises, and more confident merges.
             </p>
           </div>
           <ul className={styles.sectionList}>
-            <SectionRow icon={ShieldCheck} title="Fewer surprise incidents">
-              Catch dependency-driven breakage while the diff is still small and
-              cheap to fix.
+            <SectionRow icon={ShieldCheck} title="Reviews move faster">
+              Focus on the right risks instead of reconstructing impact from
+              changelogs and scattered context.
             </SectionRow>
-            <SectionRow icon={Timer} title="Faster PR reviews">
-              Minutes on targeted signal instead of hours re-deriving impact
-              from docs and threads.
+            <SectionRow icon={Timer} title="Testing becomes targeted">
+              Effort goes to the flows that matter, not spread across the entire
+              system.
             </SectionRow>
-            <SectionRow icon={Target} title="Smarter test investment">
-              Aim depth where runtime impact is plausible, not everywhere at
-              once.
+            <SectionRow icon={Target} title="Fewer production surprises">
+              Issues are caught while changes are still small and easy to fix.
             </SectionRow>
-            <SectionRow icon={UsersRound} title="Shared mental model">
-              Everyone sees the same picture of what could go wrong before the
-              green button.
+            <SectionRow icon={UsersRound} title="Teams stay aligned">
+              Everyone works from the same understanding of risk before merging.
             </SectionRow>
           </ul>
         </section>
@@ -278,25 +238,24 @@ export default function Home() {
         >
           <div className={styles.sectionHead}>
             <h2 id="position-heading" className={styles.h2}>
-              Not another “find everything” scanner
+              Built for clarity
             </h2>
             <p className={styles.subhead}>
-              MergeSignal is intentionally narrow: dependency shifts that can
-              change how your application behaves, explained so your team can
-              act.
+              MergeSignal focuses on what can actually affect your application,
+              and turns it into insight your team can act on.
             </p>
           </div>
           <ul className={styles.sectionList}>
-            <SectionRow icon={Telescope} title="Depth where it counts">
-              Skips vanity counts in favor of a short list tied to this
-              PR&apos;s dependency graph and usage.
+            <SectionRow icon={Telescope} title="Depth where it matters">
+              Surfaces a small set of high-impact risks based on how your code
+              uses updated dependencies.
             </SectionRow>
             <SectionRow
               icon={MessagesSquare}
-              title="Language your team already uses"
+              title="Clear, actionable language"
             >
-              Outcomes and checks you can paste into a review comment or
-              ticket—no proprietary jargon required.
+              Explains impact in plain terms your team can use directly in
+              reviews and decisions.
             </SectionRow>
           </ul>
         </section>
