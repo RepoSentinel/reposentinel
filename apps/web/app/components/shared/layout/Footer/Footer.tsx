@@ -14,6 +14,10 @@ export function Footer({ variant = "full" }: { variant?: "full" | "minimal" }) {
               GitHub
             </Link>
             <span className={styles.separator}>•</span>
+            <Link href="/getting-started" className={styles.link}>
+              Getting started
+            </Link>
+            <span className={styles.separator}>•</span>
             <Link href="/terms" className={styles.link}>
               Terms of Service
             </Link>

@@ -1,0 +1,77 @@
+name: MergeSignal scan
+description: Scan npm lockfile risk on every run and add an actionable summary to GitHub Actions (no merge server required).
+inputs:
+  fail_above:
+    description: Fail if totalScore exceeds this value (0–100). Leave empty to not fail the job.
+    required: false
+    default: ""
+
+runs:
+  using: composite
+  steps:
+    - name: Resolve MergeSignal version
+      id: toolchain-ref
+      shell: bash
+      run: |
+        set -euo pipefail
+        if [ -n "${{ github.action_ref }}" ]; then
+          echo "ref=${{ github.action_ref }}" >> "$GITHUB_OUTPUT"
+        elif [ "${{ github.repository }}" = "MergeSignal/mergesignal" ]; then
+          echo "ref=${{ github.sha }}" >> "$GITHUB_OUTPUT"
+        else
+          echo "ref=main" >> "$GITHUB_OUTPUT"
+        fi
+
+    - name: Set up MergeSignal
+      uses: actions/checkout@v4
+      with:
+        repository: MergeSignal/mergesignal
+        ref: ${{ steps.toolchain-ref.outputs.ref }}
+        path: _ms_rt
+
+    - name: Set up Node
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: _ms_rt/.nvmrc
+
+    - name: Install and build MergeSignal
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      run: |
+        set -euo pipefail
+        cd "$GITHUB_WORKSPACE/_ms_rt"
+        corepack enable
+        corepack install
+        pnpm install --frozen-lockfile
+        pnpm turbo run build --filter=@mergesignal/cli...
+
+    - name: Run dependency scan
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+        SCAN_JSON: ${{ runner.temp }}/mergesignal-scan.json
+      run: |
+        set -euo pipefail
+        cd "$GITHUB_WORKSPACE"
+        echo "MergeSignal scan for $GITHUB_REPOSITORY"
+        pnpm --dir _ms_rt ms scan --repo-id "$GITHUB_REPOSITORY" --out "$SCAN_JSON"
+
+    - name: Add scan summary to workflow
+      shell: bash
+      env:
+        SCAN_JSON: ${{ runner.temp }}/mergesignal-scan.json
+      run: |
+        set -euo pipefail
+        node "$GITHUB_WORKSPACE/_ms_rt/scripts/ci/render-mergesignal-step-summary.mjs" \
+          "$SCAN_JSON"
+
+    - name: Verify score threshold
+      if: ${{ inputs.fail_above != '' }}
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      run: |
+        set -euo pipefail
+        cd "$GITHUB_WORKSPACE"
+        pnpm --dir _ms_rt ms scan --repo-id "$GITHUB_REPOSITORY" --fail-above "${{ inputs.fail_above }}"

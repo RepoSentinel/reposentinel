@@ -275,22 +275,26 @@ export default function Home() {
       <section className={styles.sectionCard} aria-labelledby="docs-heading">
         <div className={styles.sectionHead}>
           <h2 id="docs-heading" className={styles.h2}>
-            GitHub App &amp; self-hosting
+            Install, CI, and GitHub
           </h2>
           <p className={styles.subhead}>
-            Permissions, webhooks, and environment variables for operators.
+            Run locally, wire Actions or the App, and scan PRs with confidence.
           </p>
         </div>
         <ul className={styles.sectionList}>
           <SectionRow icon={BookOpen} title="Documentation">
-            See{" "}
+            Follow{" "}
+            <Link className={styles.inlineLink} href="/getting-started">
+              Getting started
+            </Link>{" "}
+            on this site for install, CI, and PR scanning, or open{" "}
             <Link
               className={styles.inlineLink}
               href="https://github.com/MergeSignal/mergesignal/blob/main/docs/github-app.md"
             >
-              GitHub App setup (docs)
+              GitHub App setup
             </Link>{" "}
-            in the open-source repository.
+            in the repository for webhook and permission details.
           </SectionRow>
         </ul>
       </section>

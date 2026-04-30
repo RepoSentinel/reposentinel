@@ -25,7 +25,16 @@ pnpm install
 
 ### Command-line scanner (no Docker)
 
-From the repo root, in any project that has a lockfile:
+Run the scan from **your** project directory (the folder that contains your lockfile).
+
+If MergeSignal is cloned elsewhere, use `pnpm`’s `--dir` flag so the CLI runs from the MergeSignal install while using your current directory for the lockfile:
+
+```bash
+cd /path/to/your-project
+pnpm --dir /path/to/mergesignal ms scan
+```
+
+If you are working **inside** the cloned `mergesignal` repository, from the repo root after `pnpm install`:
 
 ```bash
 pnpm ms scan
@@ -53,7 +62,56 @@ The web app proxies **SSE** live scan updates via `GET /api/scan/:id/events` so 
 
 ## CI on GitHub Actions
 
-[`.github/workflows/mergesignal-scan.yml`](./.github/workflows/mergesignal-scan.yml) runs a scan on pull requests and pushes to `main`, adds a job summary, and uploads `mergesignal-scan.json`.
+**MergeSignal scans dependency changes on every pull request (or push) and adds a clear, actionable risk summary to your GitHub Actions workflow**—scores, top recommendations, and a layer breakdown in the run **Summary**, with no MergeSignal server to host.
+
+The integration is **one short workflow**: check out your repo, run the official action, done. You do not configure how MergeSignal is built inside the runner.
+
+**CI time:** the first run may take several minutes while the runner prepares MergeSignal; that is normal for v1 and will get faster when the CLI is published to npm (Phase 2) without changing how you reference the action.
+
+### Recommended (official action)
+
+```yaml
+name: MergeSignal
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: MergeSignal/mergesignal/.github/actions/merge-signal-scan@main
+```
+
+Examples use **`@main`** so you always pick up the latest action from the default branch. Optional version tags are described in [RELEASING.md](./RELEASING.md).
+
+**Optional gate — `fail_above`:** set `with: fail_above: "40"` (for example) to **fail the job** when the scan’s total score is **strictly greater** than that number. The **Summary is still written** before the gate runs, so you keep the full picture even when the check goes red. On a pull request, a failed gate shows as a **failed check**; in logs, the failing step is the threshold step. See [.github/actions/merge-signal-scan/README.md](./.github/actions/merge-signal-scan/README.md) for the full contract.
+
+```yaml
+- uses: MergeSignal/mergesignal/.github/actions/merge-signal-scan@main
+  with:
+    fail_above: "40"
+```
+
+### Advanced (full template)
+
+This repository includes [`.github/workflows/mergesignal-scan.yml`](./.github/workflows/mergesignal-scan.yml), which uses the same action and adds an artifact upload. Fork or adapt it if you need caching, matrices, or extra steps.
+
+---
+
+## Troubleshooting
+
+- **`pnpm ms scan` not found** — The `ms` script is defined on the MergeSignal repo root. Use `pnpm --dir /path/to/mergesignal ms scan` from your project, or `cd` into the clone and run `pnpm ms scan` there.
+- **No lockfile** — Run from the package root that contains `pnpm-lock.yaml` or `package-lock.json`, or pass `--lockfile` with a path. Yarn lockfiles are supported when passed explicitly.
+- **Node version** — Use Node ≥ 20.19 (see `.nvmrc`). With plain nvm, run `nvm install && nvm use` before `pnpm install` if your shell does not auto-read `.nvmrc`.
+- **GitHub Actions** — Use the [official action README](./.github/actions/merge-signal-scan/README.md). The dogfood workflow uploads the scan JSON artifact from the runner temp path used by the action.
+
+For the full stack (Docker, Postgres, Redis, API, web, worker), environment variables, and deployment, see **Web app and API locally** above and [DEPLOYMENT.md](./DEPLOYMENT.md).
 
 ---
 
@@ -72,5 +130,7 @@ MergeSignal software in this repository is licensed under **[Apache License 2.0]
 ---
 
 ## Further reading
+
+**Getting started (product guide):** on a deployed web build, open `/getting-started` (for example [mergesignal-web.fly.dev/getting-started](https://mergesignal-web.fly.dev/getting-started)). GitHub Actions: [action README](./.github/actions/merge-signal-scan/README.md) and [RELEASING.md](./RELEASING.md).
 
 Operations and infrastructure: [DEPLOYMENT.md](./DEPLOYMENT.md). Results are designed to stay interpretable (scores, reasons, and supporting detail where the product exposes them); treat methodology as guidance, not a guarantee.

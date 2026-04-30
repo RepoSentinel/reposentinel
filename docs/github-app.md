@@ -2,6 +2,8 @@
 
 MergeSignal can ingest GitHub events and automatically enqueue scans when a lockfile changes.
 
+For local development of the API and web app (Docker, env files, migrations), see the [README](../README.md) (“Web app and API locally”) and [DEPLOYMENT.md](../DEPLOYMENT.md).
+
 ## Create a GitHub App
 
 In GitHub:
@@ -29,5 +31,9 @@ Set these env vars for `apps/api`:
 
 ## What happens on events
 
-- On `pull_request` (`opened`, `reopened`, `synchronize`), if a lockfile changed, MergeSignal fetches the lockfile from the PR head SHA and enqueues a scan. After the scan completes, it posts/updates a PR comment with a risk delta (pnpm only for now).
-- On `push`, if a lockfile changed, MergeSignal fetches the lockfile at the pushed SHA and enqueues a scan.
+- On **pull request** (`opened`, `reopened`, `synchronize`), if a lockfile changed in the PR, MergeSignal fetches the lockfile at the PR head (and base when available), then enqueues a scan.
+- On **push**, if a lockfile changed in the pushed commits, MergeSignal fetches the lockfile at that commit and enqueues a scan.
+
+Supported lockfile paths include `pnpm-lock.yaml`, `package-lock.json`, and `yarn.lock` (including nested paths in the repo).
+
+After a scan completes, results are available through the MergeSignal **API** and **web app**. **Automated pull request comments** on GitHub are part of the **full hosted MergeSignal** experience; wire your deployment accordingly if your team wants feedback directly on the PR.
