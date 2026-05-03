@@ -283,18 +283,12 @@ export default function Home() {
         </div>
         <ul className={styles.sectionList}>
           <SectionRow icon={BookOpen} title="Documentation">
-            Follow{" "}
+            Open{" "}
             <Link className={styles.inlineLink} href="/getting-started">
               Getting started
             </Link>{" "}
-            on this site for install, CI, and PR scanning, or open{" "}
-            <Link
-              className={styles.inlineLink}
-              href="https://github.com/MergeSignal/mergesignal/blob/main/docs/github-app.md"
-            >
-              GitHub App setup
-            </Link>{" "}
-            in the repository for webhook and permission details.
+            for install, GitHub Actions, and GitHub App on one page—everything
+            you need without leaving this site.
           </SectionRow>
         </ul>
       </section>

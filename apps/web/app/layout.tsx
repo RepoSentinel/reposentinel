@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import { auth } from "../auth";
+import { getSiteOrigin } from "../lib/siteOrigin";
 import { ClientSessionProvider } from "./components/shared/ClientSessionProvider/ClientSessionProvider";
 import "./globals.css";
 
@@ -16,6 +17,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: getSiteOrigin(),
   title: "MergeSignal — dependency risk before you merge",
   description:
     "MergeSignal analyzes dependency changes and surfaces runtime-impacting risks so you can merge with confidence.",

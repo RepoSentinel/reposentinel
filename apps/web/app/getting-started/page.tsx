@@ -1,27 +1,17 @@
-import type { Metadata } from "next";
-
-import docStyles from "../../components/features/LegalMarkdown/LegalDoc.module.css";
-import { CodeBlock } from "../../components/shared/CodeBlock/CodeBlock";
-import { MarkdownContent } from "../../components/shared/MarkdownContent/MarkdownContent";
+import docStyles from "../components/features/LegalMarkdown/LegalDoc.module.css";
+import { CodeBlock } from "../components/shared/CodeBlock/CodeBlock";
+import { MarkdownContent } from "../components/shared/MarkdownContent/MarkdownContent";
+import { readGithubAppDocumentationMarkdown } from "../../lib/readGithubAppDoc";
 import gsStyles from "./getting-started.module.css";
-
-export const metadata: Metadata = {
-  title: "Getting started — MergeSignal",
-  description:
-    "Spot dependency risk before merge: quick local scan, then GitHub Actions summary on every PR—no server required.",
-};
 
 const REPO_BLOB = "https://github.com/MergeSignal/mergesignal/blob/main";
 const README = `${REPO_BLOB}/README.md`;
-const DOCS_GITHUB_APP = `${REPO_BLOB}/docs/github-app.md`;
 const RELEASING = `${REPO_BLOB}/RELEASING.md`;
 const WORKFLOW_SCAN = `${REPO_BLOB}/.github/workflows/mergesignal-scan.yml`;
 
 const INSTALL_SNIPPET = `git clone https://github.com/MergeSignal/mergesignal.git
 cd mergesignal
 pnpm install`;
-
-//const RUN_SCAN_FROM_PROJECT = `pnpm --dir <path-to-mergesignal> ms scan`;
 
 const RUN_SCAN_SAME_REPO = `pnpm ms scan`;
 
@@ -41,7 +31,6 @@ jobs:
       - uses: actions/checkout@v4
       - uses: MergeSignal/mergesignal/.github/actions/merge-signal-scan@main`;
 
-/** Illustrative PR comment (full hosted setup); not tied to a specific implementation. */
 const HOSTED_PR_COMMENT_EXAMPLE = `
 ## MergeSignal
 
@@ -59,56 +48,50 @@ const HOSTED_PR_COMMENT_EXAMPLE = `
 > **Action:** Run a clean \`pnpm install\` on CI and re-run integration tests before merge.
 `;
 
+function githubAppMarkdownBody(): string {
+  const raw = readGithubAppDocumentationMarkdown();
+  return raw.replace(/^#\s+GitHub App\s*\n+/m, "").trim();
+}
+
 export default function GettingStartedPage() {
+  const githubAppMd = githubAppMarkdownBody();
+
   return (
     <article className={docStyles.article}>
       <h1>Getting started</h1>
       <p className={gsStyles.subtitle}>
-        MergeSignal helps you spot dependency risk before merge—locally in your
-        terminal, or automatically on every pull request in GitHub Actions.
+        MergeSignal detects dependency risks before merge so you catch issues
+        early instead of in production.
       </p>
+      <p>Start locally in seconds, then run it on every pull request.</p>
 
-      {/* Guide A — Quick start (local scan) */}
       <section
-        className={gsStyles.sectionBlock}
+        id="quick-start"
+        className={`${gsStyles.sectionBlock} ${gsStyles.anchorSection}`}
         aria-labelledby="quick-start-heading"
       >
-        <h2 id="quick-start-heading">Quick start (local scan)</h2>
+        <h2 id="quick-start-heading">Quick start</h2>
         <p className={gsStyles.sectionLead}>
-          Run a quick local scan to see what might break before opening or
-          merging a dependency change.
+          Run a local scan to see potential risks before opening a pull request.
         </p>
 
         <div className={gsStyles.stepBlock}>
-          <p className={gsStyles.stepLabel}>Step 1 — Install</p>
+          <p className={gsStyles.stepLabel}>Install</p>
           <CodeBlock text={INSTALL_SNIPPET} copyLabel="Copy install commands" />
         </div>
 
         <div className={gsStyles.stepBlock}>
-          <p className={gsStyles.stepLabel}>Step 2 — Run a scan</p>
+          <p className={gsStyles.stepLabel}>Run a scan</p>
           <p>
             Run the scan from your project directory, where MergeSignal is
             installed.
           </p>
-          {/* <p>If MergeSignal is installed in a different location, use:</p>
-          <CodeBlock
-            text={RUN_SCAN_FROM_PROJECT}
-            copyLabel="Copy scan command"
-          />
-          <p className={gsStyles.stepNote}>
-            Working only inside the cloned repository? After{" "}
-            <code>pnpm install</code>, from the repository root you can run:
-          </p> */}
           <CodeBlock text={RUN_SCAN_SAME_REPO} copyLabel="Copy scan command" />
         </div>
 
-        <p className={gsStyles.tierNote}>
+        {/* <p className={gsStyles.tierNote}>
           The open-source version provides a basic analysis.
-        </p>
-        <p className={gsStyles.tierNote}>
-          For deeper insights and automated pull request comments, use the full
-          hosted setup.
-        </p>
+        </p> */}
 
         <p className={gsStyles.sectionLead}>
           Locally you will see an overall score, a layer breakdown, and
@@ -117,26 +100,30 @@ export default function GettingStartedPage() {
           .
         </p>
 
-        <p>To run this on every pull request, continue below.</p>
+        <p>
+          For deeper insights and automated pull request comments, continue
+          below.
+        </p>
+        {/* <p>To run this on every pull request, continue below.</p> */}
       </section>
 
       <hr className={gsStyles.sectionDivider} />
 
-      {/* Guide B — Run on every PR */}
       <section
-        className={gsStyles.sectionBlock}
+        id="github-actions"
+        className={`${gsStyles.sectionBlock} ${gsStyles.anchorSection}`}
         aria-labelledby="pr-product-heading"
       >
-        <h2 id="pr-product-heading">Run on every PR (recommended)</h2>
+        <h2 id="pr-product-heading">Run on every Pull Request (recommended)</h2>
         <p className={gsStyles.sectionLead}>
           MergeSignal scans dependency changes on every pull request and adds a
           clear, actionable risk summary directly in your GitHub Actions
-          workflow—no MergeSignal server to run yourself.
+          workflow - no MergeSignal server to run yourself!
         </p>
 
         <div className={gsStyles.stepBlock}>
           <h3 className={gsStyles.subGuideHeading} id="gha-heading">
-            GitHub Actions (recommended)
+            GitHub Actions
           </h3>
           <p>
             Add a short workflow: check out your repository, then run the
@@ -184,21 +171,11 @@ export default function GettingStartedPage() {
           </p>
         </div>
 
-        <div className={gsStyles.stepBlock}>
-          <h3 className={gsStyles.subGuideHeading} id="hosted-heading">
-            Connect GitHub (hosted setup)
-          </h3>
-          <p>
-            To automatically comment on pull requests, use the hosted setup
-            described below.
-          </p>
-          <p>
-            Install the MergeSignal GitHub App, point the webhook at your API,
-            and subscribe to pull request and push events. Full setup steps,
-            permissions, and environment variables are in{" "}
-            <a href={DOCS_GITHUB_APP}>GitHub App setup</a>.
-          </p>
-        </div>
+        <p className={gsStyles.sectionLead}>
+          To automatically comment on pull requests via the MergeSignal GitHub
+          App, webhook, and API configuration, see the{" "}
+          <a href="#github-app">GitHub App</a> section below.
+        </p>
 
         <h3 className={gsStyles.subGuideHeading} id="pr-example-heading">
           What you can see on pull requests
@@ -208,7 +185,7 @@ export default function GettingStartedPage() {
           the example below (illustrative).
         </p>
         <div className={gsStyles.exampleMarkdown}>
-          <div className={gsStyles.exampleMarkdownProse}>
+          <div className={gsStyles.prCommentExamplePanel}>
             <MarkdownContent githubAlertCallouts>
               {HOSTED_PR_COMMENT_EXAMPLE}
             </MarkdownContent>
@@ -218,7 +195,24 @@ export default function GettingStartedPage() {
 
       <hr className={gsStyles.sectionDivider} />
 
-      <div className={gsStyles.stepBlock}>
+      <section
+        id="github-app"
+        className={`${gsStyles.sectionBlock} ${gsStyles.anchorSection}`}
+        aria-labelledby="github-app-heading"
+      >
+        <h2 id="github-app-heading">GitHub App</h2>
+        <p className={gsStyles.sectionLead}>
+          Optional: connect a GitHub App to your hosted API so repository events
+          (for example lockfile changes on pull requests) can enqueue
+          scans—useful when you want ingestion aligned with your deployment, not
+          only GitHub Actions.
+        </p>
+        <MarkdownContent>{githubAppMd}</MarkdownContent>
+      </section>
+
+      <hr className={gsStyles.sectionDivider} />
+
+      <div className={`${gsStyles.stepBlock} ${gsStyles.troubleshootingPanel}`}>
         <h3 className={gsStyles.subGuideHeading} id="troubleshooting-heading">
           Having trouble?
         </h3>

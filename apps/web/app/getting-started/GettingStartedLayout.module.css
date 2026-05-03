@@ -1,0 +1,49 @@
+.layout {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 2rem;
+  width: 100%;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 0 1.25rem 2.5rem;
+}
+
+/**
+ * Tall flex rail so a shorter inner box can use `position: sticky` for the full
+ * document scroll range (sticky is limited by the height of its containing block).
+ */
+.navRail {
+  flex: 0 0 12.5rem;
+  align-self: stretch;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.navRailSticky {
+  position: sticky;
+  top: calc(var(--ms-site-header-height, 3.75rem) + 0.5rem);
+  align-self: flex-start;
+  width: 100%;
+  max-height: calc(100dvh - var(--ms-site-header-height, 3.75rem) - 1.5rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+@media (max-width: 52rem) {
+  .layout {
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .navRail {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+}

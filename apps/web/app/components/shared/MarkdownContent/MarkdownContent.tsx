@@ -90,7 +90,7 @@ function stripAlertLeadFromParagraphChildren(
 
 /**
  * GitHub-flavored blockquote alerts (`> [!WARNING]` first line) rendered as
- * the same panel structure as the former rehype plugin (no SVG icons).
+ * alert panels (custom component; same class names as typical GFM alert markup).
  */
 function GithubAlertBlockquote({
   children,

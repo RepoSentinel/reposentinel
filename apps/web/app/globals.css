@@ -165,7 +165,8 @@
 html,
 body {
   max-width: 100vw;
-  overflow-x: hidden;
+  /* `hidden` breaks `position: sticky` for many descendants; `clip` clips overflow without the same scrollport side-effects. */
+  overflow-x: clip;
 }
 
 body {

@@ -2,7 +2,7 @@
 
 MergeSignal helps teams **see and reason about risk in npm dependencies** before it becomes an incident. It turns lockfiles and dependency graphs into **actionable, explainable scores** you can inspect, and supports **upgrade simulation**, **org-level views** (dashboards, alerts, policies, benchmarks), and an optional **GitHub App** that reacts when lockfiles change on PRs or pushes.
 
-This repository lets you run the **public web experience**, **HTTP API**, **BullMQ worker**, and **command-line scanner** locally or in your own environment. The in-repo worker (`apps/worker`) consumes the same queue the API enqueues; you can also run a proprietary worker from **mergesignal-engine** by swapping the container image and `MERGESIGNAL_ENGINE_IMPL`. See [DEPLOYMENT.md](./DEPLOYMENT.md). For analysis on your machine without the full stack, use the CLI (see below).
+**Documentation (users):** the canonical guide (CLI quick start, GitHub Actions, GitHub App) lives on the web app—for the public Fly deployment see **[mergesignal-web.fly.dev/getting-started](https://mergesignal-web.fly.dev/getting-started)** (use your own origin when self-hosting).
 
 ---
 
@@ -46,6 +46,8 @@ Common options: `--json`, `--out mergesignal-result.json`, `--lockfile pnpm-lock
 
 ## Web app and API locally
 
+This repository lets you run the **public web experience**, **HTTP API**, **BullMQ worker**, and **command-line scanner** locally or in your own environment. The in-repo worker (`apps/worker`) consumes the same queue the API enqueues; you can also run a proprietary worker from **mergesignal-engine** by swapping the container image and `MERGESIGNAL_ENGINE_IMPL`. See [DEPLOYMENT.md](./DEPLOYMENT.md). For analysis on your machine without the full stack, use the CLI (**[Install from GitHub](#install-from-github)** above).
+
 1. Start databases and worker: `docker compose up -d` (starts Postgres, Redis, and `worker`).
 2. Copy `apps/api/.env.example` to `apps/api/.env` (defaults match the repo’s `docker-compose.yml`).
 3. Create an API key: `pnpm -C apps/api migrate` then `pnpm -C apps/api generate-api-key <owner> "<description>"`. Store the `ms_…` value once. The `owner` string must match the GitHub org or user that prefixes your `repoId` values (e.g. `acme` for `acme/my-repo`).
@@ -54,53 +56,17 @@ Common options: `--json`, `--out mergesignal-result.json`, `--lockfile pnpm-lock
 
 **Deployed (Fly.io):** Web — [https://mergesignal-web.fly.dev/](https://mergesignal-web.fly.dev/) · API — [https://mergesignal-api.fly.dev](https://mergesignal-api.fly.dev) · OpenAPI — [https://mergesignal-api.fly.dev/openapi.json](https://mergesignal-api.fly.dev/openapi.json) · Health — `GET https://mergesignal-api.fly.dev/health` (no auth).
 
-**Local:** Web — http://localhost:3000 · API — http://localhost:4000 · OpenAPI — http://localhost:4000/openapi.json · Health — `GET /health` (no auth).
-
 The web app proxies **SSE** live scan updates via `GET /api/scan/:id/events` so browsers never send `Authorization` to the API directly.
 
 ---
 
 ## CI on GitHub Actions
 
-**MergeSignal scans dependency changes on every pull request (or push) and adds a clear, actionable risk summary to your GitHub Actions workflow**—scores, top recommendations, and a layer breakdown in the run **Summary**, with no MergeSignal server to host.
+MergeSignal can run on **GitHub Actions** and write a risk summary to each workflow run’s **Summary**—no MergeSignal server required for that path.
 
-The integration is **one short workflow**: check out your repo, run the official action, done. You do not configure how MergeSignal is built inside the runner.
+**Full guide (recommended workflow, optional `fail_above` gate, first-run notes):** use the canonical page on your web deployment, e.g. **[mergesignal-web.fly.dev/getting-started#github-actions](https://mergesignal-web.fly.dev/getting-started#github-actions)** (replace the host with yours if self-hosted).
 
-**CI time:** the first run may take several minutes while the runner prepares MergeSignal; that is normal for v1 and will get faster when the CLI is published to npm (Phase 2) without changing how you reference the action.
-
-### Recommended (official action)
-
-```yaml
-name: MergeSignal
-on:
-  pull_request:
-  push:
-    branches: [main]
-
-permissions:
-  contents: read
-
-jobs:
-  scan:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: MergeSignal/mergesignal/.github/actions/merge-signal-scan@main
-```
-
-Examples use **`@main`** so you always pick up the latest action from the default branch. Optional version tags are described in [RELEASING.md](./RELEASING.md).
-
-**Optional gate — `fail_above`:** set `with: fail_above: "40"` (for example) to **fail the job** when the scan’s total score is **strictly greater** than that number. The **Summary is still written** before the gate runs, so you keep the full picture even when the check goes red. On a pull request, a failed gate shows as a **failed check**; in logs, the failing step is the threshold step. See [.github/actions/merge-signal-scan/README.md](./.github/actions/merge-signal-scan/README.md) for the full contract.
-
-```yaml
-- uses: MergeSignal/mergesignal/.github/actions/merge-signal-scan@main
-  with:
-    fail_above: "40"
-```
-
-### Advanced (full template)
-
-This repository includes [`.github/workflows/mergesignal-scan.yml`](./.github/workflows/mergesignal-scan.yml), which uses the same action and adds an artifact upload. Fork or adapt it if you need caching, matrices, or extra steps.
+**Contract and versioning:** input/output details and release pins are in [.github/actions/merge-signal-scan/README.md](./.github/actions/merge-signal-scan/README.md) and [RELEASING.md](./RELEASING.md). This repository’s [`.github/workflows/mergesignal-scan.yml`](./.github/workflows/mergesignal-scan.yml) dogfoods the same action.
 
 ---
 
@@ -117,7 +83,7 @@ For the full stack (Docker, Postgres, Redis, API, web, worker), environment vari
 
 ## Optional: GitHub App
 
-See [`docs/github-app.md`](./docs/github-app.md).
+**Canonical guide:** [mergesignal-web.fly.dev/getting-started#github-app](https://mergesignal-web.fly.dev/getting-started#github-app) (use your own web host if self-hosted). This repository still contains a short [pointer file](./docs/github-app.md) for legacy links.
 
 ---
 
@@ -131,6 +97,7 @@ MergeSignal software in this repository is licensed under **[Apache License 2.0]
 
 ## Further reading
 
-**Getting started (product guide):** on a deployed web build, open `/getting-started` (for example [mergesignal-web.fly.dev/getting-started](https://mergesignal-web.fly.dev/getting-started)). GitHub Actions: [action README](./.github/actions/merge-signal-scan/README.md) and [RELEASING.md](./RELEASING.md).
+- **[Getting started](https://mergesignal-web.fly.dev/getting-started)** (user guide on the web app: CLI, GitHub Actions, GitHub App)—replace the host with your deployment when self-hosting.
+- **[DEPLOYMENT.md](./DEPLOYMENT.md)** — operations and infrastructure for running the stack yourself.
 
-Operations and infrastructure: [DEPLOYMENT.md](./DEPLOYMENT.md). Results are designed to stay interpretable (scores, reasons, and supporting detail where the product exposes them); treat methodology as guidance, not a guarantee.
+Results are designed to stay interpretable (scores, reasons, and supporting detail where the product exposes them); treat methodology as guidance, not a guarantee.

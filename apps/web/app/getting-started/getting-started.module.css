@@ -19,6 +19,19 @@
   margin-bottom: var(--ms-space-lg);
 }
 
+/* Same accent treatment as home “Built for clarity” (landing.sectionCardAccent) */
+.troubleshootingPanel {
+  padding: var(--ms-space-lg);
+  border-radius: var(--ms-radius-lg);
+  border: var(--ms-border-width) solid var(--ms-color-border);
+  box-shadow: var(--ms-shadow-sm);
+  background: linear-gradient(
+    125deg,
+    color-mix(in oklab, var(--ms-logo-panel) 48%, transparent),
+    color-mix(in oklab, var(--ms-color-surface) 94%, transparent)
+  );
+}
+
 .stepLabel {
   font-size: var(--ms-text-base);
   font-weight: 600;
@@ -77,31 +90,30 @@
   line-height: var(--ms-leading-snug);
 }
 
-/* Hosted PR example — same shell as shared markdown example panels */
+/* Hosted PR comment example: panel + typography; alert tokens for MarkdownContent githubAlertCallouts */
 .exampleMarkdown {
   margin-bottom: var(--ms-space-md);
 }
 
-.exampleMarkdownProse {
-  /* Alert panel tokens (scoped to this example; replaces former global github-alerts-theme.css) */
-  --rehype-github-alerts-default-space: 1rem;
-  --rehype-github-alerts-default-fontFamily: var(--font-sans), ui-sans-serif, system-ui,
+.prCommentExamplePanel {
+  --ms-gfm-alert-space: 1rem;
+  --ms-gfm-alert-font-family: var(--font-sans), ui-sans-serif, system-ui,
     sans-serif;
-  --rehype-github-alerts-default-fontWeight: var(--ms-font-weight-medium);
-  --rehype-github-alerts-default-color: color-mix(
+  --ms-gfm-alert-font-weight: var(--ms-font-weight-medium);
+  --ms-gfm-alert-border-color: color-mix(
     in oklab,
     var(--ms-color-ink) 58%,
     var(--ms-color-canvas) 42%
   );
-  --rehype-github-alerts-note-color: var(--ms-color-blue-500);
-  --rehype-github-alerts-tip-color: var(--ms-color-emerald-500);
-  --rehype-github-alerts-important-color: color-mix(
+  --ms-gfm-alert-note-color: var(--ms-color-blue-500);
+  --ms-gfm-alert-tip-color: var(--ms-color-emerald-500);
+  --ms-gfm-alert-important-color: color-mix(
     in oklab,
     var(--ms-color-blue-500) 58%,
     var(--ms-color-ink) 42%
   );
-  --rehype-github-alerts-warning-color: var(--ms-color-amber-500);
-  --rehype-github-alerts-caution-color: var(--ms-color-red-500);
+  --ms-gfm-alert-warning-color: var(--ms-color-amber-500);
+  --ms-gfm-alert-caution-color: var(--ms-color-red-500);
 
   padding: var(--ms-space-md);
   border-radius: var(--ms-radius-md);
@@ -116,96 +128,72 @@
   line-height: var(--ms-leading-relaxed);
 }
 
-@media (prefers-color-scheme: dark) {
-  .exampleMarkdownProse {
-    --rehype-github-alerts-default-fontFamily: var(--font-sans), ui-sans-serif, system-ui,
-      sans-serif;
-    --rehype-github-alerts-default-fontWeight: var(--ms-font-weight-medium);
-    --rehype-github-alerts-default-color: color-mix(
-      in oklab,
-      var(--ms-color-ink) 58%,
-      var(--ms-color-canvas) 42%
-    );
-    --rehype-github-alerts-note-color: var(--ms-color-blue-500);
-    --rehype-github-alerts-tip-color: var(--ms-color-emerald-500);
-    --rehype-github-alerts-important-color: color-mix(
-      in oklab,
-      var(--ms-color-blue-500) 58%,
-      var(--ms-color-ink) 42%
-    );
-    --rehype-github-alerts-warning-color: var(--ms-color-amber-500);
-    --rehype-github-alerts-caution-color: var(--ms-color-red-500);
-  }
-}
-
-.exampleMarkdownProse :global(.markdown-alert) {
-  padding: calc(var(--rehype-github-alerts-default-space) / 2)
-    var(--rehype-github-alerts-default-space);
-  margin-bottom: var(--rehype-github-alerts-default-space);
-  border-left: calc(var(--rehype-github-alerts-default-space) / 4) solid
-    var(--rehype-github-alerts-default-color);
-  font-family: var(--rehype-github-alerts-default-fontFamily);
+.prCommentExamplePanel :global(.markdown-alert) {
+  padding: calc(var(--ms-gfm-alert-space) / 2) var(--ms-gfm-alert-space);
+  margin-bottom: var(--ms-gfm-alert-space);
+  border-left: calc(var(--ms-gfm-alert-space) / 4) solid
+    var(--ms-gfm-alert-border-color);
+  font-family: var(--ms-gfm-alert-font-family);
   color: var(--ms-color-ink);
   background: var(--ms-color-surface);
-  
 }
 
-.exampleMarkdownProse :global(.markdown-alert > :first-child) {
+.prCommentExamplePanel :global(.markdown-alert > :first-child) {
   margin-top: 0;
 }
 
-.exampleMarkdownProse :global(.markdown-alert > :last-child) {
+.prCommentExamplePanel :global(.markdown-alert > :last-child) {
   margin-bottom: 0;
 }
 
-.exampleMarkdownProse :global(.markdown-alert-note) {
-  border-left-color: var(--rehype-github-alerts-note-color);
+.prCommentExamplePanel :global(.markdown-alert-note) {
+  border-left-color: var(--ms-gfm-alert-note-color);
 }
 
-.exampleMarkdownProse :global(.markdown-alert-tip) {
-  border-left-color: var(--rehype-github-alerts-tip-color);
+.prCommentExamplePanel :global(.markdown-alert-tip) {
+  border-left-color: var(--ms-gfm-alert-tip-color);
 }
 
-.exampleMarkdownProse :global(.markdown-alert-important) {
-  border-left-color: var(--rehype-github-alerts-important-color);
+.prCommentExamplePanel :global(.markdown-alert-important) {
+  border-left-color: var(--ms-gfm-alert-important-color);
 }
 
-.exampleMarkdownProse :global(.markdown-alert-warning) {
-  border-left-color: var(--rehype-github-alerts-warning-color);
+.prCommentExamplePanel :global(.markdown-alert-warning) {
+  border-left-color: var(--ms-gfm-alert-warning-color);
 }
 
-.exampleMarkdownProse :global(.markdown-alert-caution) {
-  border-left-color: var(--rehype-github-alerts-caution-color);
+.prCommentExamplePanel :global(.markdown-alert-caution) {
+  border-left-color: var(--ms-gfm-alert-caution-color);
 }
 
-.exampleMarkdownProse :global(.markdown-alert-title) {
+.prCommentExamplePanel :global(.markdown-alert-title) {
   display: flex;
-  margin-bottom: calc(var(--rehype-github-alerts-default-space) / 4);
+  margin-bottom: calc(var(--ms-gfm-alert-space) / 4);
   align-items: center;
-  font-weight: var(--rehype-github-alerts-default-fontWeight, 500);
+  font-weight: var(--ms-gfm-alert-font-weight);
 }
 
-.exampleMarkdownProse :global(.markdown-alert-note .markdown-alert-title) {
-  color: var(--rehype-github-alerts-note-color);
+.prCommentExamplePanel :global(.markdown-alert-note .markdown-alert-title) {
+  color: var(--ms-gfm-alert-note-color);
 }
 
-.exampleMarkdownProse :global(.markdown-alert-tip .markdown-alert-title) {
-  color: var(--rehype-github-alerts-tip-color);
+.prCommentExamplePanel :global(.markdown-alert-tip .markdown-alert-title) {
+  color: var(--ms-gfm-alert-tip-color);
 }
 
-.exampleMarkdownProse :global(.markdown-alert-important .markdown-alert-title) {
-  color: var(--rehype-github-alerts-important-color);
+.prCommentExamplePanel :global(.markdown-alert-important .markdown-alert-title) {
+  color: var(--ms-gfm-alert-important-color);
 }
 
-.exampleMarkdownProse :global(.markdown-alert-warning .markdown-alert-title) {
-  color: var(--rehype-github-alerts-warning-color);
+.prCommentExamplePanel :global(.markdown-alert-warning .markdown-alert-title) {
+  color: var(--ms-gfm-alert-warning-color);
 }
 
-.exampleMarkdownProse :global(.markdown-alert-caution .markdown-alert-title) {
-  color: var(--rehype-github-alerts-caution-color);
+.prCommentExamplePanel :global(.markdown-alert-caution .markdown-alert-title) {
+  color: var(--ms-gfm-alert-caution-color);
 }
 
-.exampleMarkdownProse :global(h2) {
+.prCommentExamplePanel :global(h2) {
   font-family: var(--ms-font-display);
   font-size: clamp(1.15rem, 2vw, 1.3rem);
   font-weight: var(--ms-font-weight-semibold);
@@ -214,26 +202,26 @@
   line-height: 1.25;
 }
 
-.exampleMarkdownProse :global(p) {
+.prCommentExamplePanel :global(p) {
   margin: 0 0 var(--ms-space-sm);
 }
 
-.exampleMarkdownProse :global(p:last-child) {
+.prCommentExamplePanel :global(p:last-child) {
   margin-bottom: 0;
 }
 
-.exampleMarkdownProse :global(strong) {
+.prCommentExamplePanel :global(strong) {
   color: var(--ms-color-ink);
   font-weight: var(--ms-font-weight-semibold);
 }
 
-.exampleMarkdownProse :global(a) {
+.prCommentExamplePanel :global(a) {
   color: var(--ms-color-brand-frost);
   text-decoration: underline;
   text-underline-offset: var(--ms-space-2xs);
 }
 
-.exampleMarkdownProse :global(a:hover) {
+.prCommentExamplePanel :global(a:hover) {
   color: var(--ms-color-ink);
 }
 
@@ -295,4 +283,9 @@
 
 .detailsBody h3:first-child {
   margin-top: 0;
+}
+
+/* In-page anchor targets: clear fixed/sticky header */
+.anchorSection {
+  scroll-margin-top: 5.5rem;
 }
