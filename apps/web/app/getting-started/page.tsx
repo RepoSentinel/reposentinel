@@ -161,55 +161,46 @@ export default function GettingStartedPage() {
         <div className={gsStyles.exampleMarkdown}>
           <div className={gsStyles.prCommentExamplePanel}>
             <h2>MergeSignal</h2>
-            <div className="markdown-alert markdown-alert-warning">
-              <p className="markdown-alert-title">Warning</p>
-              <p>
-                <strong>Risky</strong> - elevated dependency merge risk - see
-                signals below
-              </p>
-            </div>
             <p>
-              <strong>RISKY</strong> -{" "}
-              <strong>
-                <code>express</code> can reorder hooks so validation runs after
-                your handler-skipped checks.
-              </strong>
+              <strong>Elevated dependency merge risk</strong>
             </p>
             <p>
-              <strong>Mechanism:</strong> Auth middleware order shifts so guards
-              run after handlers-skipped session checks on requests.
+              <code>express</code> may reorder middleware so validation runs
+              after handlers, skipping checks.
             </p>
             <p>
-              <strong>Context:</strong> <code>express</code> participates in
-              middleware chain during a normal request lifecycle.
-            </p>
-            <blockquote>
-              <p>
-                <strong>Action:</strong> Confirm middleware chain runs before
-                route handlers and verify 401/403 on protected routes.
-              </p>
-            </blockquote>
-            <p>
-              <strong>RISKY</strong> -{" "}
-              <strong>
-                Transitive <code>semver</code> resolution changed-tests may not
-                exercise the resolved graph.
-              </strong>
+              <strong>Where it shows up</strong>
             </p>
             <p>
-              <strong>Mechanism:</strong> Minor version bumps reorder peer
-              dependencies under pnpm’s strict layout.
+              Auth middleware may run after handlers, allowing requests without
+              proper validation.
             </p>
             <p>
-              <strong>Context:</strong> Touches <code>packages/web</code> and{" "}
-              <code>services/api</code> entrypoints in this workspace.
+              <strong>What to do</strong>
             </p>
-            <blockquote>
-              <p>
-                <strong>Action:</strong> Run a clean <code>pnpm install</code>{" "}
-                on CI and re-run integration tests before merge.
-              </p>
-            </blockquote>
+            <p>
+              Ensure middleware runs before handlers and verify 401 or 403
+              responses on protected routes.
+            </p>
+            <hr />
+            <p>
+              Transitive <code>semver</code> resolution changed - tests may not
+              exercise the resolved graph.
+            </p>
+            <p>
+              <strong>Where it shows up</strong>
+            </p>
+            <p>
+              Affects <code>packages/web</code> and <code>services/api</code>{" "}
+              entrypoints where peer dependencies are resolved at install time.
+            </p>
+            <p>
+              <strong>What to do</strong>
+            </p>
+            <p>
+              Run a clean <code>pnpm install</code> on CI and re-run integration
+              tests before merge.
+            </p>
           </div>
         </div>
       </section>

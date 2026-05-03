@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { PRInsight, PRDecision } from "@mergesignal/shared";
+import { formatInsight } from "@mergesignal/shared";
 import styles from "./ScanClient.module.css";
 import layoutStyles from "./ScanClientLayout.module.css";
 import { Card, cardStyles } from "../../components/shared/Card/Card";
@@ -216,53 +217,61 @@ export default function ScanClient({
           }
         >
           <div className={styles.insightsList}>
-            {insights.map((insight, idx) => (
-              <div
-                key={idx}
-                className={styles.insight}
-                data-priority={insight.priority}
-              >
-                <div className={styles.insightHeader}>
-                  <span
-                    className={styles.priorityBadge}
-                    data-priority={insight.priority}
-                  >
-                    {insight.priority}
-                  </span>
-                  <span className={styles.insightType}>
-                    {insight.type.replace(/_/g, " ")}
-                  </span>
+            {insights.map((insight, idx) => {
+              const f = formatInsight(insight);
+              return (
+                <div
+                  key={idx}
+                  className={styles.insight}
+                  data-priority={insight.priority}
+                >
+                  <div className={styles.insightHeader}>
+                    <span
+                      className={styles.priorityBadge}
+                      data-priority={insight.priority}
+                    >
+                      {insight.priority}
+                    </span>
+                    <span className={styles.insightType}>
+                      {insight.type.replace(/_/g, " ")}
+                    </span>
+                  </div>
+                  <p className={styles.insightMessage}>{f.message}</p>
+                  {f.where && (
+                    <p className={styles.insightAction}>
+                      <strong>Where it shows up</strong>
+                      {f.where}
+                    </p>
+                  )}
+                  {f.action && (
+                    <p className={styles.insightAction}>
+                      <strong>What to do</strong>
+                      {f.action}
+                    </p>
+                  )}
+                  {insight.affectedFiles &&
+                    insight.affectedFiles.length > 0 && (
+                      <details className={styles.affectedFiles}>
+                        <summary>
+                          {insight.affectedFiles.length} file(s) affected
+                        </summary>
+                        <ul>
+                          {insight.affectedFiles.slice(0, 10).map((file, i) => (
+                            <li key={i}>
+                              <code>{file}</code>
+                            </li>
+                          ))}
+                          {insight.affectedFiles.length > 10 && (
+                            <li>
+                              ...and {insight.affectedFiles.length - 10} more
+                            </li>
+                          )}
+                        </ul>
+                      </details>
+                    )}
                 </div>
-                <p className={styles.insightMessage}>{insight.message}</p>
-                {"context" in insight && insight.context && (
-                  <p className={styles.insightAction}>
-                    <strong>Context:</strong> {insight.context}
-                  </p>
-                )}
-                {"remediation" in insight && insight.remediation && (
-                  <p className={styles.insightAction}>
-                    <strong>Remediation:</strong> {insight.remediation}
-                  </p>
-                )}
-                {insight.affectedFiles && insight.affectedFiles.length > 0 && (
-                  <details className={styles.affectedFiles}>
-                    <summary>
-                      {insight.affectedFiles.length} file(s) affected
-                    </summary>
-                    <ul>
-                      {insight.affectedFiles.slice(0, 10).map((file, i) => (
-                        <li key={i}>
-                          <code>{file}</code>
-                        </li>
-                      ))}
-                      {insight.affectedFiles.length > 10 && (
-                        <li>...and {insight.affectedFiles.length - 10} more</li>
-                      )}
-                    </ul>
-                  </details>
-                )}
-              </div>
-            ))}
+              );
+            })}
           </div>
         </Card>
       )}

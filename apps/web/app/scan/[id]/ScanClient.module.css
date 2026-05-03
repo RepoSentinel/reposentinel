@@ -240,7 +240,7 @@
   font-size: 0.9375rem;
   font-weight: 600;
   color: var(--ms-color-ink);
-  margin: 0;
+  margin: 0 0 var(--ms-space-sm) 0;
   line-height: var(--ms-leading-snug);
 }
 
@@ -251,6 +251,8 @@
 }
 
 .insightAction strong {
+  display: block;
+  margin-bottom: var(--ms-space-2xs);
   color: var(--ms-color-text-emphasis);
 }
 
