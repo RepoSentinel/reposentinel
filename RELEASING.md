@@ -29,9 +29,9 @@ uses: MergeSignal/mergesignal/.github/actions/merge-signal-scan@vX.Y.Z
 
 **Semver guidance**
 
-- **Patch** — Summary text tweaks, bug fixes, faster installs, no input or JSON contract change.
-- **Minor** — New optional inputs, backward-compatible summary additions.
-- **Major** — Remove/rename inputs, or breaking changes to fields consumed by `render-mergesignal-step-summary.mjs` from `mergesignal-scan.json`.
+- **Patch** - Summary text tweaks, bug fixes, faster installs, no input or JSON contract change.
+- **Minor** - New optional inputs, backward-compatible summary additions.
+- **Major** - Remove/rename inputs, or breaking changes to fields consumed by `render-mergesignal-step-summary.mjs` from `mergesignal-scan.json`.
 
 ## Smoke test before tagging
 

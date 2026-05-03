@@ -416,7 +416,7 @@ aws secretsmanager create-secret \
 1. **Prometheus + Grafana**: Metrics and dashboards
 2. **CloudWatch**: AWS-native monitoring
 3. **ELK Stack or CloudWatch Logs**: Centralized logging
-4. **Sentry**: Error tracking — set optional `SENTRY_DSN` and `SENTRY_TRACES_SAMPLE_RATE` on the API (`apps/api`), web server (`apps/web` `instrumentation.ts`), and worker (`apps/worker`).
+4. **Sentry**: Error tracking - set optional `SENTRY_DSN` and `SENTRY_TRACES_SAMPLE_RATE` on the API (`apps/api`), web server (`apps/web` `instrumentation.ts`), and worker (`apps/worker`).
 
 ### Setting up CloudWatch Container Insights
 

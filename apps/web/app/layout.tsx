@@ -18,7 +18,7 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
   metadataBase: getSiteOrigin(),
-  title: "MergeSignal — dependency risk before you merge",
+  title: "MergeSignal - dependency risk before you merge",
   description:
     "MergeSignal analyzes dependency changes and surfaces runtime-impacting risks so you can merge with confidence.",
 };

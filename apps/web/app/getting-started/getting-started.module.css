@@ -237,7 +237,7 @@
   border-top: var(--ms-border-width) solid var(--ms-color-border);
 }
 
-/* Native collapsible — “Having trouble?” */
+/* Native collapsible - “Having trouble?” */
 .detailsHelp {
   margin-top: var(--ms-space-xl);
   border: var(--ms-border-width) solid var(--ms-color-border);

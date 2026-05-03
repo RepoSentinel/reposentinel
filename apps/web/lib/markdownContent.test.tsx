@@ -12,7 +12,7 @@ import { MarkdownContent } from "../app/components/shared/MarkdownContent/Markdo
 
 describe("MarkdownContent", () => {
   it("renders GitHub blockquote alert panels when enabled", () => {
-    const md = `> [!WARNING]\n> **Risky** — test.`;
+    const md = `> [!WARNING]\n> **Risky** - test.`;
     const html = renderToStaticMarkup(
       <MarkdownContent githubAlertCallouts={true}>{md}</MarkdownContent>,
     );

@@ -181,7 +181,7 @@ function ScoreBadge({ score }: { score: number | null }) {
 
 function DeltaBadge({ delta }: { delta: number | null | undefined }) {
   if (typeof delta !== "number") {
-    return <span className={styles.deltaNeutral}>—</span>;
+    return <span className={styles.deltaNeutral}>-</span>;
   }
 
   if (delta > 0) {
@@ -200,7 +200,7 @@ function DeltaBadge({ delta }: { delta: number | null | undefined }) {
     );
   }
 
-  return <span className={styles.deltaNeutral}>—</span>;
+  return <span className={styles.deltaNeutral}>-</span>;
 }
 
 function StatusBadge({ status }: { status: string }) {

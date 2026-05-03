@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import docStyles from "../../components/shared/DocArticle/DocArticle.module.css";
 
 export const metadata: Metadata = {
-  title: "Contact — MergeSignal",
+  title: "Contact - MergeSignal",
   description:
     "Contact MergeSignal for legal, security, support, and business inquiries.",
 };

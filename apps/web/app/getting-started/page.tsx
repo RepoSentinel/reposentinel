@@ -103,7 +103,7 @@ export default function GettingStartedPage() {
             Add a short workflow: check out your repository, then run the
             official MergeSignal action. On each run you get a{" "}
             <strong>Summary</strong> in GitHub Actions with an overall score,
-            top recommendations, and a risk breakdown—right where your team
+            top recommendations, and a risk breakdown-right where your team
             already reviews CI.
           </p>
           <CodeBlock
@@ -116,8 +116,8 @@ export default function GettingStartedPage() {
             in <a href={RELEASING}>RELEASING.md</a>.
           </p>
           <p className={gsStyles.stepNote}>
-            <strong>Optional — fail the check on risk:</strong> add{" "}
-            <code>with: fail_above: &quot;40&quot;</code> (use any 0–100
+            <strong>Optional - fail the check on risk:</strong> add{" "}
+            <code>with: fail_above: &quot;40&quot;</code> (use any 0-100
             threshold). The job <strong>fails</strong> when the total score is{" "}
             <strong>strictly higher</strong> than that value; the workflow{" "}
             <strong>Summary is still written first</strong>, so you keep the
@@ -126,7 +126,7 @@ export default function GettingStartedPage() {
           </p>
           <p className={gsStyles.stepNote}>
             First runs can take several minutes while the runner prepares
-            MergeSignal—that is expected for now and will improve when the CLI
+            MergeSignal-that is expected for now and will improve when the CLI
             ships as a smaller install (Phase 2).
           </p>
           <p>
@@ -164,20 +164,20 @@ export default function GettingStartedPage() {
             <div className="markdown-alert markdown-alert-warning">
               <p className="markdown-alert-title">Warning</p>
               <p>
-                <strong>Risky</strong> — elevated dependency merge risk — see
+                <strong>Risky</strong> - elevated dependency merge risk - see
                 signals below
               </p>
             </div>
             <p>
-              <strong>RISKY</strong> —{" "}
+              <strong>RISKY</strong> -{" "}
               <strong>
                 <code>express</code> can reorder hooks so validation runs after
-                your handler—skipped checks.
+                your handler-skipped checks.
               </strong>
             </p>
             <p>
               <strong>Mechanism:</strong> Auth middleware order shifts so guards
-              run after handlers—skipped session checks on requests.
+              run after handlers-skipped session checks on requests.
             </p>
             <p>
               <strong>Context:</strong> <code>express</code> participates in
@@ -190,9 +190,9 @@ export default function GettingStartedPage() {
               </p>
             </blockquote>
             <p>
-              <strong>RISKY</strong> —{" "}
+              <strong>RISKY</strong> -{" "}
               <strong>
-                Transitive <code>semver</code> resolution changed—tests may not
+                Transitive <code>semver</code> resolution changed-tests may not
                 exercise the resolved graph.
               </strong>
             </p>
@@ -225,7 +225,7 @@ export default function GettingStartedPage() {
         <p className={gsStyles.sectionLead}>
           Optional: connect a GitHub App to your hosted API so repository events
           (for example lockfile changes on pull requests) can enqueue
-          scans—useful when you want ingestion aligned with your deployment, not
+          scans-useful when you want ingestion aligned with your deployment, not
           only GitHub Actions.
         </p>
 
@@ -235,7 +235,7 @@ export default function GettingStartedPage() {
           <strong>hosted</strong> MergeSignal API receive repository events.
           When a <strong>lockfile changes</strong> on a pull request or push,
           MergeSignal can <strong>enqueue a scan</strong> so results stay fresh
-          without relying on Actions alone—useful when you want ingestion and PR
+          without relying on Actions alone-useful when you want ingestion and PR
           automation aligned with your deployment.
         </p>
 
@@ -266,7 +266,7 @@ export default function GettingStartedPage() {
             In GitHub, <strong>create a GitHub App</strong> (org-owned is fine).
           </li>
           <li>
-            Set the <strong>webhook URL</strong> to your API’s webhook path—for
+            Set the <strong>webhook URL</strong> to your API’s webhook path-for
             example <code>{`https://<your-api-host>/github/webhook`}</code> (use
             the host where <code>apps/api</code> is deployed).
           </li>
@@ -318,7 +318,7 @@ export default function GettingStartedPage() {
         </p>
         <p>
           For a <strong>local full stack</strong> (Docker, databases,
-          migrations), use the repository’s contributor-oriented sections—
+          migrations), use the repository’s contributor-oriented sections-
           <strong>not</strong> this product doc page.
         </p>
       </section>
@@ -331,7 +331,7 @@ export default function GettingStartedPage() {
         </h3>
         <ul className={gsStyles.compactHelpList}>
           <li>
-            <strong>Node.js</strong> ≥ 20.19 and <strong>pnpm</strong> 9.x — see
+            <strong>Node.js</strong> ≥ 20.19 and <strong>pnpm</strong> 9.x - see
             the <a href={README}>README</a> prerequisites.
           </li>
           <li>
@@ -340,7 +340,7 @@ export default function GettingStartedPage() {
           </li>
           <li>
             CLI options and common fixes:{" "}
-            <a href={README}>README — Install from GitHub</a> and{" "}
+            <a href={README}>README - Install from GitHub</a> and{" "}
             <strong>Troubleshooting</strong> there.
           </li>
           <li>

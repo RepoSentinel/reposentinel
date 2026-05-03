@@ -9,7 +9,7 @@ This is a **black-box** integration from a repository owner’s perspective: you
 ## What you get
 
 - **Problem addressed:** dependency and lockfile changes can introduce security, maintenance, and upgrade risk that is easy to miss in review.
-- **Immediately after adding the action:** each matching workflow run includes a **job summary** in GitHub Actions with an overall score, top recommendations, and an expandable risk breakdown—no separate MergeSignal server required.
+- **Immediately after adding the action:** each matching workflow run includes a **job summary** in GitHub Actions with an overall score, top recommendations, and an expandable risk breakdown-no separate MergeSignal server required.
 
 ## Recommended workflow
 
@@ -40,7 +40,7 @@ Open the workflow run in GitHub and read the **Summary** section for the scan ou
 
 | Input        | Required | Description                                                                                                                                                                                                                                        |
 | ------------ | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `fail_above` | No       | Numeric string `0`–`100`. When set, the job **fails** if the scan’s `totalScore` is **strictly greater** than this value (same rule as the MergeSignal CLI `--fail-above`). When empty or omitted, the job **never** fails because of score alone. |
+| `fail_above` | No       | Numeric string `0`-`100`. When set, the job **fails** if the scan’s `totalScore` is **strictly greater** than this value (same rule as the MergeSignal CLI `--fail-above`). When empty or omitted, the job **never** fails because of score alone. |
 
 ### Deterministic behavior when `fail_above` is set
 

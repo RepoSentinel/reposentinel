@@ -4,7 +4,7 @@ import Link from "next/link";
 import docStyles from "../../components/shared/DocArticle/DocArticle.module.css";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — MergeSignal",
+  title: "Privacy Policy - MergeSignal",
   description:
     "How MergeSignal collects, uses, and protects data, including Customer Content restrictions.",
 };
@@ -34,9 +34,9 @@ export default function PrivacyPage() {
       <h3>2.1 Restrictions on use of Customer Content</h3>
       <p>
         <strong>&ldquo;Customer Content&rdquo;</strong> means data you (or an
-        integration on your behalf) submit to operate the Service—for example
+        integration on your behalf) submit to operate the Service-for example
         dependency manifests, lockfiles, structured dependency graphs,
-        repository identifiers, and analysis outputs—not your unrelated private
+        repository identifiers, and analysis outputs-not your unrelated private
         business documents unless you choose to upload them.
       </p>
       <p>
@@ -74,7 +74,7 @@ export default function PrivacyPage() {
       </p>
       <p>
         <strong>What we persist:</strong> The Service stores what is needed to
-        run analyses and show history—typically repository identifiers,{" "}
+        run analyses and show history-typically repository identifiers,{" "}
         <strong>lockfile or manifest-derived inputs</strong> you supply (or that
         the GitHub App sends for changed paths), structured dependency
         summaries, <strong>analysis results</strong> (scores, signals,
@@ -158,7 +158,7 @@ export default function PrivacyPage() {
             Improve the Service (within the limits of Section 2.1)
           </strong>
           : Tune heuristics, fix bugs, and build <strong>aggregate</strong>{" "}
-          product insights—without selling Customer Content or using it to train
+          product insights-without selling Customer Content or using it to train
           third-party foundation models as described above
         </li>
         <li>
@@ -191,7 +191,7 @@ export default function PrivacyPage() {
         <li>
           <strong>PostgreSQL database</strong>: Scan status, scores,{" "}
           <strong>analysis results (JSON)</strong>, repository/org identifiers,
-          policies, alerts, and related metadata—<strong>not</strong> a
+          policies, alerts, and related metadata-<strong>not</strong> a
           wholesale copy of your application source tree unless you have
           uploaded such content as part of a documented feature
         </li>

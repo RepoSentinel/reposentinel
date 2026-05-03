@@ -2,7 +2,7 @@ name: MergeSignal scan
 description: Scan npm lockfile risk on every run and add an actionable summary to GitHub Actions (no merge server required).
 inputs:
   fail_above:
-    description: Fail if totalScore exceeds this value (0–100). Leave empty to not fail the job.
+    description: Fail if totalScore exceeds this value (0-100). Leave empty to not fail the job.
     required: false
     default: ""
 

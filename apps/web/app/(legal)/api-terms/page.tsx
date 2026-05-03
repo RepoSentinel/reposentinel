@@ -4,7 +4,7 @@ import Link from "next/link";
 import docStyles from "../../components/shared/DocArticle/DocArticle.module.css";
 
 export const metadata: Metadata = {
-  title: "API Terms — MergeSignal",
+  title: "API Terms - MergeSignal",
   description:
     "API rate limits, quotas, authentication, and acceptable use for the MergeSignal API.",
 };
@@ -332,7 +332,7 @@ export default function ApiTermsPage() {
       </ul>
       <p>
         This data should be validated; automated outputs may be incomplete or
-        wrong—see the Terms of Service, Section 3.
+        wrong-see the Terms of Service, Section 3.
       </p>
 
       <h2>7. Access Revocation and Suspension</h2>

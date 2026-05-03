@@ -1,6 +1,6 @@
 :root {
   /* =============================================================================
-   * MergeSignal theme — one hex (or literal) per concept here only.
+   * MergeSignal theme - one hex (or literal) per concept here only.
    * Everything below references these primitives via var().
    * ============================================================================= */
 
@@ -88,7 +88,7 @@
   --ms-color-red-500: #ef4444;
   --ms-color-blue-500: #3b82f6;
 
-  /* --- Spacing (rem) — simple scale --- */
+  /* --- Spacing (rem) - simple scale --- */
   --ms-space-2xs: 0.25rem; /* 4px */
   --ms-space-xs: 0.5rem; /* 8px */
   --ms-space-sm: 0.75rem; /* 12px */
@@ -134,7 +134,7 @@
   --ms-radius-lg: 1rem; /* 16px */
   --ms-radius-full: 9999px;
 
-  /* Sticky header block height (logo row + padding) — used for viewport math */
+  /* Sticky header block height (logo row + padding) - used for viewport math */
   --ms-site-header-height: 3.75rem;
 
   /* GitHub sign-in button (matches common github.com OAuth styling) */
@@ -194,7 +194,7 @@ body {
   line-height: var(--ms-leading-snug);
 }
 
-/* Semantic typography — h1/h2 use display serif; h3–h6 stay sans (inherit body) */
+/* Semantic typography - h1/h2 use display serif; h3-h6 stay sans (inherit body) */
 h1 {
   font-family: var(--ms-font-display);
   font-size: clamp(

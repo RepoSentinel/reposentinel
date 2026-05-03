@@ -164,7 +164,7 @@ export type MarkdownContentProps = {
 
 /**
  * Renders markdown to React (GFM). Hardens parsing with `skipHtml`, a small
- * disallowed-element list, and safe URL handling — no raw HTML pass-through.
+ * disallowed-element list, and safe URL handling - no raw HTML pass-through.
  */
 export function MarkdownContent({
   children,

@@ -4,7 +4,7 @@ import Link from "next/link";
 import docStyles from "../../components/shared/DocArticle/DocArticle.module.css";
 
 export const metadata: Metadata = {
-  title: "Terms of Service — MergeSignal",
+  title: "Terms of Service - MergeSignal",
   description:
     "MergeSignal Terms of Service: acceptable use, API rules, limitations, and liability.",
 };

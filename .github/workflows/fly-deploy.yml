@@ -1,6 +1,6 @@
 # Deploy web + API to Fly.io (avoids corporate TLS issues on laptops).
 #
-# GitHub Actions secrets (one per Fly app–scoped deploy token):
+# GitHub Actions secrets (one per Fly app-scoped deploy token):
 #   FLY_API_TOKEN_MERGESIGNAL_WEB
 #   FLY_API_TOKEN_MERGESIGNAL_API
 # Settings → Secrets and variables → Actions
