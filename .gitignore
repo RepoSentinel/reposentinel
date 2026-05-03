@@ -46,10 +46,6 @@ yarn-error.log*
 # TS incremental/build info
 *.tsbuildinfo
 
-# Cursor AI
-.cursor/plans/
-.cursor/sessions/
-.cursor/cache/
-.cursor/logs/
-.cursor/agents/
+# Cursor IDE — keep local only (never commit rules/agents/plans)
+.cursor/
 cursor/
