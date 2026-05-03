@@ -1,7 +1,5 @@
-import docStyles from "../components/features/LegalMarkdown/LegalDoc.module.css";
+import docStyles from "../components/shared/DocArticle/DocArticle.module.css";
 import { CodeBlock } from "../components/shared/CodeBlock/CodeBlock";
-import { MarkdownContent } from "../components/shared/MarkdownContent/MarkdownContent";
-import { readGithubAppDocumentationMarkdown } from "../../lib/readGithubAppDoc";
 import gsStyles from "./getting-started.module.css";
 
 const REPO_BLOB = "https://github.com/MergeSignal/mergesignal/blob/main";
@@ -31,31 +29,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: MergeSignal/mergesignal/.github/actions/merge-signal-scan@main`;
 
-const HOSTED_PR_COMMENT_EXAMPLE = `
-## MergeSignal
-
-> [!WARNING]
-> **Risky** — elevated dependency merge risk — see signals below
-
-**RISKY** — **\`express\` can reorder hooks so validation runs after your handler—skipped checks.**
-**Mechanism:** Auth middleware order shifts so guards run after handlers—skipped session checks on requests.
-**Context:** \`express\` participates in middleware chain during a normal request lifecycle.
-> **Action:** Confirm middleware chain runs before route handlers and verify 401/403 on protected routes.
-
-**RISKY** — **Transitive \`semver\` resolution changed—tests may not exercise the resolved graph.**
-**Mechanism:** Minor version bumps reorder peer dependencies under pnpm’s strict layout.
-**Context:** Touches \`packages/web\` and \`services/api\` entrypoints in this workspace.
-> **Action:** Run a clean \`pnpm install\` on CI and re-run integration tests before merge.
-`;
-
-function githubAppMarkdownBody(): string {
-  const raw = readGithubAppDocumentationMarkdown();
-  return raw.replace(/^#\s+GitHub App\s*\n+/m, "").trim();
-}
-
 export default function GettingStartedPage() {
-  const githubAppMd = githubAppMarkdownBody();
-
   return (
     <article className={docStyles.article}>
       <h1>Getting started</h1>
@@ -186,9 +160,56 @@ export default function GettingStartedPage() {
         </p>
         <div className={gsStyles.exampleMarkdown}>
           <div className={gsStyles.prCommentExamplePanel}>
-            <MarkdownContent githubAlertCallouts>
-              {HOSTED_PR_COMMENT_EXAMPLE}
-            </MarkdownContent>
+            <h2>MergeSignal</h2>
+            <div className="markdown-alert markdown-alert-warning">
+              <p className="markdown-alert-title">Warning</p>
+              <p>
+                <strong>Risky</strong> — elevated dependency merge risk — see
+                signals below
+              </p>
+            </div>
+            <p>
+              <strong>RISKY</strong> —{" "}
+              <strong>
+                <code>express</code> can reorder hooks so validation runs after
+                your handler—skipped checks.
+              </strong>
+            </p>
+            <p>
+              <strong>Mechanism:</strong> Auth middleware order shifts so guards
+              run after handlers—skipped session checks on requests.
+            </p>
+            <p>
+              <strong>Context:</strong> <code>express</code> participates in
+              middleware chain during a normal request lifecycle.
+            </p>
+            <blockquote>
+              <p>
+                <strong>Action:</strong> Confirm middleware chain runs before
+                route handlers and verify 401/403 on protected routes.
+              </p>
+            </blockquote>
+            <p>
+              <strong>RISKY</strong> —{" "}
+              <strong>
+                Transitive <code>semver</code> resolution changed—tests may not
+                exercise the resolved graph.
+              </strong>
+            </p>
+            <p>
+              <strong>Mechanism:</strong> Minor version bumps reorder peer
+              dependencies under pnpm’s strict layout.
+            </p>
+            <p>
+              <strong>Context:</strong> Touches <code>packages/web</code> and{" "}
+              <code>services/api</code> entrypoints in this workspace.
+            </p>
+            <blockquote>
+              <p>
+                <strong>Action:</strong> Run a clean <code>pnpm install</code>{" "}
+                on CI and re-run integration tests before merge.
+              </p>
+            </blockquote>
           </div>
         </div>
       </section>
@@ -207,7 +228,99 @@ export default function GettingStartedPage() {
           scans—useful when you want ingestion aligned with your deployment, not
           only GitHub Actions.
         </p>
-        <MarkdownContent>{githubAppMd}</MarkdownContent>
+
+        <h3>What you get</h3>
+        <p>
+          The <strong>MergeSignal GitHub App</strong> lets your{" "}
+          <strong>hosted</strong> MergeSignal API receive repository events.
+          When a <strong>lockfile changes</strong> on a pull request or push,
+          MergeSignal can <strong>enqueue a scan</strong> so results stay fresh
+          without relying on Actions alone—useful when you want ingestion and PR
+          automation aligned with your deployment.
+        </p>
+
+        <h3>When to use this page</h3>
+        <p>
+          You already run or plan to run <strong>MergeSignal’s API</strong>{" "}
+          (hosted or self-managed) and want <strong>GitHub-driven</strong> scans
+          and optional <strong>PR feedback</strong> wired to that stack. This is{" "}
+          <strong>optional</strong> and assumes you are comfortable with GitHub
+          App permissions and API configuration.
+        </p>
+
+        <h3>Prerequisites</h3>
+        <ul>
+          <li>
+            A running MergeSignal <strong>API</strong> reachable from GitHub
+            (HTTPS).
+          </li>
+          <li>
+            Ability to create a <strong>GitHub App</strong> in your org or
+            account and install it on target repositories.
+          </li>
+        </ul>
+
+        <h3>Setup</h3>
+        <ol>
+          <li>
+            In GitHub, <strong>create a GitHub App</strong> (org-owned is fine).
+          </li>
+          <li>
+            Set the <strong>webhook URL</strong> to your API’s webhook path—for
+            example <code>{`https://<your-api-host>/github/webhook`}</code> (use
+            the host where <code>apps/api</code> is deployed).
+          </li>
+          <li>
+            Create a <strong>webhook secret</strong> and keep it for API
+            configuration.
+          </li>
+          <li>
+            Subscribe to <strong>Pull request</strong> and <strong>Push</strong>{" "}
+            events.
+          </li>
+          <li>
+            Under repository permissions, set <strong>Contents</strong> and{" "}
+            <strong>Pull requests</strong> to read-only, and{" "}
+            <strong>Issues</strong> to read and write if you need PR comments
+            from the product.
+          </li>
+          <li>
+            <strong>Install</strong> the App on the repositories (or all repos)
+            that should send events.
+          </li>
+          <li>
+            On the API, set <code>GITHUB_APP_ID</code>,{" "}
+            <code>GITHUB_PRIVATE_KEY</code> (PEM; newlines may be escaped as{" "}
+            <code>\n</code> in env), and <code>GITHUB_WEBHOOK_SECRET</code> to
+            match the App.
+          </li>
+        </ol>
+        <p>
+          On pull request events (<code>opened</code>, <code>reopened</code>,{" "}
+          <code>synchronize</code>), MergeSignal looks for lockfile changes at
+          the PR head and enqueues a scan when appropriate. On{" "}
+          <strong>push</strong>, it does the same for the pushed commits.
+          Supported lockfiles include <code>pnpm-lock.yaml</code>,{" "}
+          <code>package-lock.json</code>, and <code>yarn.lock</code> (including
+          nested paths).
+        </p>
+
+        <h3>What happens next</h3>
+        <p>
+          Scans surface in the <strong>MergeSignal web app and API</strong> like
+          any other run. If you have not yet added CI summaries for every PR,
+          complete{" "}
+          <a href="#github-actions">
+            <strong>GitHub Actions</strong>
+          </a>{" "}
+          first, then return here when you are ready to wire the App to your
+          API.
+        </p>
+        <p>
+          For a <strong>local full stack</strong> (Docker, databases,
+          migrations), use the repository’s contributor-oriented sections—
+          <strong>not</strong> this product doc page.
+        </p>
       </section>
 
       <hr className={gsStyles.sectionDivider} />
