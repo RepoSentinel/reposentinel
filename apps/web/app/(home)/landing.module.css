@@ -51,6 +51,88 @@
   }
 }
 
+/* ---------- Hero primary CTA (filled, accent) ---------- */
+.primaryCta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ms-space-sm);
+  padding: 0.72rem 1.4rem;
+  border-radius: var(--ms-radius-md);
+  font-size: var(--ms-text-base);
+  font-weight: var(--ms-font-weight-semibold);
+  text-decoration: none;
+  color: var(--ms-color-on-accent);
+  background: var(--ms-color-accent);
+  border: var(--ms-border-width) solid
+    color-mix(in oklab, var(--ms-color-white) 65%, transparent);
+  box-shadow: var(--ms-shadow-sm);
+  transition:
+    transform 0.14s ease,
+    box-shadow 0.14s ease,
+    filter 0.14s ease;
+}
+
+.primaryCta:hover {
+  filter: brightness(0.95);
+  box-shadow: var(--ms-shadow-md);
+}
+
+.primaryCta:focus-visible {
+  outline: 2px solid var(--ms-color-focus-ring);
+  outline-offset: 2px;
+}
+
+/* ---------- Hero ghost CTA (outline, scroll target) ---------- */
+.ghostCta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ms-space-xs);
+  padding: 0.72rem 1.4rem;
+  border-radius: var(--ms-radius-md);
+  font-size: var(--ms-text-base);
+  font-weight: var(--ms-font-weight-semibold);
+  cursor: pointer;
+  color: var(--ms-color-text-muted);
+  background: transparent;
+  border: var(--ms-border-width) solid var(--ms-color-border);
+  transition:
+    color 0.14s ease,
+    border-color 0.14s ease,
+    transform 0.14s ease;
+}
+
+.ghostCta:hover {
+  color: var(--ms-color-ink);
+  border-color: color-mix(in oklab, var(--ms-color-ink) 35%, transparent);
+}
+
+.ghostCta:focus-visible {
+  outline: 2px solid var(--ms-color-focus-ring);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .primaryCta,
+  .ghostCta {
+    transition: none;
+  }
+
+  .primaryCta:hover,
+  .ghostCta:hover {
+    transform: none;
+    filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .primaryCta:hover,
+  .ghostCta:hover {
+    transform: translateY(-1px);
+  }
+}
+
 /* ---------- Hero (full viewport band, edge bleed, no card chrome) ---------- */
 .hero {
   margin-left: calc(-1 * var(--ms-space-md));

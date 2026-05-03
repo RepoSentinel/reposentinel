@@ -1,44 +1,23 @@
 import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 import {
-  BookOpen,
+  BellRing,
+  BugOff,
+  ChevronDown,
   ClipboardCheck,
   Crosshair,
-  FileWarning,
+  Gauge,
   MapPinned,
   MessagesSquare,
+  Microscope,
   Route,
-  ShieldAlert,
-  ShieldCheck,
-  Target,
+  ScrollText,
   Telescope,
-  Timer,
   UsersRound,
 } from "lucide-react";
 import Link from "next/link";
+import { ScrollButton } from "../components/shared/ScrollButton/ScrollButton";
 import styles from "./landing.module.css";
-
-function GitHubMark({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      aria-hidden
-    >
-      <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.82-.255.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12c0-6.627-5.373-12-12-12z" />
-    </svg>
-  );
-}
-
-function GithubCtaLink({ href }: { href: string }) {
-  return (
-    <Link className={styles.githubCta} href={href}>
-      <GitHubMark className={styles.githubCtaIcon} />
-      Continue with GitHub
-    </Link>
-  );
-}
 
 function SectionRow({
   icon: Icon,
@@ -63,8 +42,6 @@ function SectionRow({
 }
 
 export default function Home() {
-  const githubHref = "/api/auth/signin/github";
-
   return (
     <>
       <section className={styles.hero} aria-labelledby="hero-heading">
@@ -77,13 +54,25 @@ export default function Home() {
             to verify before merging.
           </p>
           <div className={styles.heroActions}>
-            <GithubCtaLink href={githubHref} />
+            <Link href="/getting-started" className={styles.primaryCta}>
+              Get started for free
+            </Link>
+            <ScrollButton targetId="why-hard" className={styles.ghostCta}>
+              Learn more <ChevronDown size={16} strokeWidth={2} aria-hidden />
+            </ScrollButton>
           </div>
         </div>
       </section>
 
       <div className={styles.sectionStack}>
-        <section className={styles.sectionCard} aria-labelledby="pain-heading">
+        <section
+          id="why-hard"
+          className={styles.sectionCard}
+          aria-labelledby="pain-heading"
+          style={{
+            scrollMarginTop: "calc(var(--ms-site-header-height) + 1.5rem)",
+          }}
+        >
           <div className={styles.sectionHead}>
             <h2 id="pain-heading" className={styles.h2}>
               Why dependency upgrades are hard to review
@@ -94,14 +83,14 @@ export default function Home() {
           </div>
           <ul className={styles.sectionList}>
             <SectionRow
-              icon={FileWarning}
+              icon={ScrollText}
               title="Changelogs don’t show real impact"
             >
               They list changes, but not how those changes affect your code
               paths, flows, and edge cases.
             </SectionRow>
             <SectionRow
-              icon={ShieldAlert}
+              icon={BellRing}
               title="Too much signal, not enough clarity"
             >
               Security tools and alerts create noise, but rarely show what
@@ -215,15 +204,15 @@ export default function Home() {
             </p>
           </div>
           <ul className={styles.sectionList}>
-            <SectionRow icon={ShieldCheck} title="Reviews move faster">
+            <SectionRow icon={Gauge} title="Reviews move faster">
               Focus on the right risks instead of reconstructing impact from
               changelogs and scattered context.
             </SectionRow>
-            <SectionRow icon={Timer} title="Testing becomes targeted">
+            <SectionRow icon={Microscope} title="Testing becomes targeted">
               Effort goes to the flows that matter, not spread across the entire
               system.
             </SectionRow>
-            <SectionRow icon={Target} title="Fewer production surprises">
+            <SectionRow icon={BugOff} title="Fewer production surprises">
               Issues are caught while changes are still small and easy to fix.
             </SectionRow>
             <SectionRow icon={UsersRound} title="Teams stay aligned">
@@ -269,28 +258,9 @@ export default function Home() {
           Connect GitHub when you&apos;re ready to scan a repo; until then, this
           page is here to explain how MergeSignal thinks about dependency risk.
         </p>
-        <GithubCtaLink href={githubHref} />
-      </section>
-
-      <section className={styles.sectionCard} aria-labelledby="docs-heading">
-        <div className={styles.sectionHead}>
-          <h2 id="docs-heading" className={styles.h2}>
-            Install, CI, and GitHub
-          </h2>
-          <p className={styles.subhead}>
-            Run locally, wire Actions or the App, and scan PRs with confidence.
-          </p>
-        </div>
-        <ul className={styles.sectionList}>
-          <SectionRow icon={BookOpen} title="Documentation">
-            Open{" "}
-            <Link className={styles.inlineLink} href="/getting-started">
-              Getting started
-            </Link>{" "}
-            for install, GitHub Actions, and GitHub App on one page—everything
-            you need without leaving this site.
-          </SectionRow>
-        </ul>
+        <Link href="/getting-started" className={styles.primaryCta}>
+          Get started for free
+        </Link>
       </section>
     </>
   );
