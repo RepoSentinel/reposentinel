@@ -35,4 +35,33 @@ describe("MarkdownContent", () => {
     const html = renderToStaticMarkup(<MarkdownContent>{md}</MarkdownContent>);
     expect(html).not.toContain("javascript:");
   });
+
+  it("strips img onerror from inline HTML", () => {
+    const md = `Hello\n\n<img src=x onerror=alert(1)>\n\nWorld`;
+    const html = renderToStaticMarkup(<MarkdownContent>{md}</MarkdownContent>);
+    expect(html).not.toContain("onerror");
+    expect(html).toContain("Hello");
+    expect(html).toContain("World");
+  });
+
+  it("strips svg onload from inline HTML", () => {
+    const md = `Hello\n\n<svg onload=alert(1)></svg>\n\nWorld`;
+    const html = renderToStaticMarkup(<MarkdownContent>{md}</MarkdownContent>);
+    expect(html).not.toContain("onload");
+    expect(html).toContain("Hello");
+    expect(html).toContain("World");
+  });
+
+  it("neutralizes javascript: URLs in markdown images", () => {
+    const md = `![x](javascript:alert(1))`;
+    const html = renderToStaticMarkup(<MarkdownContent>{md}</MarkdownContent>);
+    expect(html).not.toContain("javascript:");
+  });
+
+  it("renders a very long string without throwing", () => {
+    const md = "a".repeat(50_000);
+    expect(() =>
+      renderToStaticMarkup(<MarkdownContent>{md}</MarkdownContent>),
+    ).not.toThrow();
+  });
 });

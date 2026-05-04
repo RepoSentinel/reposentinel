@@ -24,12 +24,25 @@ export function decisionTitle(
   return DECISION_TITLES[recommendation];
 }
 
+/**
+ * Normalizes typographic punctuation to ASCII equivalents so that LLM output
+ * renders consistently across PR comments, the web UI, and CLI output.
+ * Only targets characters that cause visual/encoding inconsistency; other
+ * characters (including XSS payloads) are passed through unchanged — HTML
+ * escaping is the renderer's responsibility.
+ */
+function normalizeToAscii(s: string): string {
+  return s
+    .replace(/\u2014/g, "-") // em dash —
+    .replace(/\u2013/g, "-"); // en dash –
+}
+
 // Maps one PRInsight to its display fields (no title)
 export function formatInsight(insight: PRInsight): FormattedInsight {
   return {
-    message: insight.message,
-    where: insight.context,
-    action: insight.remediation,
+    message: normalizeToAscii(insight.message),
+    where: normalizeToAscii(insight.context),
+    action: normalizeToAscii(insight.remediation),
   };
 }
 

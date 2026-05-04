@@ -16,8 +16,11 @@ export class ApiError extends Error {
 function getServerApiKey(): string | undefined {
   return (
     process.env.MERGESIGNAL_API_KEY ??
+    // MERGESIGNAL_DEV_API_KEY is a dev-only fallback. It must NOT use the
+    // NEXT_PUBLIC_ prefix: that prefix causes Next.js to inline the value
+    // into the client bundle at build time, which would expose the key.
     (process.env.NODE_ENV !== "production"
-      ? process.env.NEXT_PUBLIC_API_KEY
+      ? process.env.MERGESIGNAL_DEV_API_KEY
       : undefined)
   );
 }
@@ -28,7 +31,7 @@ export async function serverApiGet<T>(path: string): Promise<T> {
   const apiKey = getServerApiKey();
   if (!apiKey) {
     throw new ApiError(
-      "Missing MERGESIGNAL_API_KEY (server-only). For local dev, NEXT_PUBLIC_API_KEY is still accepted when NODE_ENV is not production.",
+      "Missing MERGESIGNAL_API_KEY (server-only). For local dev, MERGESIGNAL_DEV_API_KEY is also accepted when NODE_ENV is not production.",
       500,
       "Configuration error",
     );

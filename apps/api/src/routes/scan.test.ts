@@ -210,6 +210,90 @@ describe("scan routes", () => {
       const body = JSON.parse(response.body);
       expect(body.title).toBe("Too Many Requests");
     });
+
+    it("should return 400 when repoId is null", async () => {
+      const response = await app.inject({
+        method: "POST",
+        url: "/scan",
+        payload: { repoId: null, dependencyGraph: {} },
+      });
+
+      expect(response.statusCode).toBe(400);
+      const body = JSON.parse(response.body);
+      expect(body.title).toBe("Bad Request");
+      expect(body.detail).not.toContain("TypeError");
+      expect(body.detail).not.toContain("Cannot read");
+    });
+
+    it("should return 400 when repoId is a number", async () => {
+      const response = await app.inject({
+        method: "POST",
+        url: "/scan",
+        payload: { repoId: 42, dependencyGraph: {} },
+      });
+
+      expect(response.statusCode).toBe(400);
+      const body = JSON.parse(response.body);
+      expect(body.title).toBe("Bad Request");
+    });
+
+    it("should return 400 when repoId is missing", async () => {
+      const response = await app.inject({
+        method: "POST",
+        url: "/scan",
+        payload: { dependencyGraph: {} },
+      });
+
+      expect(response.statusCode).toBe(400);
+      const body = JSON.parse(response.body);
+      expect(body.title).toBe("Bad Request");
+    });
+
+    it("should return 400 when repoId is empty string", async () => {
+      const response = await app.inject({
+        method: "POST",
+        url: "/scan",
+        payload: { repoId: "", dependencyGraph: {} },
+      });
+
+      expect(response.statusCode).toBe(400);
+      const body = JSON.parse(response.body);
+      expect(body.title).toBe("Bad Request");
+    });
+
+    it("should return 400 when body is missing entirely", async () => {
+      const response = await app.inject({
+        method: "POST",
+        url: "/scan",
+        headers: { "content-type": "application/json" },
+        payload: "",
+      });
+
+      // Fastify returns 400 for unparseable JSON body
+      expect(response.statusCode).toBe(400);
+      const body = JSON.parse(response.body);
+      // Must not expose internals regardless of exact status
+      expect(body).not.toHaveProperty("stack");
+    });
+
+    it("should accept repoId containing an XSS payload as a valid string", async () => {
+      const mockScanId = "scan_xss";
+      vi.mocked(createScanAndEnqueue).mockResolvedValue({ scanId: mockScanId });
+
+      // A valid string with angle brackets is allowed at the API level.
+      // XSS safety is the renderer's responsibility, not the API's.
+      const response = await app.inject({
+        method: "POST",
+        url: "/scan",
+        payload: {
+          repoId: "<script>alert(1)</script>/repo",
+          dependencyGraph: {},
+        },
+      });
+
+      expect(response.statusCode).toBe(202);
+      expect(JSON.parse(response.body).scanId).toBe(mockScanId);
+    });
   });
 
   describe("GET /scan/:id", () => {

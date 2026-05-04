@@ -14,6 +14,10 @@ export async function createApp() {
   initApiSentry();
 
   const app = Fastify({
+    // 5 MiB matches the paid tier lockfile limit and prevents large
+    // dependencyGraph payloads from being deserialized into memory before
+    // the per-field size checks in scanService run.
+    bodyLimit: 5 * 1024 * 1024,
     logger: {
       level: process.env.LOG_LEVEL ?? "info",
       serializers: {

@@ -1,14 +1,38 @@
 import { FastifyInstance } from "fastify";
+import { z } from "zod";
 import { queries } from "../db.js";
-import type { ScanRequest } from "@mergesignal/shared";
 import { createScanAndEnqueue } from "../services/scanService.js";
 import { sendProblem } from "../problem.js";
+
+const LockfileManagerSchema = z.enum(["pnpm", "npm", "yarn"]);
+
+const ScanRequestSchema = z.object({
+  repoId: z.string().min(1).max(500),
+  dependencyGraph: z.unknown(),
+  lockfile: z
+    .object({
+      manager: LockfileManagerSchema,
+      content: z.string(),
+      path: z.string().optional(),
+    })
+    .optional(),
+});
 
 type ScanStatus = "queued" | "running" | "done" | "failed";
 
 export async function scanRoutes(app: FastifyInstance) {
   app.post("/scan", async (req, reply) => {
-    const body = req.body as ScanRequest;
+    const parsed = ScanRequestSchema.safeParse(req.body);
+    if (!parsed.success) {
+      return sendProblem(reply, req, {
+        status: 400,
+        title: "Bad Request",
+        detail: parsed.error.issues
+          .map((i) => `${i.path.join(".") || "body"}: ${i.message}`)
+          .join("; "),
+      });
+    }
+    const body = parsed.data;
 
     // Authorization check: if using org-scoped API key, ensure repoId matches owner
     if (req.authenticatedOwner) {
