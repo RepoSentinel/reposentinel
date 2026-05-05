@@ -1,6 +1,20 @@
 import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
 
+/**
+ * Session encryption/signing secret. Required in production — set `AUTH_SECRET`
+ * (e.g. `openssl rand -base64 32`). In development only, a fixed placeholder is
+ * used when unset so `next dev` works without `.env.local`; never rely on this in prod.
+ */
+function resolveAuthSecret(): string | undefined {
+  const fromEnv = process.env.AUTH_SECRET?.trim();
+  if (fromEnv) return fromEnv;
+  if (process.env.NODE_ENV === "development") {
+    return "local-dev-auth-secret-not-for-production";
+  }
+  return undefined;
+}
+
 async function fetchGithubOrgs(accessToken: string): Promise<string[]> {
   const res = await fetch("https://api.github.com/user/orgs?per_page=100", {
     headers: {
@@ -15,6 +29,7 @@ async function fetchGithubOrgs(accessToken: string): Promise<string[]> {
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  secret: resolveAuthSecret(),
   trustHost: true,
   providers: [
     GitHub({
