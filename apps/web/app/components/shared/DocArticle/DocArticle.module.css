@@ -5,21 +5,21 @@
 }
 
 .article :global(h1) {
-  font-family: Georgia, ui-serif, serif;
-  font-size: clamp(1.65rem, 3vw, 2rem);
-  font-weight: 600;
+  font-family:  var(--ms-type-doc-h1-font-family);
+  font-size:    var(--ms-type-doc-h1-font-size);
+  font-weight:  var(--ms-type-doc-h1-font-weight);
+  line-height:  var(--ms-type-doc-h1-line-height);
   color: var(--ms-color-ink);
   margin: 0 0 0.75rem;
-  line-height: 1.2;
 }
 
 .article :global(h2) {
-  font-family: Georgia, ui-serif, serif;
-  font-size: clamp(1.2rem, 2vw, 1.35rem);
-  font-weight: 600;
+  font-family:  var(--ms-type-doc-h2-font-family);
+  font-size:    var(--ms-type-doc-h2-font-size);
+  font-weight:  var(--ms-type-doc-h2-font-weight);
+  line-height:  var(--ms-type-doc-h2-line-height);
   color: var(--ms-color-ink);
   margin: 2rem 0 0.65rem;
-  line-height: 1.25;
 }
 
 .article :global(h2:first-of-type) {
@@ -28,7 +28,7 @@
 
 .article :global(h3) {
   font-size: var(--ms-text-lg);
-  font-weight: 600;
+  font-weight: var(--ms-font-weight-semibold);
   color: var(--ms-color-ink);
   margin: 1.25rem 0 0.45rem;
 }
@@ -49,7 +49,7 @@
 
 .article :global(strong) {
   color: var(--ms-color-ink);
-  font-weight: 600;
+  font-weight: var(--ms-font-weight-semibold);
 }
 
 .article :global(hr) {
@@ -80,8 +80,8 @@
 }
 
 .article :global(code) {
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
-  font-size: 0.88em;
+  font-family: var(--ms-type-mono-inline-font-family);
+  font-size:   var(--ms-type-mono-inline-font-size);
 }
 
 .article :global(pre code) {
@@ -106,5 +106,5 @@
 .article :global(th) {
   background: var(--ms-color-surface);
   color: var(--ms-color-ink);
-  font-weight: 600;
+  font-weight: var(--ms-font-weight-semibold);
 }

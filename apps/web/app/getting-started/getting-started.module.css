@@ -34,7 +34,7 @@
 
 .stepLabel {
   font-size: var(--ms-text-base);
-  font-weight: 600;
+  font-weight: var(--ms-font-weight-semibold);
   color: var(--ms-color-ink);
   margin: 0 0 var(--ms-space-xs);
 }
@@ -59,7 +59,7 @@
 
 .subGuideHeading {
   font-size: var(--ms-text-lg);
-  font-weight: 600;
+  font-weight: var(--ms-font-weight-semibold);
   color: var(--ms-color-ink);
   margin: 0 0 var(--ms-space-sm);
   line-height: var(--ms-leading-snug);
@@ -97,8 +97,7 @@
 
 .prCommentExamplePanel {
   --ms-gfm-alert-space: 1rem;
-  --ms-gfm-alert-font-family: var(--font-sans), ui-sans-serif, system-ui,
-    sans-serif;
+  --ms-gfm-alert-font-family: var(--ms-font-family-sans);
   --ms-gfm-alert-font-weight: var(--ms-font-weight-medium);
   --ms-gfm-alert-border-color: color-mix(
     in oklab,
@@ -194,12 +193,12 @@
 }
 
 .prCommentExamplePanel :global(h2) {
-  font-family: var(--ms-font-display);
-  font-size: clamp(1.15rem, 2vw, 1.3rem);
-  font-weight: var(--ms-font-weight-semibold);
+  font-family:  var(--ms-type-panel-h2-font-family);
+  font-size:    var(--ms-type-panel-h2-font-size);
+  font-weight:  var(--ms-type-panel-h2-font-weight);
+  line-height:  var(--ms-type-panel-h2-line-height);
   color: var(--ms-color-ink);
   margin: 0 0 var(--ms-space-sm);
-  line-height: 1.25;
 }
 
 .prCommentExamplePanel :global(p) {
@@ -248,7 +247,7 @@
 
 .detailsHelp summary {
   cursor: pointer;
-  font-weight: 600;
+  font-weight: var(--ms-font-weight-semibold);
   font-size: var(--ms-text-lg);
   color: var(--ms-color-ink);
   padding: var(--ms-space-xs) 0;

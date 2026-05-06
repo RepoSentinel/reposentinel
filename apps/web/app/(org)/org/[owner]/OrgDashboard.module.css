@@ -6,10 +6,10 @@
 }
 
 .metricValue {
-  font-size: 1.75rem;
-  font-weight: 700;
+  font-size:      var(--ms-type-kpi-font-size);
+  font-weight:    var(--ms-type-kpi-font-weight);
+  letter-spacing: var(--ms-type-kpi-letter-spacing);
   margin-top: var(--ms-space-xs);
-  letter-spacing: -0.02em;
 }
 
 /* 8. Score distribution visualization */
@@ -62,7 +62,7 @@
 }
 
 .worstRepoName {
-  font-weight: 600;
+  font-weight: var(--ms-font-weight-semibold);
 }
 
 /* 6. Empty state */
@@ -88,7 +88,7 @@
 .openLink {
   color: var(--ms-color-accent);
   text-decoration: none;
-  font-weight: 600;
+  font-weight: var(--ms-font-weight-semibold);
   padding: var(--ms-space-2xs) var(--ms-space-xs);
   border-radius: var(--ms-radius-2xs);
   transition: background 0.15s ease;
@@ -107,7 +107,7 @@
 .scoreBadge {
   padding: var(--ms-space-sm) var(--ms-space-sm);
   border-radius: var(--ms-radius-xs);
-  font-weight: 600;
+  font-weight: var(--ms-font-weight-semibold);
   font-size: var(--ms-text-md);
 }
 
@@ -133,7 +133,7 @@
   display: inline-flex;
   align-items: center;
   gap: var(--ms-space-sm);
-  font-weight: 600;
+  font-weight: var(--ms-font-weight-semibold);
 }
 
 .deltaPositive {
@@ -154,10 +154,10 @@
   gap: var(--ms-space-2xs);
   padding: var(--ms-space-sm) var(--ms-space-sm);
   border-radius: var(--ms-radius-xs);
-  font-size: var(--ms-text-xs);
-  font-weight: 600;
+  font-size:      var(--ms-text-xs);
+  font-weight:    var(--ms-font-weight-semibold);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: var(--ms-tracking-badge);
 }
 
 .statusDone {

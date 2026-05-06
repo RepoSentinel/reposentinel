@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { BrandWordmark } from "../../BrandWordmark/BrandWordmark";
 import { UserNav } from "../UserNav/UserNav";
 import styles from "./Header.module.css";
 
@@ -23,12 +24,13 @@ export function Header({
         <Link href="/" className={styles.brand}>
           <Image
             src="/mergesignal-logo.png"
-            alt="MergeSignal"
+            alt=""
             width={1024}
             height={680}
             className={styles.brandLogo}
             priority
           />
+          <BrandWordmark />
         </Link>
         {owner ? <span className={styles.owner}>/ {owner}</span> : null}
       </div>

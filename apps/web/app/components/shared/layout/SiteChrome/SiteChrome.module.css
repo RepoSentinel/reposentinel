@@ -18,8 +18,8 @@
 }
 
 .title {
-  font-size: 1.875rem;
-  letter-spacing: -0.03em;
+  font-size:      var(--ms-type-page-title-font-size);
+  letter-spacing: var(--ms-type-page-title-letter-spacing);
 }
 
 .subtitle {

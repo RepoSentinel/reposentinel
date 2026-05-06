@@ -1,3 +1,5 @@
+@import "./_styles/typography.css";
+
 :root {
   /* =============================================================================
    * MergeSignal theme - one hex (or literal) per concept here only.
@@ -88,7 +90,10 @@
   --ms-color-red-500: #ef4444;
   --ms-color-blue-500: #3b82f6;
 
-  /* --- Spacing (rem) - simple scale --- */
+  /* --- Spacing (rem) - simple scale ---
+   * Typography tokens (font families, size scale, weights, leading,
+   * tracking, clamps, composite type roles) live in _styles/typography.css.
+   * ─────────────────────────────────────────────────────────────────────── */
   --ms-space-2xs: 0.25rem; /* 4px */
   --ms-space-xs: 0.5rem; /* 8px */
   --ms-space-sm: 0.75rem; /* 12px */
@@ -97,34 +102,6 @@
   --ms-space-xl: 2rem; /* 32px */
   --ms-space-2xl: 3rem; /* 48px */
   --ms-space-layout-min: 16.25rem; /* 260px min column / logo cap */
-
-  /* --- Typography scale (rem) --- */
-  --ms-text-2xs: 0.6875rem; /* 11px */
-  --ms-text-xs: 0.75rem; /* 12px */
-  --ms-text-sm: 0.8125rem; /* 13px */
-  --ms-text-md: 0.875rem; /* 14px */
-  --ms-text-base: 1rem; /* 16px */
-  --ms-text-lg: 1.125rem; /* 18px */
-  --ms-text-xl: 1.25rem; /* 20px */
-  --ms-text-2xl: 1.5rem; /* 24px */
-  --ms-text-3xl: 1.875rem; /* 30px */
-  --ms-text-4xl: 2.25rem; /* 36px */
-  --ms-text-5xl: 2.5rem; /* 40px */
-  --ms-text-6xl: 3rem; /* 48px */
-
-  /* Display serif for marketing / page titles; body stays sans via body {} */
-  --ms-font-display: Georgia, "Iowan Old Style", "Palatino Linotype", ui-serif,
-    serif;
-
-  --ms-font-weight-regular: 400;
-  --ms-font-weight-medium: 500;
-  --ms-font-weight-semibold: 600;
-  --ms-font-weight-bold: 700;
-
-  /* Unitless line-height (multiplies element font-size) */
-  --ms-leading-snug: 1.5;
-  --ms-leading-relaxed: 1.55;
-  --ms-leading-roomy: 1.6;
 
   /* --- Radius (rem only): 2xs → xs → sm → md → lg → full --- */
   --ms-radius-2xs: 0.25rem; /* 4px */
@@ -187,74 +164,65 @@ body {
       var(--ms-color-canvas),
       var(--ms-color-canvas-elevated)
     );
-  font-family:
-    var(--font-sans), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-size: var(--ms-text-base);
-  font-weight: var(--ms-font-weight-regular);
-  line-height: var(--ms-leading-snug);
+  font-family:  var(--ms-type-body-font-family);
+  font-size:    var(--ms-type-body-font-size);
+  font-weight:  var(--ms-type-body-font-weight);
+  line-height:  var(--ms-type-body-line-height);
 }
 
 /* Semantic typography - h1/h2 use display serif; h3-h6 stay sans (inherit body) */
 h1 {
-  font-family: var(--ms-font-display);
-  font-size: clamp(
-    var(--ms-text-3xl),
-    1.35rem + 2.8vw,
-    var(--ms-text-6xl)
-  );
-  font-weight: var(--ms-font-weight-semibold);
-  line-height: 1.12;
-  letter-spacing: 0.01em;
+  font-family:    var(--ms-type-h1-font-family);
+  font-size:      var(--ms-type-h1-font-size);
+  font-weight:    var(--ms-type-h1-font-weight);
+  line-height:    var(--ms-type-h1-line-height);
+  letter-spacing: var(--ms-type-h1-letter-spacing);
 }
 
 h2 {
-  font-family: var(--ms-font-display);
-  font-size: clamp(
-    var(--ms-text-2xl),
-    1rem + 2vw,
-    var(--ms-text-4xl)
-  );
-  font-weight: var(--ms-font-weight-semibold);
-  line-height: 1.2;
-  letter-spacing: 0.01em;
+  font-family:    var(--ms-type-h2-font-family);
+  font-size:      var(--ms-type-h2-font-size);
+  font-weight:    var(--ms-type-h2-font-weight);
+  line-height:    var(--ms-type-h2-line-height);
+  letter-spacing: var(--ms-type-h2-letter-spacing);
 }
 
 h3 {
-  font-size: var(--ms-text-2xl);
-  font-weight: var(--ms-font-weight-semibold);
-  line-height: 1.28;
+  font-size:   var(--ms-type-h3-font-size);
+  font-weight: var(--ms-type-h3-font-weight);
+  line-height: var(--ms-type-h3-line-height);
 }
 
 h4 {
-  font-size: var(--ms-text-xl);
-  font-weight: var(--ms-font-weight-semibold);
-  line-height: 1.35;
+  font-size:   var(--ms-type-h4-font-size);
+  font-weight: var(--ms-type-h4-font-weight);
+  line-height: var(--ms-type-h4-line-height);
 }
 
 h5 {
-  font-size: var(--ms-text-lg);
-  font-weight: var(--ms-font-weight-semibold);
-  line-height: 1.4;
+  font-size:   var(--ms-type-h5-font-size);
+  font-weight: var(--ms-type-h5-font-weight);
+  line-height: var(--ms-type-h5-line-height);
 }
 
 h6 {
-  font-size: var(--ms-text-base);
-  font-weight: var(--ms-font-weight-semibold);
-  line-height: var(--ms-leading-snug);
-  letter-spacing: 0.03em;
+  font-size:      var(--ms-type-h6-font-size);
+  font-weight:    var(--ms-type-h6-font-weight);
+  line-height:    var(--ms-type-h6-line-height);
+  letter-spacing: var(--ms-type-h6-letter-spacing);
   text-transform: uppercase;
 }
 
 p {
-  font-size: var(--ms-text-base);
-  font-weight: var(--ms-font-weight-regular);
-  line-height: var(--ms-leading-snug);
+  font-size:   var(--ms-type-body-font-size);
+  font-weight: var(--ms-type-body-font-weight);
+  line-height: var(--ms-type-body-line-height);
 }
 
 label {
-  font-size: var(--ms-text-sm);
-  font-weight: var(--ms-font-weight-medium);
-  line-height: var(--ms-leading-snug);
+  font-size:   var(--ms-type-label-font-size);
+  font-weight: var(--ms-type-label-font-weight);
+  line-height: var(--ms-type-label-line-height);
 }
 
 * {
@@ -269,7 +237,7 @@ a {
 }
 
 code {
-  font-family: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: var(--ms-type-mono-inline-font-family);
 }
 
 ::selection {

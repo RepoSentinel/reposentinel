@@ -1,0 +1,249 @@
+/*
+ * typography.css — MergeSignal typography system
+ *
+ * Loaded via @import at the top of globals.css so every --ms-type-* and
+ * --ms-font-* token is available before element defaults and CSS modules
+ * cascade.
+ *
+ * Structure
+ * ─────────
+ *  I.   Font family stacks     — --ms-font-family-*
+ *  II.  Font size scale        — --ms-text-*
+ *  III. Font weight scale      — --ms-font-weight-*
+ *  IV.  Line-height scale      — --ms-leading-*
+ *  V.   Letter-spacing scale   — --ms-tracking-*
+ *  VI.  Responsive size tokens — --ms-font-size-*  (clamp() defined once)
+ *  VII. Composite type tokens  — --ms-type-{role}-{property}
+ */
+
+:root {
+  /* ═══════════════════════════════════════════════════════════════════
+   * I. Font family stacks
+   *    Next/font CSS variables (--font-sans, --font-brand,
+   *    --font-geist-mono) are injected on <body> in layout.tsx.
+   *    These stacks reference them with graceful system fallbacks.
+   * ═══════════════════════════════════════════════════════════════════ */
+
+  --ms-font-family-sans:
+    var(--font-sans), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --ms-font-family-display:
+    Georgia, "Iowan Old Style", "Palatino Linotype", ui-serif, serif;
+
+  --ms-font-family-brand:
+    var(--font-brand), "Palatino Linotype", Palatino, ui-serif, serif;
+
+  --ms-font-family-mono:
+    var(--font-geist-mono), ui-monospace, SFMono-Regular,
+    Menlo, Monaco, Consolas, monospace;
+
+  /* ═══════════════════════════════════════════════════════════════════
+   * II. Font size scale (rem)
+   * ═══════════════════════════════════════════════════════════════════ */
+
+  --ms-text-2xs:  0.6875rem; /*  11px */
+  --ms-text-xs:   0.75rem;   /*  12px */
+  --ms-text-sm:   0.8125rem; /*  13px */
+  --ms-text-md:   0.875rem;  /*  14px */
+  --ms-text-base: 1rem;      /*  16px */
+  --ms-text-lg:   1.125rem;  /*  18px */
+  --ms-text-xl:   1.25rem;   /*  20px */
+  --ms-text-2xl:  1.5rem;    /*  24px */
+  --ms-text-3xl:  1.875rem;  /*  30px */
+  --ms-text-4xl:  2.25rem;   /*  36px */
+  --ms-text-5xl:  2.5rem;    /*  40px */
+  --ms-text-6xl:  3rem;      /*  48px */
+
+  /* ═══════════════════════════════════════════════════════════════════
+   * III. Font weight scale
+   * ═══════════════════════════════════════════════════════════════════ */
+
+  --ms-font-weight-regular:   400;
+  --ms-font-weight-medium:    500;
+  --ms-font-weight-semibold:  600;
+  --ms-font-weight-bold:      700;
+  --ms-font-weight-extrabold: 800;
+
+  /* ═══════════════════════════════════════════════════════════════════
+   * IV. Line-height scale (unitless — multiplies the element's font-size)
+   * ═══════════════════════════════════════════════════════════════════ */
+
+  --ms-leading-none:     1;     /* icon / wordmark contexts       */
+  --ms-leading-tight:    1.12;  /* h1 display headline            */
+  --ms-leading-display:  1.2;   /* h2, doc-h1                     */
+  --ms-leading-sub:      1.25;  /* doc-h2, in-panel h2            */
+  --ms-leading-heading:  1.28;  /* h3                             */
+  --ms-leading-ui:       1.35;  /* h4                             */
+  --ms-leading-subhead:  1.4;   /* h5                             */
+  --ms-leading-snug:     1.5;   /* body, h6, labels (default)     */
+  --ms-leading-relaxed:  1.55;  /* descriptive paragraph copy     */
+  --ms-leading-roomy:    1.6;   /* spacious marketing blocks      */
+  --ms-leading-doc:      1.65;  /* long-form article prose        */
+
+  /* ═══════════════════════════════════════════════════════════════════
+   * V. Letter-spacing (tracking) scale
+   * ═══════════════════════════════════════════════════════════════════ */
+
+  --ms-tracking-tightest: -0.04em; /* scan score hero number         */
+  --ms-tracking-tighter:  -0.03em; /* section / page title           */
+  --ms-tracking-tight:    -0.02em; /* KPI metric value               */
+  --ms-tracking-snug:     -0.01em; /* mono text, slight tightening   */
+  --ms-tracking-normal:    0em;    /* browser default                */
+  --ms-tracking-wide:      0.01em; /* brand name, display headings   */
+  --ms-tracking-wider:     0.02em; /* small badge labels             */
+  --ms-tracking-heading:   0.03em; /* h6 uppercase, priority badges  */
+  --ms-tracking-badge:     0.05em; /* status badge uppercase         */
+  --ms-tracking-label:     0.08em; /* uppercase card / table headers */
+  --ms-tracking-loose:     0.18em; /* marketing kicker eyebrow       */
+  --ms-tracking-widest:    0.22em; /* brand tagline                  */
+
+  /* ═══════════════════════════════════════════════════════════════════
+   * VI. Responsive font sizes (clamp() defined once, referenced anywhere)
+   * ═══════════════════════════════════════════════════════════════════ */
+
+  --ms-font-size-h1: clamp(
+    var(--ms-text-3xl),
+    1.35rem + 2.8vw,
+    var(--ms-text-6xl)
+  );
+
+  --ms-font-size-h2: clamp(
+    var(--ms-text-2xl),
+    1rem + 2vw,
+    var(--ms-text-4xl)
+  );
+
+  /* Long-form document article */
+  --ms-font-size-doc-h1: clamp(1.65rem, 3vw, 2rem);
+  --ms-font-size-doc-h2: clamp(1.2rem, 2vw, 1.35rem);
+
+  /* In-panel heading (preview / doc sidebar panels) */
+  --ms-font-size-panel-h2: clamp(1.15rem, 2vw, 1.3rem);
+
+  /* ═══════════════════════════════════════════════════════════════════
+   * VII. Composite type tokens  (--ms-type-{role}-{property})
+   *
+   * Each role bundles the font-* properties that differ from the base
+   * body style. Modules reference individual longhands; element rules
+   * in globals.css consume the full set.
+   * ═══════════════════════════════════════════════════════════════════ */
+
+  /* ── Body (base prose) ─────────────────────────────────────────── */
+  --ms-type-body-font-family:  var(--ms-font-family-sans);
+  --ms-type-body-font-size:    var(--ms-text-base);
+  --ms-type-body-font-weight:  var(--ms-font-weight-regular);
+  --ms-type-body-line-height:  var(--ms-leading-snug);
+
+  /* ── Label (form labels, UI meta, nav links) ────────────────────── */
+  --ms-type-label-font-size:    var(--ms-text-sm);
+  --ms-type-label-font-weight:  var(--ms-font-weight-medium);
+  --ms-type-label-line-height:  var(--ms-leading-snug);
+
+  /* ── Heading h1 ─────────────────────────────────────────────────── */
+  --ms-type-h1-font-family:    var(--ms-font-family-display);
+  --ms-type-h1-font-size:      var(--ms-font-size-h1);
+  --ms-type-h1-font-weight:    var(--ms-font-weight-semibold);
+  --ms-type-h1-line-height:    var(--ms-leading-tight);
+  --ms-type-h1-letter-spacing: var(--ms-tracking-wide);
+
+  /* ── Heading h2 ─────────────────────────────────────────────────── */
+  --ms-type-h2-font-family:    var(--ms-font-family-display);
+  --ms-type-h2-font-size:      var(--ms-font-size-h2);
+  --ms-type-h2-font-weight:    var(--ms-font-weight-semibold);
+  --ms-type-h2-line-height:    var(--ms-leading-display);
+  --ms-type-h2-letter-spacing: var(--ms-tracking-wide);
+
+  /* ── Heading h3 ─────────────────────────────────────────────────── */
+  --ms-type-h3-font-size:    var(--ms-text-2xl);
+  --ms-type-h3-font-weight:  var(--ms-font-weight-semibold);
+  --ms-type-h3-line-height:  var(--ms-leading-heading);
+
+  /* ── Heading h4 ─────────────────────────────────────────────────── */
+  --ms-type-h4-font-size:    var(--ms-text-xl);
+  --ms-type-h4-font-weight:  var(--ms-font-weight-semibold);
+  --ms-type-h4-line-height:  var(--ms-leading-ui);
+
+  /* ── Heading h5 ─────────────────────────────────────────────────── */
+  --ms-type-h5-font-size:    var(--ms-text-lg);
+  --ms-type-h5-font-weight:  var(--ms-font-weight-semibold);
+  --ms-type-h5-line-height:  var(--ms-leading-subhead);
+
+  /* ── Heading h6 (uppercase meta-heading) ────────────────────────── */
+  --ms-type-h6-font-size:        var(--ms-text-base);
+  --ms-type-h6-font-weight:      var(--ms-font-weight-semibold);
+  --ms-type-h6-line-height:      var(--ms-leading-snug);
+  --ms-type-h6-letter-spacing:   var(--ms-tracking-heading);
+
+  /* ── Document article headings ──────────────────────────────────── */
+  --ms-type-doc-h1-font-family:  var(--ms-font-family-display);
+  --ms-type-doc-h1-font-size:    var(--ms-font-size-doc-h1);
+  --ms-type-doc-h1-font-weight:  var(--ms-font-weight-semibold);
+  --ms-type-doc-h1-line-height:  var(--ms-leading-display);
+
+  --ms-type-doc-h2-font-family:  var(--ms-font-family-display);
+  --ms-type-doc-h2-font-size:    var(--ms-font-size-doc-h2);
+  --ms-type-doc-h2-font-weight:  var(--ms-font-weight-semibold);
+  --ms-type-doc-h2-line-height:  var(--ms-leading-sub);
+
+  /* ── In-panel heading (preview / doc panel h2) ──────────────────── */
+  --ms-type-panel-h2-font-family:  var(--ms-font-family-display);
+  --ms-type-panel-h2-font-size:    var(--ms-font-size-panel-h2);
+  --ms-type-panel-h2-font-weight:  var(--ms-font-weight-semibold);
+  --ms-type-panel-h2-line-height:  var(--ms-leading-sub);
+
+  /* ── Page section title (SiteChrome, dashboard title bars) ─────── */
+  --ms-type-page-title-font-size:        var(--ms-text-3xl);
+  --ms-type-page-title-letter-spacing:   var(--ms-tracking-tighter);
+
+  /* ── Brand wordmark name ────────────────────────────────────────── */
+  --ms-type-brand-name-font-family:    var(--ms-font-family-brand);
+  --ms-type-brand-name-font-size:      1.05rem;  /* 16.8px — between base & lg */
+  --ms-type-brand-name-font-weight:    var(--ms-font-weight-medium);
+  --ms-type-brand-name-letter-spacing: var(--ms-tracking-wide);
+
+  /* ── Brand wordmark tagline ─────────────────────────────────────── */
+  --ms-type-brand-tagline-font-family:    var(--ms-font-family-sans);
+  --ms-type-brand-tagline-font-size:      0.58rem;  /* ~9px — intentionally micro */
+  --ms-type-brand-tagline-font-weight:    var(--ms-font-weight-regular);
+  --ms-type-brand-tagline-letter-spacing: var(--ms-tracking-widest);
+
+  /* ── Marketing kicker (eyebrow above hero headline) ─────────────── */
+  --ms-type-kicker-font-size:        var(--ms-text-xs);
+  --ms-type-kicker-font-weight:      var(--ms-font-weight-semibold);
+  --ms-type-kicker-letter-spacing:   var(--ms-tracking-loose);
+
+  /* ── Marketing body lead ────────────────────────────────────────── */
+  --ms-type-marketing-lead-font-size:    var(--ms-text-lg);
+  --ms-type-marketing-lead-line-height:  var(--ms-leading-roomy);
+
+  /* ── KPI metric value (org dashboard stat cards) ────────────────── */
+  --ms-type-kpi-font-size:        1.75rem;  /* 28px — intentional between 2xl/3xl */
+  --ms-type-kpi-font-weight:      var(--ms-font-weight-bold);
+  --ms-type-kpi-letter-spacing:   var(--ms-tracking-tight);
+
+  /* ── Benchmark metric value ─────────────────────────────────────── */
+  --ms-type-benchmark-metric-font-size: var(--ms-text-xl);
+
+  /* ── Scan score hero number ─────────────────────────────────────── */
+  --ms-type-score-hero-font-size:        var(--ms-text-5xl);
+  --ms-type-score-hero-font-weight:      var(--ms-font-weight-extrabold);
+  --ms-type-score-hero-letter-spacing:   var(--ms-tracking-tightest);
+
+  /* ── Scan insight message title ─────────────────────────────────── */
+  --ms-type-insight-message-font-size:    0.9375rem;  /* 15px — between md & base */
+  --ms-type-insight-message-font-weight:  var(--ms-font-weight-semibold);
+  --ms-type-insight-message-line-height:  var(--ms-leading-snug);
+
+  /* ── Monospace — inline code within prose ───────────────────────── */
+  --ms-type-mono-inline-font-family: var(--ms-font-family-mono);
+  --ms-type-mono-inline-font-size:   0.88em; /* relative — intentional */
+
+  /* ── Monospace — fenced code blocks (pre > code) ────────────────── */
+  --ms-type-mono-block-font-family:  var(--ms-font-family-mono);
+  --ms-type-mono-block-font-size:    var(--ms-text-sm);
+  --ms-type-mono-block-line-height:  var(--ms-leading-snug);
+
+  /* ── Monospace — compact code snippets (affected-files, table code) */
+  --ms-type-mono-snippet-font-family: var(--ms-font-family-mono);
+  --ms-type-mono-snippet-font-size:   var(--ms-text-xs);
+}

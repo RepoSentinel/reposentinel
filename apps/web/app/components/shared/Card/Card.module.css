@@ -25,16 +25,16 @@
 }
 
 .title {
-  font-size: var(--ms-text-sm);
+  font-size:      var(--ms-text-sm);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: var(--ms-tracking-label);
   opacity: 0.9;
-  font-weight: 700;
+  font-weight:    var(--ms-font-weight-bold);
 }
 
 .title + * {
   margin-top: var(--ms-space-sm);
-  letter-spacing: -0.01em;
+  letter-spacing: var(--ms-tracking-snug);
 }
 
 .muted {

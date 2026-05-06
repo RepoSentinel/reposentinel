@@ -6,9 +6,9 @@
 }
 
 .scoreValue {
-  font-size: 2.5rem;
-  font-weight: 800;
-  letter-spacing: -0.04em;
+  font-size:      var(--ms-type-score-hero-font-size);
+  font-weight:    var(--ms-type-score-hero-font-weight);
+  letter-spacing: var(--ms-type-score-hero-letter-spacing);
   background: linear-gradient(90deg, var(--ms-color-accent), var(--ms-color-accent-alt));
   -webkit-background-clip: text;
   background-clip: text;
@@ -84,8 +84,8 @@
   gap: var(--ms-space-2xs);
   padding: var(--ms-space-xs) var(--ms-space-sm);
   border-radius: var(--ms-radius-md);
-  font-size: var(--ms-text-md);
-  font-weight: 600;
+  font-size:   var(--ms-text-md);
+  font-weight: var(--ms-font-weight-semibold);
   border: var(--ms-border-width) solid;
 }
 
@@ -123,10 +123,10 @@
   align-items: center;
   padding: var(--ms-space-2xs) var(--ms-space-xs);
   border-radius: var(--ms-radius-2xs);
-  font-size: var(--ms-text-2xs);
-  font-weight: 600;
+  font-size:      var(--ms-text-2xs);
+  font-weight:    var(--ms-font-weight-semibold);
   text-transform: uppercase;
-  letter-spacing: 0.02em;
+  letter-spacing: var(--ms-tracking-wider);
   border: var(--ms-border-width) solid;
 }
 
@@ -199,10 +199,10 @@
   align-items: center;
   padding: var(--ms-space-2xs) var(--ms-space-xs);
   border-radius: var(--ms-radius-2xs);
-  font-size: var(--ms-text-2xs);
-  font-weight: 700;
+  font-size:      var(--ms-text-2xs);
+  font-weight:    var(--ms-font-weight-bold);
   text-transform: uppercase;
-  letter-spacing: 0.03em;
+  letter-spacing: var(--ms-tracking-heading);
   border: var(--ms-border-width) solid;
 }
 
@@ -237,11 +237,11 @@
 }
 
 .insightMessage {
-  font-size: 0.9375rem;
-  font-weight: 600;
+  font-size:   var(--ms-type-insight-message-font-size);
+  font-weight: var(--ms-type-insight-message-font-weight);
+  line-height: var(--ms-type-insight-message-line-height);
   color: var(--ms-color-ink);
   margin: 0 0 var(--ms-space-sm) 0;
-  line-height: var(--ms-leading-snug);
 }
 
 .insightAction {
@@ -264,7 +264,7 @@
 .affectedFiles summary {
   cursor: pointer;
   color: var(--ms-color-accent);
-  font-weight: 600;
+  font-weight: var(--ms-font-weight-semibold);
   user-select: none;
 }
 
@@ -283,8 +283,8 @@
 }
 
 .affectedFiles code {
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
-  font-size: var(--ms-text-xs);
+  font-family: var(--ms-type-mono-snippet-font-family);
+  font-size:   var(--ms-type-mono-snippet-font-size);
   padding: 2px var(--ms-space-2xs);
   border-radius: var(--ms-radius-2xs);
   background: color-mix(in oklab, var(--ms-color-surface-emphasis) 50%, transparent);

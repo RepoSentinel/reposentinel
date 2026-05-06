@@ -177,9 +177,9 @@
 }
 
 .kicker {
-  font-size: var(--ms-text-xs);
-  font-weight: var(--ms-font-weight-semibold);
-  letter-spacing: 0.18em;
+  font-size:      var(--ms-type-kicker-font-size);
+  font-weight:    var(--ms-type-kicker-font-weight);
+  letter-spacing: var(--ms-type-kicker-letter-spacing);
   text-transform: uppercase;
   color: var(--ms-color-brand-frost);
   opacity: 0.95;
@@ -317,7 +317,7 @@
   margin: var(--ms-space-xs) 0 0;
   padding-left: 1.15rem;
   color: var(--ms-color-text-muted);
-  font-size: 0.92rem;
+  font-size: var(--ms-text-md);
   line-height: var(--ms-leading-relaxed);
 }
 

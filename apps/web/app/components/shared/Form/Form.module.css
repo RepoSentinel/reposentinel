@@ -37,7 +37,7 @@
   );
   color: var(--ms-color-on-accent);
   cursor: pointer;
-  font-weight: 600;
+  font-weight: var(--ms-font-weight-semibold);
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
   transition:
     transform 120ms ease,

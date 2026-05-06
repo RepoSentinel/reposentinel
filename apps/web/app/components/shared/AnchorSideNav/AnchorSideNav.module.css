@@ -17,7 +17,7 @@
   display: block;
   padding: 0.35rem 0.5rem;
   border-radius: 6px;
-  font-size: var(--ms-text-sm, 0.9375rem);
+  font-size: var(--ms-text-sm);
   color: var(--ms-color-text-muted, #4b5563);
   text-decoration: none;
   border-left: 3px solid transparent;
@@ -35,7 +35,7 @@
 
 .linkActive {
   color: var(--ms-color-ink, #111827);
-  font-weight: 600;
+  font-weight: var(--ms-font-weight-semibold);
   background: var(--ms-color-surface-muted, rgba(0, 0, 0, 0.06));
   border-left-color: var(--ms-color-brand-frost, #38bdf8);
 }

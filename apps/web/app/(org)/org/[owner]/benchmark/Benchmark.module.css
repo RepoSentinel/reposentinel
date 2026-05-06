@@ -5,5 +5,5 @@
 }
 
 .metricValue {
-  font-size: 1.25rem;
+  font-size: var(--ms-type-benchmark-metric-font-size);
 }

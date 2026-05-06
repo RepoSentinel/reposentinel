@@ -39,7 +39,7 @@
   border: var(--ms-border-width) solid color-mix(in oklab, var(--ms-color-accent) 35%, var(--ms-color-border));
   background: var(--ms-color-accent);
   color: var(--ms-color-on-accent);
-  font-weight: 600;
+  font-weight: var(--ms-font-weight-semibold);
 }
 
 .buttonSecondary {

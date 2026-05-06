@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { EB_Garamond, Inter } from "next/font/google";
 import localFont from "next/font/local";
 import { auth } from "../auth";
 import { getSiteOrigin } from "../lib/siteOrigin";
@@ -9,6 +9,12 @@ import "./globals.css";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
+  display: "swap",
+});
+const ebGaramond = EB_Garamond({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-brand",
   display: "swap",
 });
 const geistMono = localFont({
@@ -32,7 +38,9 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${geistMono.variable}`}>
+      <body
+        className={`${inter.variable} ${ebGaramond.variable} ${geistMono.variable}`}
+      >
         <ClientSessionProvider session={session}>
           {children}
         </ClientSessionProvider>

@@ -1,0 +1,5 @@
+.brandName {
+  font-family: var(--ms-type-brand-name-font-family);
+  font-weight: var(--ms-type-brand-name-font-weight);
+  font-style: normal;
+}

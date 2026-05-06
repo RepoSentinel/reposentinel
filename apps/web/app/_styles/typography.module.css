@@ -1,11 +1,11 @@
 .h2Tight {
   margin-top: var(--ms-space-2xs);
-  font-size: var(--ms-text-base);
-  letter-spacing: -0.01em;
+  font-size:      var(--ms-text-base);
+  letter-spacing: var(--ms-tracking-snug);
 }
 
 .h2 {
   margin-top: var(--ms-space-md);
-  font-size: var(--ms-text-base);
-  letter-spacing: -0.01em;
+  font-size:      var(--ms-text-base);
+  letter-spacing: var(--ms-tracking-snug);
 }

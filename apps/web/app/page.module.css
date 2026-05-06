@@ -35,12 +35,12 @@
 }
 
 .main ol {
-  font-family: var(--font-geist-mono);
+  font-family:    var(--ms-font-family-mono);
   padding-left: 0;
   margin: 0;
-  font-size: var(--ms-text-md);
-  line-height: 1.5rem;
-  letter-spacing: -0.01em;
+  font-size:      var(--ms-text-md);
+  line-height:    var(--ms-leading-snug);
+  letter-spacing: var(--ms-tracking-snug);
   list-style-position: inside;
 }
 
@@ -53,7 +53,7 @@
   background: var(--gray-alpha-100);
   padding: 2px 4px;
   border-radius: 4px;
-  font-weight: 600;
+  font-weight: var(--ms-font-weight-semibold);
 }
 
 .ctas {
@@ -66,16 +66,16 @@
   border-radius: 128px;
   height: 48px;
   padding: 0 20px;
-  font-family: var(--font-sans);
+  font-family: var(--ms-font-family-sans);
   border: 1px solid transparent;
   transition: background 0.2s, color 0.2s, border-color 0.2s;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: var(--ms-text-base);
-  line-height: 1.25rem;
-  font-weight: 500;
+  font-size:   var(--ms-text-base);
+  line-height: var(--ms-leading-snug);
+  font-weight: var(--ms-font-weight-medium);
 }
 
 a.primary {
@@ -94,23 +94,23 @@ button.secondary {
   border-radius: 128px;
   height: 48px;
   padding: 0 20px;
-  font-family: var(--font-sans);
+  font-family: var(--ms-font-family-sans);
   border: 1px solid transparent;
   transition: background 0.2s, color 0.2s, border-color 0.2s;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: var(--ms-text-base);
-  line-height: 1.25rem;
-  font-weight: 500;
+  font-size:   var(--ms-text-base);
+  line-height: var(--ms-leading-snug);
+  font-weight: var(--ms-font-weight-medium);
   background: transparent;
   border-color: var(--gray-alpha-200);
   min-width: 180px;
 }
 
 .footer {
-  font-family: var(--font-sans);
+  font-family: var(--ms-font-family-sans);
   grid-row-start: 3;
   display: flex;
   gap: 24px;
