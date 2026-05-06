@@ -6,9 +6,9 @@
 }
 
 .metricValue {
-  font-size:      var(--ms-type-kpi-font-size);
-  font-weight:    var(--ms-type-kpi-font-weight);
-  letter-spacing: var(--ms-type-kpi-letter-spacing);
+  font-size:      var(--ms-text-3xl);
+  font-weight:    var(--ms-font-weight-bold);
+  letter-spacing: var(--ms-tracking-tight);
   margin-top: var(--ms-space-xs);
 }
 
@@ -157,7 +157,7 @@
   font-size:      var(--ms-text-xs);
   font-weight:    var(--ms-font-weight-semibold);
   text-transform: uppercase;
-  letter-spacing: var(--ms-tracking-badge);
+  letter-spacing: var(--ms-tracking-wider);
 }
 
 .statusDone {

@@ -14,7 +14,7 @@ This is a **black-box** integration from a repository owner’s perspective: you
 ## Recommended workflow
 
 ```yaml
-name: MergeSignal
+name: MergeSignal Scan
 on:
   pull_request:
   push:

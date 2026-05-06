@@ -22,13 +22,13 @@
   border: none;
   background: transparent;
   overflow-x: auto;
-  font-size: var(--ms-text-sm);
+  font-size: var(--ms-text-xs);
   line-height: var(--ms-leading-snug);
   color: var(--ms-color-text-emphasis);
 }
 
 .shell .pre code {
-  font-family: var(--ms-type-mono-block-font-family);
+  font-family: var(--ms-font-family-mono);
   font-size: inherit;
   white-space: pre;
 }

@@ -17,7 +17,7 @@
   display: block;
   padding: 0.35rem 0.5rem;
   border-radius: 6px;
-  font-size: var(--ms-text-sm);
+  font-size: var(--ms-text-xs);
   color: var(--ms-color-text-muted, #4b5563);
   text-decoration: none;
   border-left: 3px solid transparent;

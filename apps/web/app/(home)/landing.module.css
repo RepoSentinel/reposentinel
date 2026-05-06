@@ -177,9 +177,9 @@
 }
 
 .kicker {
-  font-size:      var(--ms-type-kicker-font-size);
-  font-weight:    var(--ms-type-kicker-font-weight);
-  letter-spacing: var(--ms-type-kicker-letter-spacing);
+  font-size:      var(--ms-text-xs);
+  font-weight:    var(--ms-font-weight-semibold);
+  letter-spacing: var(--ms-tracking-loose);
   text-transform: uppercase;
   color: var(--ms-color-brand-frost);
   opacity: 0.95;

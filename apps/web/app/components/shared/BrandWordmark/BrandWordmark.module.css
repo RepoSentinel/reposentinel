@@ -1,24 +1,24 @@
 .wordmark {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: var( --ms-space-2xs);
   line-height: 1;
   user-select: none;
 }
 
 .name {
-  font-family:    var(--ms-type-brand-name-font-family);
-  font-size:      var(--ms-type-brand-name-font-size);
-  font-weight:    var(--ms-type-brand-name-font-weight);
-  letter-spacing: var(--ms-type-brand-name-letter-spacing);
+  font-family:    var(--ms-font-family-brand);
+  font-size:      var(--ms-text-lg);
+  font-weight:    var(--ms-font-weight-medium);
+  letter-spacing: var(--ms-tracking-wide);
   color: var(--ms-color-ink);
 }
 
 .tagline {
-  font-family:    var(--ms-type-brand-tagline-font-family);
-  font-size:      var(--ms-type-brand-tagline-font-size);
-  font-weight:    var(--ms-type-brand-tagline-font-weight);
-  letter-spacing: var(--ms-type-brand-tagline-letter-spacing);
+  font-family:    var(--ms-font-family-sans);
+  font-size:      var(--ms-text-2xs);
+  font-weight:    var(--ms-font-weight-regular);
+  letter-spacing: var(--ms-tracking-widest);
   color: var(--ms-color-text-muted);
   text-transform: uppercase;
 }

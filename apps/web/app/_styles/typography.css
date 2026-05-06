@@ -1,9 +1,8 @@
 /*
  * typography.css — MergeSignal typography system
  *
- * Loaded via @import at the top of globals.css so every --ms-type-* and
- * --ms-font-* token is available before element defaults and CSS modules
- * cascade.
+ * Loaded via @import at the top of globals.css so every token is
+ * available before element defaults and CSS modules cascade.
  *
  * Structure
  * ─────────
@@ -14,6 +13,8 @@
  *  V.   Letter-spacing scale   — --ms-tracking-*
  *  VI.  Responsive size tokens — --ms-font-size-*  (clamp() defined once)
  *  VII. Composite type tokens  — --ms-type-{role}-{property}
+ *       Only truly global roles belong here (body, label, h1–h6, mono-inline).
+ *       Component-specific type styles are defined locally in each module.
  */
 
 :root {
@@ -41,9 +42,9 @@
    * II. Font size scale (rem)
    * ═══════════════════════════════════════════════════════════════════ */
 
-  --ms-text-2xs:  0.6875rem; /*  11px */
+  --ms-text-3xs:  0.5rem;    /*   8px */
+  --ms-text-2xs:  0.625rem;  /*  10px */
   --ms-text-xs:   0.75rem;   /*  12px */
-  --ms-text-sm:   0.8125rem; /*  13px */
   --ms-text-md:   0.875rem;  /*  14px */
   --ms-text-base: 1rem;      /*  16px */
   --ms-text-lg:   1.125rem;  /*  18px */
@@ -84,15 +85,11 @@
    * V. Letter-spacing (tracking) scale
    * ═══════════════════════════════════════════════════════════════════ */
 
-  --ms-tracking-tightest: -0.04em; /* scan score hero number         */
-  --ms-tracking-tighter:  -0.03em; /* section / page title           */
-  --ms-tracking-tight:    -0.02em; /* KPI metric value               */
-  --ms-tracking-snug:     -0.01em; /* mono text, slight tightening   */
-  --ms-tracking-normal:    0em;    /* browser default                */
-  --ms-tracking-wide:      0.01em; /* brand name, display headings   */
-  --ms-tracking-wider:     0.02em; /* small badge labels             */
-  --ms-tracking-heading:   0.03em; /* h6 uppercase, priority badges  */
-  --ms-tracking-badge:     0.05em; /* status badge uppercase         */
+  --ms-tracking-tightest: -0.04em; /* score hero number              */
+  --ms-tracking-tight:    -0.02em; /* KPI values, page titles        */
+  --ms-tracking-snug:     -0.01em; /* mono text, subtle tightening   */
+  --ms-tracking-wide:      0.02em; /* brand name, display headings   */
+  --ms-tracking-wider:     0.04em; /* h6, badge labels, uppercase UI */
   --ms-tracking-label:     0.08em; /* uppercase card / table headers */
   --ms-tracking-loose:     0.18em; /* marketing kicker eyebrow       */
   --ms-tracking-widest:    0.22em; /* brand tagline                  */
@@ -123,9 +120,9 @@
   /* ═══════════════════════════════════════════════════════════════════
    * VII. Composite type tokens  (--ms-type-{role}-{property})
    *
-   * Each role bundles the font-* properties that differ from the base
-   * body style. Modules reference individual longhands; element rules
-   * in globals.css consume the full set.
+   * Only global element roles live here. Component-specific type
+   * styles (brand, KPI, score, doc headings, etc.) are defined as
+   * local declarations inside their own CSS module files.
    * ═══════════════════════════════════════════════════════════════════ */
 
   /* ── Body (base prose) ─────────────────────────────────────────── */
@@ -135,7 +132,7 @@
   --ms-type-body-line-height:  var(--ms-leading-snug);
 
   /* ── Label (form labels, UI meta, nav links) ────────────────────── */
-  --ms-type-label-font-size:    var(--ms-text-sm);
+  --ms-type-label-font-size:    var(--ms-text-xs);
   --ms-type-label-font-weight:  var(--ms-font-weight-medium);
   --ms-type-label-line-height:  var(--ms-leading-snug);
 
@@ -172,78 +169,9 @@
   --ms-type-h6-font-size:        var(--ms-text-base);
   --ms-type-h6-font-weight:      var(--ms-font-weight-semibold);
   --ms-type-h6-line-height:      var(--ms-leading-snug);
-  --ms-type-h6-letter-spacing:   var(--ms-tracking-heading);
-
-  /* ── Document article headings ──────────────────────────────────── */
-  --ms-type-doc-h1-font-family:  var(--ms-font-family-display);
-  --ms-type-doc-h1-font-size:    var(--ms-font-size-doc-h1);
-  --ms-type-doc-h1-font-weight:  var(--ms-font-weight-semibold);
-  --ms-type-doc-h1-line-height:  var(--ms-leading-display);
-
-  --ms-type-doc-h2-font-family:  var(--ms-font-family-display);
-  --ms-type-doc-h2-font-size:    var(--ms-font-size-doc-h2);
-  --ms-type-doc-h2-font-weight:  var(--ms-font-weight-semibold);
-  --ms-type-doc-h2-line-height:  var(--ms-leading-sub);
-
-  /* ── In-panel heading (preview / doc panel h2) ──────────────────── */
-  --ms-type-panel-h2-font-family:  var(--ms-font-family-display);
-  --ms-type-panel-h2-font-size:    var(--ms-font-size-panel-h2);
-  --ms-type-panel-h2-font-weight:  var(--ms-font-weight-semibold);
-  --ms-type-panel-h2-line-height:  var(--ms-leading-sub);
-
-  /* ── Page section title (SiteChrome, dashboard title bars) ─────── */
-  --ms-type-page-title-font-size:        var(--ms-text-3xl);
-  --ms-type-page-title-letter-spacing:   var(--ms-tracking-tighter);
-
-  /* ── Brand wordmark name ────────────────────────────────────────── */
-  --ms-type-brand-name-font-family:    var(--ms-font-family-brand);
-  --ms-type-brand-name-font-size:      1.05rem;  /* 16.8px — between base & lg */
-  --ms-type-brand-name-font-weight:    var(--ms-font-weight-medium);
-  --ms-type-brand-name-letter-spacing: var(--ms-tracking-wide);
-
-  /* ── Brand wordmark tagline ─────────────────────────────────────── */
-  --ms-type-brand-tagline-font-family:    var(--ms-font-family-sans);
-  --ms-type-brand-tagline-font-size:      0.58rem;  /* ~9px — intentionally micro */
-  --ms-type-brand-tagline-font-weight:    var(--ms-font-weight-regular);
-  --ms-type-brand-tagline-letter-spacing: var(--ms-tracking-widest);
-
-  /* ── Marketing kicker (eyebrow above hero headline) ─────────────── */
-  --ms-type-kicker-font-size:        var(--ms-text-xs);
-  --ms-type-kicker-font-weight:      var(--ms-font-weight-semibold);
-  --ms-type-kicker-letter-spacing:   var(--ms-tracking-loose);
-
-  /* ── Marketing body lead ────────────────────────────────────────── */
-  --ms-type-marketing-lead-font-size:    var(--ms-text-lg);
-  --ms-type-marketing-lead-line-height:  var(--ms-leading-roomy);
-
-  /* ── KPI metric value (org dashboard stat cards) ────────────────── */
-  --ms-type-kpi-font-size:        1.75rem;  /* 28px — intentional between 2xl/3xl */
-  --ms-type-kpi-font-weight:      var(--ms-font-weight-bold);
-  --ms-type-kpi-letter-spacing:   var(--ms-tracking-tight);
-
-  /* ── Benchmark metric value ─────────────────────────────────────── */
-  --ms-type-benchmark-metric-font-size: var(--ms-text-xl);
-
-  /* ── Scan score hero number ─────────────────────────────────────── */
-  --ms-type-score-hero-font-size:        var(--ms-text-5xl);
-  --ms-type-score-hero-font-weight:      var(--ms-font-weight-extrabold);
-  --ms-type-score-hero-letter-spacing:   var(--ms-tracking-tightest);
-
-  /* ── Scan insight message title ─────────────────────────────────── */
-  --ms-type-insight-message-font-size:    0.9375rem;  /* 15px — between md & base */
-  --ms-type-insight-message-font-weight:  var(--ms-font-weight-semibold);
-  --ms-type-insight-message-line-height:  var(--ms-leading-snug);
+  --ms-type-h6-letter-spacing:   var(--ms-tracking-wider);
 
   /* ── Monospace — inline code within prose ───────────────────────── */
   --ms-type-mono-inline-font-family: var(--ms-font-family-mono);
-  --ms-type-mono-inline-font-size:   0.88em; /* relative — intentional */
-
-  /* ── Monospace — fenced code blocks (pre > code) ────────────────── */
-  --ms-type-mono-block-font-family:  var(--ms-font-family-mono);
-  --ms-type-mono-block-font-size:    var(--ms-text-sm);
-  --ms-type-mono-block-line-height:  var(--ms-leading-snug);
-
-  /* ── Monospace — compact code snippets (affected-files, table code) */
-  --ms-type-mono-snippet-font-family: var(--ms-font-family-mono);
-  --ms-type-mono-snippet-font-size:   var(--ms-text-xs);
+  --ms-type-mono-inline-font-size:   0.88em; /* relative to parent — intentional */
 }

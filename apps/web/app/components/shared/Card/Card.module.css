@@ -25,7 +25,7 @@
 }
 
 .title {
-  font-size:      var(--ms-text-sm);
+  font-size:      var(--ms-text-xs);
   text-transform: uppercase;
   letter-spacing: var(--ms-tracking-label);
   opacity: 0.9;
@@ -40,13 +40,13 @@
 .muted {
   margin-top: var(--ms-space-2xs);
   color: var(--ms-color-text-muted);
-  font-size: var(--ms-text-sm);
+  font-size: var(--ms-text-xs);
 }
 
 .note {
   margin-top: var(--ms-space-sm);
   color: var(--ms-color-text-muted);
-  font-size: var(--ms-text-sm);
+  font-size: var(--ms-text-xs);
 }
 
 .note code {

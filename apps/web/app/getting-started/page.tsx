@@ -13,7 +13,7 @@ pnpm install`;
 
 const RUN_SCAN_SAME_REPO = `pnpm ms scan`;
 
-const GHA_RECOMMENDED_SNIPPET = `name: MergeSignal
+const GHA_RECOMMENDED_SNIPPET = `name: MergeSignal Scan
 on:
   pull_request:
   push:

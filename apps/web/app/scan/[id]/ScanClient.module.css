@@ -6,9 +6,9 @@
 }
 
 .scoreValue {
-  font-size:      var(--ms-type-score-hero-font-size);
-  font-weight:    var(--ms-type-score-hero-font-weight);
-  letter-spacing: var(--ms-type-score-hero-letter-spacing);
+  font-size:      var(--ms-text-5xl);
+  font-weight:    var(--ms-font-weight-extrabold);
+  letter-spacing: var(--ms-tracking-tightest);
   background: linear-gradient(90deg, var(--ms-color-accent), var(--ms-color-accent-alt));
   -webkit-background-clip: text;
   background-clip: text;
@@ -17,7 +17,7 @@
 
 .scoreMeta {
   color: var(--ms-color-text-muted);
-  font-size: var(--ms-text-sm);
+  font-size: var(--ms-text-xs);
 }
 
 .pill {
@@ -28,7 +28,7 @@
   border-radius: var(--ms-radius-full);
   border: var(--ms-border-width) solid var(--ms-color-border);
   background: color-mix(in oklab, var(--ms-color-surface-emphasis) 75%, transparent);
-  font-size: var(--ms-text-sm);
+  font-size: var(--ms-text-xs);
   color: var(--ms-color-ink);
 }
 
@@ -110,7 +110,7 @@
 .decisionReasoning {
   margin-top: var(--ms-space-sm);
   padding-left: var(--ms-space-lg);
-  font-size: var(--ms-text-sm);
+  font-size: var(--ms-text-xs);
   color: var(--ms-color-ink);
 }
 
@@ -126,7 +126,7 @@
   font-size:      var(--ms-text-2xs);
   font-weight:    var(--ms-font-weight-semibold);
   text-transform: uppercase;
-  letter-spacing: var(--ms-tracking-wider);
+  letter-spacing: var(--ms-tracking-wide);
   border: var(--ms-border-width) solid;
 }
 
@@ -202,7 +202,7 @@
   font-size:      var(--ms-text-2xs);
   font-weight:    var(--ms-font-weight-bold);
   text-transform: uppercase;
-  letter-spacing: var(--ms-tracking-heading);
+  letter-spacing: var(--ms-tracking-wider);
   border: var(--ms-border-width) solid;
 }
 
@@ -231,15 +231,15 @@
 }
 
 .insightType {
-  font-size: var(--ms-text-sm);
+  font-size: var(--ms-text-xs);
   color: var(--ms-color-text-muted);
   text-transform: capitalize;
 }
 
 .insightMessage {
-  font-size:   var(--ms-type-insight-message-font-size);
-  font-weight: var(--ms-type-insight-message-font-weight);
-  line-height: var(--ms-type-insight-message-line-height);
+  font-size:   var(--ms-text-md);
+  font-weight: var(--ms-font-weight-semibold);
+  line-height: var(--ms-leading-snug);
   color: var(--ms-color-ink);
   margin: 0 0 var(--ms-space-sm) 0;
 }
@@ -258,7 +258,7 @@
 
 .affectedFiles {
   margin-top: var(--ms-space-sm);
-  font-size: var(--ms-text-sm);
+  font-size: var(--ms-text-xs);
 }
 
 .affectedFiles summary {
@@ -283,8 +283,8 @@
 }
 
 .affectedFiles code {
-  font-family: var(--ms-type-mono-snippet-font-family);
-  font-size:   var(--ms-type-mono-snippet-font-size);
+  font-family: var(--ms-font-family-mono);
+  font-size:   var(--ms-text-xs);
   padding: 2px var(--ms-space-2xs);
   border-radius: var(--ms-radius-2xs);
   background: color-mix(in oklab, var(--ms-color-surface-emphasis) 50%, transparent);
